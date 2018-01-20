@@ -3,9 +3,8 @@
   "version": "1.0.0",
   "description": "Finding your way through buildings and campuses through the power of augmented reality",
   "private": true,
-  "main": "./node_modules/react-native-scripts/build/bin/crna-entry.js",
+  "main": "node_modules/expo/AppEntry.js",
   "scripts": {
-    "start": "react-native-scripts start",
     "test": "node node_modules/jest/bin/jest.js --watch"
   },
   "repository": {
@@ -56,10 +55,10 @@
   },
   "dependencies": {
     "@expo/vector-icons": "^6.2.2",
-    "expo": "^25.0.0",
+    "expo": "^24.0.0",
     "firebase": "^4.9.0",
     "react": "^16.2.0",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-25.0.0.tar.gz",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-24.0.0.tar.gz",
     "react-navigation": "^1.0.0-beta.27",
     "tslib": "^1.8.0"
   },
@@ -71,7 +70,6 @@
     "@types/react-navigation": "^1.0.28",
     "@types/react-test-renderer": "^16.0.0",
     "jest-expo": "^25.0.0",
-    "react-native-scripts": "^1.9.0",
     "react-native-typescript-transformer": "^1.2.2",
     "react-test-renderer": "^16.2.0",
     "ts-jest": "^22.0.1",

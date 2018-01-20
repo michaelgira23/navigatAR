@@ -5,6 +5,7 @@ import { TabBarBottom, TabNavigator } from 'react-navigation';
 
 import Colors from '../constants/Colors';
 
+import { AdminScreen } from '../screens/AdminScreen';
 import { HomeScreen } from '../screens/HomeScreen';
 import { SettingsScreen } from '../screens/SettingsScreen';
 
@@ -36,6 +37,17 @@ export default TabNavigator(
 				tabBarIcon: ({ focused }) => getIcon({
 					ios: `ios-options${focused ? '' : '-outline'}`,
 					android: 'md-options'
+				}, focused)
+			}
+		},
+		Admin: {
+			screen: AdminScreen,
+			navigationOptions: {
+				...navbarOptions,
+				tabBarLabel: 'Admin Panel',
+				tabBarIcon: ({ focused }) => getIcon({
+					ios: `ios-cafe${focused ? '' : '-outline'}`,
+					android: 'md-coffee'
 				}, focused)
 			}
 		}

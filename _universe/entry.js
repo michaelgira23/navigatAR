@@ -1,4 +1,4 @@
 import Expo from 'expo';
-import App from '../App.js';
+import App from '../src/App.js';
 
 Expo.registerRootComponent(App);

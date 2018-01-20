@@ -8,47 +8,47 @@ import Colors from '../constants/Colors';
 import { HomeScreen } from '../screens/HomeScreen';
 import { SettingsScreen } from '../screens/SettingsScreen';
 
+const navbarOptions = {
+	// tabBarComponent: TabBarBottom,
+	// tabBarPosition: 'bottom',
+	// animationEnabled: false,
+	// swipeEnabled: false
+};
+
 export default TabNavigator(
 	{
 		Home: {
-			screen: HomeScreen
+			screen: HomeScreen,
+			navigationOptions: {
+				...navbarOptions,
+				tabBarLabel: 'Home',
+				tabBarIcon: ({ focused }) => getIcon({
+					ios: `ios-information-circle${focused ? '' : '-outline'}`,
+					android: 'md-information-circle'
+				}, focused)
+			}
 		},
 		Settings: {
-			screen: SettingsScreen
-		}
-	},
-	({
-		navigationOptions: ({ navigation }) => ({
-			tabBarIcon: ({ focused }) => {
-				const { routeName } = navigation.state;
-				let iconName;
-				switch (routeName) {
-					case 'Home':
-						iconName =
-							Platform.OS === 'ios'
-								? `ios-information-circle${focused ? '' : '-outline'}`
-								: 'md-information-circle';
-						break;
-					case 'Links':
-						iconName = Platform.OS === 'ios' ? `ios-link${focused ? '' : '-outline'}` : 'md-link';
-						break;
-					case 'Settings':
-						iconName =
-							Platform.OS === 'ios' ? `ios-options${focused ? '' : '-outline'}` : 'md-options';
-				}
-				return (
-					<Ionicons
-						name={iconName}
-						size={28}
-						style={{ marginBottom: -3 }}
-						color={focused ? Colors.tabIconSelected : Colors.tabIconDefault}
-					/>
-				);
+			screen: SettingsScreen,
+			navigationOptions: {
+				...navbarOptions,
+				tabBarLabel: 'Settings',
+				tabBarIcon: ({ focused }) => getIcon({
+					ios: `ios-options${focused ? '' : '-outline'}`,
+					android: 'md-options'
+				}, focused)
 			}
-		}),
-		tabBarComponent: TabBarBottom,
-		tabBarPosition: 'bottom',
-		animationEnabled: false,
-		swipeEnabled: false
-	} as any)
+		}
+	}
 );
+
+function getIcon(names: { ios: string; android: string }, focused) {
+	return (
+		<Ionicons
+			name={Platform.OS === 'ios' ? names.ios : names.android}
+			size={28}
+			style={{ marginBottom: -3 }}
+			color={focused ? Colors.tabIconSelected : Colors.tabIconDefault}
+		/>
+	);
+}

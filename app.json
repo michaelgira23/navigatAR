@@ -4,7 +4,7 @@
     "description": "Finding your way through buildings and campuses through the power of augmented reality",
     "slug": "navigatAR",
     "privacy": "unlisted",
-    "sdkVersion": "23.0.0",
+    "sdkVersion": "25.0.0",
     "platforms": ["ios", "android"],
     "version": "1.0.0",
     "icon": "./src/assets/images/icon.png",

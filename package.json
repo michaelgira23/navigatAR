@@ -1,0 +1,38 @@
+{
+  "name": "navigatar",
+  "version": "1.0.0",
+  "description": "Finding your way through buildings and campuses through the power of augmented reality",
+  "main": "node_modules/expo/AppEntry.js",
+  "private": true,
+  "scripts": {
+    "test": "node ./node_modules/jest/bin/jest.js --watchAll"
+  },
+  "jest": {
+    "preset": "jest-expo"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/michaelgira23/navigatAR.git"
+  },
+  "keywords": [
+    "navigatAR",
+    "autmented-reality",
+    "indoor-maps"
+  ],
+  "author": "MICDS WWT Hackathon Team",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/michaelgira23/navigatAR/issues"
+  },
+  "homepage": "https://github.com/michaelgira23/navigatAR#readme",
+  "dependencies": {
+    "@expo/samples": "2.1.1",
+    "expo": "^25.0.0",
+    "react": "16.2.0",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-25.0.0.tar.gz",
+    "react-navigation": "^1.0.0-beta.27"
+  },
+  "devDependencies": {
+    "jest-expo": "^25.0.0"
+  }
+}

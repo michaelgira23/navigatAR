@@ -13,13 +13,14 @@
 		"member-access": [true, "no-public"],
 		"member-ordering": [true, "fields-first"],
 		"no-bitwise": false,
+		"no-console": false,
 		"no-inferrable-types": true,
 		"no-unused-variable": true,
 		"object-literal-sort-keys": false,
-		"quotemark": [true, "single", "avoid-escape"],
+		"quotemark": [true, "single", "jsx-double", "avoid-escape"],
 		"semicolon": [true, "always"],
 		"trailing-comma": [true, { "multiline": "never", "singleline": "never" }],
-		"variable-name": [true, "ban-keywords", "check-format", "allow-leading-underscore"],
+		"variable-name": [true, "ban-keywords", "check-format", "allow-leading-underscore", "allow-pascal-case"],
 		"no-empty-interface": false
 	},
 	"rulesDirectory": []

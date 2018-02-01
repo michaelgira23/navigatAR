@@ -7,12 +7,21 @@
 //
 
 import UIKit
+import Firebase
 
 class SecondViewController: UIViewController {
+
+	var ref: DatabaseReference!
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		// Do any additional setup after loading the view, typically from a nib.
+		ref = Database.database().reference();
+
+		ref.observe(DataEventType.value, with: { (snapshot) in
+			let postDict = snapshot.value as? [String : AnyObject] ?? [:]
+			print(postDict)
+		})
 	}
 
 	override func didReceiveMemoryWarning() {

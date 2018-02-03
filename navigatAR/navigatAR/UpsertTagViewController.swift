@@ -44,9 +44,9 @@ class UpsertTagViewController: FormViewController {
 
 		form +++ ButtonRow() { row in
 			row.title = "Create"
-			row.disabled = Condition.function(["... Tags ..."]) { form in
-				return form.validate().count != 0
-			}
+//			row.disabled = Condition.function(["... Tags ..."]) { form in
+//				return form.validate().count != 0
+//			}
 			row.onCellSelection(self.createTag)
 		}
 
@@ -60,15 +60,20 @@ class UpsertTagViewController: FormViewController {
 	func createTag(cell: ButtonCellOf<String>, row: ButtonRow) {
 		let formValues = form.values()
 
-		var tagType: String = ""
+		var selectedTagValueType: String = ""
 		for tagValueType in tagValueTypes {
 			if formValues[tagValueType["value"]!]! != nil {
-				print("Above evals to true");
-				tagType = tagValueType["value"]!
+				selectedTagValueType = tagValueType["value"]!
 			}
 		}
 
-		print("Create Tag!", tagType, form.validate(), form.values());
+		// Make sure user selected type
+		/** @TODO Actually add form validation and disable button */
+		if (formValues["name"]! == nil || selectedTagValueType == "") {
+			return;
+		}
+
+		print("Create Tag!", selectedTagValueType, form.validate(), form.values());
 
 		/** @TODO Put Firebase logic here for adding tag to database */
 

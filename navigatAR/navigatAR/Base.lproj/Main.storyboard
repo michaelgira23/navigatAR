@@ -60,14 +60,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2wI-y3-v5l">
-                                <rect key="frame" x="139" y="121" width="96" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Manage Node"/>
-                                <connections>
-                                    <segue destination="rkc-8c-c3O" kind="show" identifier="ManageNodesSegue" id="jNb-BP-YyS"/>
-                                </connections>
-                            </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SIb-8T-mhR">
                                 <rect key="frame" x="95" y="403" width="185" height="84"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
@@ -88,6 +80,14 @@
                                 <state key="normal" title="Manage Tags"/>
                                 <connections>
                                     <segue destination="Us9-KI-xgF" kind="show" identifier="ManageTagsSegue" id="cVY-bW-FHv"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2wI-y3-v5l">
+                                <rect key="frame" x="135" y="121" width="104" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Manage Nodes"/>
+                                <connections>
+                                    <segue destination="rkc-8c-c3O" kind="show" identifier="ManageNodesSegue" id="jNb-BP-YyS"/>
                                 </connections>
                             </button>
                         </subviews>

@@ -8,7 +8,7 @@
 
 import Firebase
 
-enum NodeType {
+enum NodeType: String {
     // Generic stuff
     case pointOfInterest
     
@@ -23,20 +23,24 @@ enum NodeType {
     // TODO: add more types if necessary
 }
 
-struct Node {
-    let building: Building
+struct Node: FirebaseModel {
+	let id: FirebasePushKey
+
+    let building: FirebasePushKey
     let name: String
-    let admins: [String]
+	let type: NodeType
+	// let position: CLLocation TODO
     // let tags: [String: Any] TODO
     
-    static func fromPushKey(root: DataSnapshot, key: String) -> Node {
+    static func fromPushKey(root: DataSnapshot, key: FirebasePushKey) -> Node {
         let node = root.childSnapshot(forPath: "nodes/\(key)").value as! [String: Any]
         
         return Node(
-            building: Building.fromPushKey(root: root, key: node["building"] as! String),
+			id: key,
+            building: node["building"] as! FirebasePushKey,
             name: node["name"] as! String,
-            admins: Array((node["admins"] as! [String: Bool]).keys)
-            // tags: whatever
+			type: NodeType(rawValue: node["type"] as! String)!
+			// TODO: the rest of these
         )
     }
 }

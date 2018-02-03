@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		1C73730B202553D200725F6D /* Building.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C73730A202553D200725F6D /* Building.swift */; };
 		1C73730D20255A1700725F6D /* Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C73730C20255A1700725F6D /* Node.swift */; };
+		1C7373112026302D00725F6D /* FirebaseUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C7373102026302D00725F6D /* FirebaseUtils.swift */; };
+		1C7373132026330100725F6D /* TagInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C7373122026330100725F6D /* TagInfo.swift */; };
 		26AE44CF2025753800F8C75D /* AdminViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26AE44CE2025753800F8C75D /* AdminViewController.swift */; };
 		26AE44D52025934800F8C75D /* config.example.plist in Resources */ = {isa = PBXBuildFile; fileRef = 26AE44D42025934800F8C75D /* config.example.plist */; };
 		26AE44D72025936700F8C75D /* config.plist in Resources */ = {isa = PBXBuildFile; fileRef = 26AE44D62025936700F8C75D /* config.plist */; };
@@ -26,6 +28,8 @@
 /* Begin PBXFileReference section */
 		1C73730A202553D200725F6D /* Building.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Building.swift; sourceTree = "<group>"; };
 		1C73730C20255A1700725F6D /* Node.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Node.swift; sourceTree = "<group>"; };
+		1C7373102026302D00725F6D /* FirebaseUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseUtils.swift; sourceTree = "<group>"; };
+		1C7373122026330100725F6D /* TagInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagInfo.swift; sourceTree = "<group>"; };
 		26AE44CE2025753800F8C75D /* AdminViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminViewController.swift; sourceTree = "<group>"; };
 		26AE44D42025934800F8C75D /* config.example.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = config.example.plist; sourceTree = "<group>"; };
 		26AE44D62025936700F8C75D /* config.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = config.plist; sourceTree = "<group>"; };
@@ -86,6 +90,7 @@
 			isa = PBXGroup;
 			children = (
 				1C73730A202553D200725F6D /* Building.swift */,
+				1C7373122026330100725F6D /* TagInfo.swift */,
 				56EC2A0020237BAE00924B5D /* GoogleService-Info.plist */,
 				56F25B8A2022E79800B246D3 /* AppDelegate.swift */,
 				56F25B8C2022E79800B246D3 /* FirstViewController.swift */,
@@ -99,6 +104,7 @@
 				26AE44CE2025753800F8C75D /* AdminViewController.swift */,
 				26AE44D42025934800F8C75D /* config.example.plist */,
 				26AE44D62025936700F8C75D /* config.plist */,
+				1C7373102026302D00725F6D /* FirebaseUtils.swift */,
 			);
 			path = navigatAR;
 			sourceTree = "<group>";
@@ -251,11 +257,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1C7373132026330100725F6D /* TagInfo.swift in Sources */,
 				26AE44CF2025753800F8C75D /* AdminViewController.swift in Sources */,
 				56F25B8F2022E79800B246D3 /* SecondViewController.swift in Sources */,
 				1C73730D20255A1700725F6D /* Node.swift in Sources */,
 				56F25B8B2022E79800B246D3 /* AppDelegate.swift in Sources */,
 				56F25B8D2022E79800B246D3 /* FirstViewController.swift in Sources */,
+				1C7373112026302D00725F6D /* FirebaseUtils.swift in Sources */,
 				1C73730B202553D200725F6D /* Building.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

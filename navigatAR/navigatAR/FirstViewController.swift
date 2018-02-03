@@ -1,5 +1,5 @@
 //
-//  ArViewController.swift
+//  FirstViewController.swift
 //  navigatAR
 //
 //  Created by Michael Gira on 2/1/18.
@@ -10,7 +10,7 @@ import UIKit
 import SceneKit
 import ARKit
 
-class ArViewController: UIViewController, ARSCNViewDelegate {
+class FirstViewController: UIViewController, ARSCNViewDelegate {
 
 	@IBOutlet var sceneView: ARSCNView!
 

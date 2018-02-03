@@ -1,5 +1,5 @@
 //
-//  SecondViewController.swift
+//  MapViewController.swift
 //  navigatAR
 //
 //  Created by Michael Gira on 2/1/18.
@@ -9,7 +9,7 @@
 import UIKit
 import Firebase
 
-class SecondViewController: UIViewController {
+class MapViewController: UIViewController {
 
 	var ref: DatabaseReference!
 

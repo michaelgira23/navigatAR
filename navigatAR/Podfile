@@ -8,5 +8,6 @@ target 'navigatAR' do
   # Pods for navigatAR
   pod 'Firebase/Core'
   pod 'Firebase/Database'
+  pod 'IndoorAtlas'
 
 end

@@ -55,5 +55,11 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSCameraUsageDescription</key>
+	<string>Use the power of AR to show you the world</string>
+    <key>NSMotionUsageDescription</key>
+    <string>For better indoor positioning.</string>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>Platform location requested for better positioning experience.</string>
 </dict>
 </plist>

@@ -38,7 +38,6 @@
         <!--Admin Panel-->
         <scene sceneID="Rms-kx-SzT">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="yET-kz-V8c" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <navigationController id="BMV-PT-P6H" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Admin Panel" image="second" id="s8w-Va-ild"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="Thd-zG-GcI">
@@ -49,6 +48,7 @@
                         <segue destination="luA-II-VYj" kind="relationship" relationship="rootViewController" id="r8P-3O-vEM"/>
                     </connections>
                 </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="yET-kz-V8c" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="294" y="1030"/>
         </scene>
@@ -65,7 +65,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Manage Node"/>
                                 <connections>
-                                    <segue destination="rkc-8c-c3O" kind="show" id="jNb-BP-YyS"/>
+                                    <segue destination="rkc-8c-c3O" kind="show" identifier="ManageNodesSegue" id="jNb-BP-YyS"/>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SIb-8T-mhR">
@@ -87,7 +87,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Manage Tags"/>
                                 <connections>
-                                    <segue destination="Us9-KI-xgF" kind="show" id="cVY-bW-FHv"/>
+                                    <segue destination="Us9-KI-xgF" kind="show" identifier="ManageTagsSegue" id="cVY-bW-FHv"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -141,7 +141,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" textLabel="74Z-FZ-KzQ" detailTextLabel="XNi-Wo-BJc" style="IBUITableViewCellStyleValue1" id="yDH-TI-VAh">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="TagCell" textLabel="74Z-FZ-KzQ" detailTextLabel="XNi-Wo-BJc" style="IBUITableViewCellStyleValue1" id="yDH-TI-VAh">
                                         <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="yDH-TI-VAh" id="ggm-mr-Axj">
@@ -172,9 +172,9 @@
                         <viewLayoutGuide key="safeArea" id="g3Y-9P-AkB"/>
                     </view>
                     <navigationItem key="navigationItem" title="Manage Tags" id="L1V-Kf-dKz">
-                        <barButtonItem key="rightBarButtonItem" style="plain" systemItem="add" id="41P-Ht-lEM">
+                        <barButtonItem key="rightBarButtonItem" style="done" systemItem="add" id="41P-Ht-lEM">
                             <connections>
-                                <segue destination="Lbk-61-GKu" kind="show" id="lj5-w2-nni"/>
+                                <segue destination="Lbk-61-GKu" kind="show" identifier="CreateNodeSegue" id="lj5-w2-nni"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -261,7 +261,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" textLabel="B7l-jN-sB4" detailTextLabel="h6v-MW-l6Q" style="IBUITableViewCellStyleValue1" id="K2h-Za-MdS">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="NodeCell" textLabel="B7l-jN-sB4" detailTextLabel="h6v-MW-l6Q" style="IBUITableViewCellStyleValue1" id="K2h-Za-MdS">
                                         <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="K2h-Za-MdS" id="mWz-qk-irL">
@@ -292,9 +292,9 @@
                         <viewLayoutGuide key="safeArea" id="Yju-AL-Jjb"/>
                     </view>
                     <navigationItem key="navigationItem" title="Manage Nodes" id="kwT-ni-U2b">
-                        <barButtonItem key="rightBarButtonItem" style="plain" systemItem="add" id="u6V-DN-ben">
+                        <barButtonItem key="rightBarButtonItem" style="done" systemItem="add" id="u6V-DN-ben">
                             <connections>
-                                <segue destination="gMj-9p-pIm" kind="show" id="eZ6-vs-vYP"/>
+                                <segue destination="gMj-9p-pIm" kind="show" identifier="CreateNodeSegue" id="eZ6-vs-vYP"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>

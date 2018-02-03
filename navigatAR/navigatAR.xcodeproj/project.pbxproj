@@ -88,6 +88,7 @@
 				1C73730A202553D200725F6D /* Building.swift */,
 				56EC2A0020237BAE00924B5D /* GoogleService-Info.plist */,
 				56F25B8A2022E79800B246D3 /* AppDelegate.swift */,
+				26AE44CE2025753800F8C75D /* AdminViewController.swift */,
 				56F25B8C2022E79800B246D3 /* FirstViewController.swift */,
 				56F25B8E2022E79800B246D3 /* SecondViewController.swift */,
 				1C73730C20255A1700725F6D /* Node.swift */,
@@ -96,7 +97,6 @@
 				5690CC242022ECA400F298EE /* art.scnassets */,
 				56F25B952022E79800B246D3 /* LaunchScreen.storyboard */,
 				56F25B982022E79800B246D3 /* Info.plist */,
-				26AE44CE2025753800F8C75D /* AdminViewController.swift */,
 				26AE44D42025934800F8C75D /* config.example.plist */,
 				26AE44D62025936700F8C75D /* config.plist */,
 			);
@@ -395,7 +395,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = CYWSRBS9VH;
+				DEVELOPMENT_TEAM = CKCJPG6PEM;
+				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = navigatAR/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = club.micdsprogramming.navigatAR;
@@ -411,7 +412,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = CYWSRBS9VH;
+				DEVELOPMENT_TEAM = CKCJPG6PEM;
+				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = navigatAR/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = club.micdsprogramming.navigatAR;

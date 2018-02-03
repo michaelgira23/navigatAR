@@ -6,18 +6,36 @@
 //  Copyright © 2018 MICDS Programming. All rights reserved.
 //
 
-import UIKit
+import Eureka
 import IndoorAtlas
 
-class UpsertNodeViewController: UIViewController {
+class UpsertNodeViewController: FormViewController {
 
 	let locationManager = IALocationManager.sharedInstance()
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		// Do any additional setup after loading the view.
 		// Delegate methods to our custom location handler
 		locationManager.delegate = self
+
+		form +++ TextRow() { row in
+				row.title = "Name"
+				row.placeholder = "Ex. STEM 252"
+			}
+			+++ SelectableSection<ListCheckRow<String>>("Node Type", selectionType: .singleSelection(enableDeselection: true))
+		let nodeTypes = ["Pathway", "Bathroom", "Printer", "Water Fountain", "Room", "Sports Venue", "Monument"]
+		for option in nodeTypes {
+			form.last! <<< ListCheckRow<String>(option){ listRow in
+				listRow.title = option
+				listRow.selectableValue = option
+				listRow.value = nil
+			}
+		}
+
+		form +++ ButtonRow() { row in
+				row.title = "Create"
+			}
+
 	}
 
 	override func didReceiveMemoryWarning() {

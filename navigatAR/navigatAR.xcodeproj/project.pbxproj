@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1C73730B202553D200725F6D /* Building.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C73730A202553D200725F6D /* Building.swift */; };
+		1C73730D20255A1700725F6D /* Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C73730C20255A1700725F6D /* Node.swift */; };
 		5690CC252022ECA400F298EE /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 5690CC242022ECA400F298EE /* art.scnassets */; };
 		56EC2A0120237BAF00924B5D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 56EC2A0020237BAE00924B5D /* GoogleService-Info.plist */; };
 		56F25B8B2022E79800B246D3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56F25B8A2022E79800B246D3 /* AppDelegate.swift */; };
@@ -19,6 +21,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1C73730A202553D200725F6D /* Building.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Building.swift; sourceTree = "<group>"; };
+		1C73730C20255A1700725F6D /* Node.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Node.swift; sourceTree = "<group>"; };
 		3670E310BCDA21FEDDE0F541 /* Pods_navigatAR.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_navigatAR.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5690CC242022ECA400F298EE /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
 		56EC2A0020237BAE00924B5D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -75,10 +79,12 @@
 		56F25B892022E79800B246D3 /* navigatAR */ = {
 			isa = PBXGroup;
 			children = (
+				1C73730A202553D200725F6D /* Building.swift */,
 				56EC2A0020237BAE00924B5D /* GoogleService-Info.plist */,
 				56F25B8A2022E79800B246D3 /* AppDelegate.swift */,
 				56F25B8C2022E79800B246D3 /* FirstViewController.swift */,
 				56F25B8E2022E79800B246D3 /* SecondViewController.swift */,
+				1C73730C20255A1700725F6D /* Node.swift */,
 				56F25B902022E79800B246D3 /* Main.storyboard */,
 				56F25B932022E79800B246D3 /* Assets.xcassets */,
 				5690CC242022ECA400F298EE /* art.scnassets */,
@@ -235,8 +241,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				56F25B8F2022E79800B246D3 /* SecondViewController.swift in Sources */,
+				1C73730D20255A1700725F6D /* Node.swift in Sources */,
 				56F25B8B2022E79800B246D3 /* AppDelegate.swift in Sources */,
 				56F25B8D2022E79800B246D3 /* FirstViewController.swift in Sources */,
+				1C73730B202553D200725F6D /* Building.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -375,7 +383,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 9739DHZ5QZ;
+				DEVELOPMENT_TEAM = CYWSRBS9VH;
 				INFOPLIST_FILE = navigatAR/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = club.micdsprogramming.navigatAR;
@@ -391,7 +399,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 9739DHZ5QZ;
+				DEVELOPMENT_TEAM = CYWSRBS9VH;
 				INFOPLIST_FILE = navigatAR/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = club.micdsprogramming.navigatAR;

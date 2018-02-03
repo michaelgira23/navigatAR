@@ -8,11 +8,38 @@
 
 import UIKit
 import Firebase
+import IndoorAtlas
+
+func getConfigItem(name: String) -> String? {
+	let filePath = Bundle.main.path(forResource: "config", ofType: "plist")
+	let plist = NSDictionary(contentsOfFile: filePath!)
+	if let value = plist!.object(forKey: name) as? String {
+		return value
+	} else {
+		return nil
+	}
+}
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
 	var window: UIWindow?
+
+	var locationManager: IALocationManager?
+	
+	func authenticateAndRequestLocation() {
+		
+		// Get IALocationManager shared instance and point delegate to receiver
+		locationManager = IALocationManager.sharedInstance()
+		
+		// Set IndoorAtlas API key and secret
+		let IAAPIKeyId = getConfigItem(name: "IAAPIKeyId")!
+		let IAAPIKeySecret = getConfigItem(name: "IAAPIKeySecret")!
+		locationManager!.setApiKey(IAAPIKeyId, andSecret: IAAPIKeySecret)
+		
+		// Request location updates
+		locationManager!.startUpdatingLocation()
+	}
 
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
 		// Override point for customization after application launch.

@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		1C73730B202553D200725F6D /* Building.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C73730A202553D200725F6D /* Building.swift */; };
 		1C73730D20255A1700725F6D /* Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C73730C20255A1700725F6D /* Node.swift */; };
+		26AE44CF2025753800F8C75D /* AdminViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26AE44CE2025753800F8C75D /* AdminViewController.swift */; };
+		26AE44D52025934800F8C75D /* config.example.plist in Resources */ = {isa = PBXBuildFile; fileRef = 26AE44D42025934800F8C75D /* config.example.plist */; };
+		26AE44D72025936700F8C75D /* config.plist in Resources */ = {isa = PBXBuildFile; fileRef = 26AE44D62025936700F8C75D /* config.plist */; };
 		5690CC252022ECA400F298EE /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 5690CC242022ECA400F298EE /* art.scnassets */; };
 		56EC2A0120237BAF00924B5D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 56EC2A0020237BAE00924B5D /* GoogleService-Info.plist */; };
 		56F25B8B2022E79800B246D3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56F25B8A2022E79800B246D3 /* AppDelegate.swift */; };
@@ -23,6 +26,9 @@
 /* Begin PBXFileReference section */
 		1C73730A202553D200725F6D /* Building.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Building.swift; sourceTree = "<group>"; };
 		1C73730C20255A1700725F6D /* Node.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Node.swift; sourceTree = "<group>"; };
+		26AE44CE2025753800F8C75D /* AdminViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminViewController.swift; sourceTree = "<group>"; };
+		26AE44D42025934800F8C75D /* config.example.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = config.example.plist; sourceTree = "<group>"; };
+		26AE44D62025936700F8C75D /* config.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = config.plist; sourceTree = "<group>"; };
 		3670E310BCDA21FEDDE0F541 /* Pods_navigatAR.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_navigatAR.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5690CC242022ECA400F298EE /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
 		56EC2A0020237BAE00924B5D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -90,6 +96,9 @@
 				5690CC242022ECA400F298EE /* art.scnassets */,
 				56F25B952022E79800B246D3 /* LaunchScreen.storyboard */,
 				56F25B982022E79800B246D3 /* Info.plist */,
+				26AE44CE2025753800F8C75D /* AdminViewController.swift */,
+				26AE44D42025934800F8C75D /* config.example.plist */,
+				26AE44D62025936700F8C75D /* config.plist */,
 			);
 			path = navigatAR;
 			sourceTree = "<group>";
@@ -165,6 +174,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				26AE44D72025936700F8C75D /* config.plist in Resources */,
+				26AE44D52025934800F8C75D /* config.example.plist in Resources */,
 				56F25B972022E79800B246D3 /* LaunchScreen.storyboard in Resources */,
 				5690CC252022ECA400F298EE /* art.scnassets in Resources */,
 				56EC2A0120237BAF00924B5D /* GoogleService-Info.plist in Resources */,
@@ -240,6 +251,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				26AE44CF2025753800F8C75D /* AdminViewController.swift in Sources */,
 				56F25B8F2022E79800B246D3 /* SecondViewController.swift in Sources */,
 				1C73730D20255A1700725F6D /* Node.swift in Sources */,
 				56F25B8B2022E79800B246D3 /* AppDelegate.swift in Sources */,

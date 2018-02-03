@@ -9,19 +9,9 @@
 import UIKit
 import IndoorAtlas
 
-class AdminViewController: UIViewController, IALocationManagerDelegate {
+class AdminViewController: UIViewController {
 
 	let locationManager = IALocationManager.sharedInstance()
-
-	// recieve locaiton info
-	func indoorLocationManager(_ manager: IALocationManager, didUpdateLocations locations: [Any]) {
-		
-		let l = locations.last as! IALocation
-		
-		if let newLocation = l.location?.coordinate {
-			print("Position changed to coordinate: \(newLocation.latitude) \(newLocation.longitude)")
-		}
-	}
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,4 +36,17 @@ class AdminViewController: UIViewController, IALocationManagerDelegate {
     }
     */
 
+}
+
+    // MARK: - IndoorAtlas delegates
+extension AdminViewController: IALocationManagerDelegate {
+	// recieve locaiton info
+	func indoorLocationManager(_ manager: IALocationManager, didUpdateLocations locations: [Any]) {
+		
+		let l = locations.last as! IALocation
+		
+		if let newLocation = l.location?.coordinate {
+			print("Position changed to coordinate: \(newLocation.latitude) \(newLocation.longitude)")
+		}
+	}
 }

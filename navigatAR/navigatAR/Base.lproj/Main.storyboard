@@ -165,7 +165,7 @@
                     <navigationItem key="navigationItem" title="Manage Tags" id="L1V-Kf-dKz">
                         <barButtonItem key="rightBarButtonItem" style="done" systemItem="add" id="41P-Ht-lEM">
                             <connections>
-                                <segue destination="Lbk-61-GKu" kind="show" identifier="CreateNodeSegue" id="lj5-w2-nni"/>
+                                <segue destination="Lbk-61-GKu" kind="show" identifier="CreateTagSegue" id="lj5-w2-nni"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>

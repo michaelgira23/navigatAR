@@ -6,12 +6,6 @@
 //  Copyright © 2018 MICDS Programming. All rights reserved.
 //
 
-import Firebase
-
 public typealias FirebasePushKey = String
 
-public protocol FirebaseModel {
-	var id: FirebasePushKey { get }
-
-	static func fromPushKey(root: DataSnapshot, key: FirebasePushKey) -> Self
-}
+// TODO: add convenience methods

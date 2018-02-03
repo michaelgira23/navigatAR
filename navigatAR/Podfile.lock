@@ -1,4 +1,5 @@
 PODS:
+  - CodableFirebase (0.0.5)
   - Firebase/Core (4.8.2):
     - FirebaseAnalytics (= 4.0.9)
     - FirebaseCore (= 4.0.14)
@@ -30,11 +31,13 @@ PODS:
   - nanopb/encode (0.3.8)
 
 DEPENDENCIES:
+  - CodableFirebase
   - Firebase/Core
   - Firebase/Database
   - IndoorAtlas
 
 SPEC CHECKSUMS:
+  CodableFirebase: b13321acfec878cbcda93faf84c985f4d69ec2f1
   Firebase: 7d3b8cd837ad9fcd391657734c0d56dab8e9a5a3
   FirebaseAnalytics: 388b630c15713f5dbf364071f5f3d6077fb52f4e
   FirebaseCore: 2e0b98fb2d64ca8140136beff15772bdd14d2dd7
@@ -45,6 +48,6 @@ SPEC CHECKSUMS:
   leveldb-library: 08cba283675b7ed2d99629a4bc5fd052cd2bb6a5
   nanopb: 5601e6bca2dbf1ed831b519092ec110f66982ca3
 
-PODFILE CHECKSUM: 90865e56fc124f2e0454c1d6905bfa867e25af8f
+PODFILE CHECKSUM: 76d4fe5aa58e81b32399dd30fde5681bcf83f111
 
 COCOAPODS: 1.4.0

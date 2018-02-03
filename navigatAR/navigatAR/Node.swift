@@ -10,25 +10,25 @@ import CoreLocation
 import Firebase
 
 enum NodeType: String {
-    // Generic stuff
-    case pointOfInterest
-    
-    // More specific nodes
-    case pathway
-    case bathroom
-    case printer
-    case fountain
-    case room
-    case sportsVenue
-    
-    // TODO: add more types if necessary
+	// Generic stuff
+	case pointOfInterest
+
+	// More specific nodes
+	case pathway
+	case bathroom
+	case printer
+	case fountain
+	case room
+	case sportsVenue
+
+	// TODO: add more types if necessary
 }
 
 struct Node: FirebaseModel {
 	let id: FirebasePushKey
 
-    let building: FirebasePushKey
-    let name: String
+	let building: FirebasePushKey
+	let name: String
 	let type: NodeType
 	let position: CLLocation
     // let tags: [String: Any] TODO

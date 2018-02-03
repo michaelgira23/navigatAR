@@ -9,7 +9,7 @@
 import UIKit
 import Firebase
 
-class SecondViewController: UIViewController {
+class MapViewController: UIViewController {
 
 	var ref: DatabaseReference!
 

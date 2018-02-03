@@ -11,6 +11,8 @@ import IndoorAtlas
 
 class AdminViewController: UIViewController {
 
+	@IBOutlet weak var locationText: UILabel!
+	@IBOutlet weak var statusText: UILabel!
 	let locationManager = IALocationManager.sharedInstance()
 
     override func viewDidLoad() {
@@ -42,11 +44,16 @@ class AdminViewController: UIViewController {
 extension AdminViewController: IALocationManagerDelegate {
 	// recieve locaiton info
 	func indoorLocationManager(_ manager: IALocationManager, didUpdateLocations locations: [Any]) {
-		
+
 		let l = locations.last as! IALocation
-		
+
 		if let newLocation = l.location?.coordinate {
-			print("Position changed to coordinate: \(newLocation.latitude) \(newLocation.longitude)")
+			locationText.text = "Position changed to coordinate: \(newLocation.latitude) \(newLocation.longitude)"
 		}
+	}
+	
+	func indoorLocationManager(_ manager: IALocationManager, statusChanged status: IAStatus) {
+		let statusNum = String(status.type.rawValue)
+		statusText.text = "Status: " + statusNum
 	}
 }

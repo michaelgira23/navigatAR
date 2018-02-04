@@ -6,6 +6,7 @@ target 'navigatAR' do
   use_frameworks!
 
   # Pods for navigatAR
+  pod 'CodableFirebase'
   pod 'Eureka'
   pod 'Firebase/Core'
   pod 'Firebase/Database'

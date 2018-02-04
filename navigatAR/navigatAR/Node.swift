@@ -6,12 +6,12 @@
 //  Copyright © 2018 MICDS Programming. All rights reserved.
 //
 
-import Firebase
+import CoreLocation
 
-enum NodeType {
+enum NodeType: String, Codable {
 	// Generic stuff
 	case pointOfInterest
-
+	
 	// More specific nodes
 	case pathway
 	case bathroom
@@ -19,24 +19,14 @@ enum NodeType {
 	case fountain
 	case room
 	case sportsVenue
-
+	
 	// TODO: add more types if necessary
 }
 
-struct Node {
-	let building: Building
+struct Node: Codable {
+	let building: FirebasePushKey
 	let name: String
-	let admins: [String]
+	let type: NodeType
+	let position: Location
 	// let tags: [String: Any] TODO
-
-	static func fromPushKey(root: DataSnapshot, key: String) -> Node {
-		let node = root.childSnapshot(forPath: "nodes/\(key)").value as! [String: Any]
-
-		return Node(
-			building: Building.fromPushKey(root: root, key: node["building"] as! String),
-			name: node["name"] as! String,
-			admins: Array((node["admins"] as! [String: Bool]).keys)
-			// tags: whatever
-		)
-	}
 }

@@ -60,20 +60,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SIb-8T-mhR">
-                                <rect key="frame" x="95" y="403" width="185" height="84"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Kf4-ud-qcR">
-                                <rect key="frame" x="95" y="271" width="185" height="31"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tOy-lb-RQ6">
                                 <rect key="frame" x="141" y="159" width="92" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -95,10 +81,6 @@
                         <viewLayoutGuide key="safeArea" id="aqp-5P-wIW"/>
                     </view>
                     <navigationItem key="navigationItem" title="Admin Panel" id="qXL-fp-vGH"/>
-                    <connections>
-                        <outlet property="locationText" destination="SIb-8T-mhR" id="ZxP-QQ-STt"/>
-                        <outlet property="statusText" destination="Kf4-ud-qcR" id="mNp-U1-Eks"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Kid-gE-L8r" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -115,7 +97,9 @@
                         <viewLayoutGuide key="safeArea" id="EqT-16-Wgj"/>
                     </view>
                     <connections>
-                        <segue destination="WaG-9G-Vdg" kind="showDetail" identifier="NodePositionSegue" id="Vtm-GX-oY1"/>
+                        <segue destination="WaG-9G-Vdg" kind="popoverPresentation" identifier="NodePositionSegue" popoverAnchorView="hhb-SM-t9C" id="Vtm-GX-oY1">
+                            <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
+                        </segue>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="I02-mj-WIB" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -130,26 +114,37 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Get phone positiong for node" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gSl-gy-gJ7">
-                                <rect key="frame" x="75" y="396" width="224" height="21"/>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6sd-jc-cef">
+                                <rect key="frame" x="101" y="608" width="172" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Get Position"/>
+                                <connections>
+                                    <action selector="getGotted" destination="WaG-9G-Vdg" eventType="touchUpInside" id="P2L-Ld-Ush"/>
+                                    <action selector="getPosition" destination="WaG-9G-Vdg" eventType="touchUpInside" id="8Ce-hj-yCb"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Calibration: " textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gSl-gy-gJ7">
+                                <rect key="frame" x="75" y="208" width="224" height="53"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6sd-jc-cef">
-                                <rect key="frame" x="101" y="608" width="172" height="30"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Accuracy: " textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5Ly-iV-MHP">
+                                <rect key="frame" x="75" y="269" width="224" height="53"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Once Positon Got Getted"/>
-                                <connections>
-                                    <action selector="getGotted" destination="WaG-9G-Vdg" eventType="touchUpInside" id="P2L-Ld-Ush"/>
-                                </connections>
-                            </button>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="Odh-nP-Kg9"/>
                     </view>
                     <connections>
+                        <outlet property="accuracyText" destination="5Ly-iV-MHP" id="LmG-Zs-Ujj"/>
+                        <outlet property="calibrationText" destination="gSl-gy-gJ7" id="NLg-xN-Ww4"/>
+                        <outlet property="getPositionButton" destination="6sd-jc-cef" id="Qp6-KX-zfZ"/>
                         <segue destination="07B-Fa-Et9" kind="unwind" identifier="unwindToManageNodesSegueId" unwindAction="unwindToManageNodesWithSegue:" id="evj-6t-WZ6"/>
                     </connections>
                 </viewController>

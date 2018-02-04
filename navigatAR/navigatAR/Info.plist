@@ -24,6 +24,19 @@
 	<true/>
 	<key>NSCameraUsageDescription</key>
 	<string>Use the power of AR to show you the world</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Platform location requested for better indoor positioning experience.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Platform location requested for better indoor positioning experience.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Platform location requested for better positioning experience.</string>
+	<key>NSMotionUsageDescription</key>
+	<string>For better indoor positioning.</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>bluetooth-central</string>
+		<string>location</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -55,22 +68,5 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>NSCameraUsageDescription</key>
-	<string>Use the power of AR to show you the world</string>
-	<!-- IndoorAtlas configs, enables background positioning, motion detection and beacon support -->
-    <key>NSMotionUsageDescription</key>
-    <string>For better indoor positioning.</string>
-    <key>NSLocationWhenInUseUsageDescription</key>
-    <string>Platform location requested for better positioning experience.</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Platform location requested for better indoor positioning experience.</string>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Platform location requested for better indoor positioning experience.</string>
-	<key>UIBackgroundModes</key>
-	<array>
-		<string>bluetooth-central</string>
-		<string>location</string>
-	</array>
-	<!-- End of IA configs -->
 </dict>
 </plist>

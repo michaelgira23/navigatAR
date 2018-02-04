@@ -60,14 +60,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2wI-y3-v5l">
-                                <rect key="frame" x="139" y="121" width="96" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Manage Node"/>
-                                <connections>
-                                    <segue destination="rkc-8c-c3O" kind="show" identifier="ManageNodesSegue" id="jNb-BP-YyS"/>
-                                </connections>
-                            </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SIb-8T-mhR">
                                 <rect key="frame" x="95" y="403" width="185" height="84"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
@@ -90,6 +82,14 @@
                                     <segue destination="Us9-KI-xgF" kind="show" identifier="ManageTagsSegue" id="cVY-bW-FHv"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2wI-y3-v5l">
+                                <rect key="frame" x="135" y="121" width="104" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Manage Nodes"/>
+                                <connections>
+                                    <segue destination="rkc-8c-c3O" kind="show" identifier="ManageNodesSegue" id="jNb-BP-YyS"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="aqp-5P-wIW"/>
@@ -107,26 +107,56 @@
         <!--Create Node-->
         <scene sceneID="xvj-IY-XUP">
             <objects>
-                <viewController title="Create Node" id="gMj-9p-pIm" sceneMemberID="viewController">
+                <viewController title="Create Node" id="gMj-9p-pIm" customClass="UpsertNodeViewController" customModule="navigatAR" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="hhb-SM-t9C">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="EqT-16-Wgj"/>
+                    </view>
+                    <connections>
+                        <segue destination="WaG-9G-Vdg" kind="showDetail" identifier="NodePositionSegue" id="Vtm-GX-oY1"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="I02-mj-WIB" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3506" y="1004"/>
+        </scene>
+        <!--Node Position-->
+        <scene sceneID="URq-mP-JSn">
+            <objects>
+                <viewController id="WaG-9G-Vdg" userLabel="Node Position" customClass="NodePositionViewController" customModule="navigatAR" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="ym2-Wm-huV">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Create Node" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0ab-3K-k2c">
-                                <rect key="frame" x="139" y="396" width="97" height="21"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Get phone positiong for node" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gSl-gy-gJ7">
+                                <rect key="frame" x="75" y="396" width="224" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6sd-jc-cef">
+                                <rect key="frame" x="101" y="608" width="172" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Once Positon Got Getted"/>
+                                <connections>
+                                    <action selector="getGotted" destination="WaG-9G-Vdg" eventType="touchUpInside" id="P2L-Ld-Ush"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <viewLayoutGuide key="safeArea" id="EqT-16-Wgj"/>
+                        <viewLayoutGuide key="safeArea" id="Odh-nP-Kg9"/>
                     </view>
+                    <connections>
+                        <segue destination="07B-Fa-Et9" kind="unwind" identifier="unwindToManageNodesSegueId" unwindAction="unwindToManageNodesWithSegue:" id="evj-6t-WZ6"/>
+                    </connections>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="I02-mj-WIB" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="VEO-ca-7pa" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="07B-Fa-Et9" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="3506" y="1004"/>
+            <point key="canvasLocation" x="4552.8000000000002" y="1003.448275862069"/>
         </scene>
         <!--Manage Tags-->
         <scene sceneID="F3r-9x-ifC">
@@ -174,7 +204,7 @@
                     <navigationItem key="navigationItem" title="Manage Tags" id="L1V-Kf-dKz">
                         <barButtonItem key="rightBarButtonItem" style="done" systemItem="add" id="41P-Ht-lEM">
                             <connections>
-                                <segue destination="Lbk-61-GKu" kind="show" identifier="CreateNodeSegue" id="lj5-w2-nni"/>
+                                <segue destination="Lbk-61-GKu" kind="show" identifier="CreateTagSegue" id="lj5-w2-nni"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -186,19 +216,10 @@
         <!--Create Tag-->
         <scene sceneID="KuW-rs-5YJ">
             <objects>
-                <viewController title="Create Tag" id="Lbk-61-GKu" sceneMemberID="viewController">
+                <viewController title="Create Tag" id="Lbk-61-GKu" customClass="UpsertTagViewController" customModule="navigatAR" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="mMX-VK-GH2">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Create Tag" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IMS-nh-IjP">
-                                <rect key="frame" x="146" y="396" width="83" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="BFo-Zd-XCQ"/>
                     </view>
@@ -251,7 +272,7 @@
         <!--Manage Nodes-->
         <scene sceneID="iEs-lM-Ctv">
             <objects>
-                <viewController title="Manage Nodes" id="rkc-8c-c3O" sceneMemberID="viewController">
+                <viewController title="Manage Nodes" id="rkc-8c-c3O" customClass="ManageNodesViewController" customModule="navigatAR" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="LTM-L3-vYj">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

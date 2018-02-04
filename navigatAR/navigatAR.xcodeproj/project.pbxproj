@@ -23,6 +23,7 @@
 		56F25B922022E79800B246D3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 56F25B902022E79800B246D3 /* Main.storyboard */; };
 		56F25B942022E79800B246D3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 56F25B932022E79800B246D3 /* Assets.xcassets */; };
 		56F25B972022E79800B246D3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 56F25B952022E79800B246D3 /* LaunchScreen.storyboard */; };
+		56FEE4C8202639970075CA75 /* UpsertNodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56FEE4C7202639970075CA75 /* UpsertNodeViewController.swift */; };
 		A959D60230803839364FEB5D /* Pods_navigatAR.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3670E310BCDA21FEDDE0F541 /* Pods_navigatAR.framework */; };
 /* End PBXBuildFile section */
 
@@ -46,6 +47,7 @@
 		56F25B932022E79800B246D3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		56F25B962022E79800B246D3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		56F25B982022E79800B246D3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		56FEE4C7202639970075CA75 /* UpsertNodeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpsertNodeViewController.swift; sourceTree = "<group>"; };
 		5E69BC90EE3E34F49CA3FF4C /* Pods-navigatAR.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-navigatAR.release.xcconfig"; path = "Pods/Target Support Files/Pods-navigatAR/Pods-navigatAR.release.xcconfig"; sourceTree = "<group>"; };
 		DEAAEDCA81AD21BBBF3786A2 /* Pods-navigatAR.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-navigatAR.debug.xcconfig"; path = "Pods/Target Support Files/Pods-navigatAR/Pods-navigatAR.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -98,6 +100,7 @@
 				56F25B8C2022E79800B246D3 /* ArViewController.swift */,
 				56F25B8E2022E79800B246D3 /* MapViewController.swift */,
 				26AE44CE2025753800F8C75D /* AdminViewController.swift */,
+				56FEE4C7202639970075CA75 /* UpsertNodeViewController.swift */,
 				1C73730C20255A1700725F6D /* Node.swift */,
 				1C73731620267CFC00725F6D /* Location.swift */,
 				56F25B902022E79800B246D3 /* Main.storyboard */,
@@ -204,6 +207,7 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-navigatAR/Pods-navigatAR-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/CodableFirebase/CodableFirebase.framework",
+				"${BUILT_PRODUCTS_DIR}/Eureka/Eureka.framework",
 				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
 				"${PODS_ROOT}/IndoorAtlas/indooratlas-ios-sdk/IndoorAtlas.framework",
 				"${BUILT_PRODUCTS_DIR}/leveldb-library/leveldb.framework",
@@ -212,6 +216,7 @@
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CodableFirebase.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Eureka.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/IndoorAtlas.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/leveldb.framework",
@@ -267,6 +272,7 @@
 				26AE44CF2025753800F8C75D /* AdminViewController.swift in Sources */,
 				1C73730D20255A1700725F6D /* Node.swift in Sources */,
 				1C73731720267CFC00725F6D /* Location.swift in Sources */,
+				56FEE4C8202639970075CA75 /* UpsertNodeViewController.swift in Sources */,
 				56F25B8B2022E79800B246D3 /* AppDelegate.swift in Sources */,
 				1C7373112026302D00725F6D /* FirebaseUtils.swift in Sources */,
 				56F25B8D2022E79800B246D3 /* ArViewController.swift in Sources */,
@@ -409,7 +415,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = CYWSRBS9VH;
+				DEVELOPMENT_TEAM = CKCJPG6PEM;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = navigatAR/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -426,7 +432,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = CYWSRBS9VH;
+				DEVELOPMENT_TEAM = CKCJPG6PEM;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = navigatAR/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

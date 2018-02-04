@@ -1,5 +1,5 @@
 //
-//  ArViewController.swift
+//  NavViewController.swift
 //  navigatAR
 //
 //  Created by Michael Gira on 2/1/18.
@@ -10,19 +10,24 @@ import UIKit
 import SceneKit
 import ARKit
 
-class ArViewController: UIViewController, ARSCNViewDelegate {
+class NavViewController: UIViewController, ARSCNViewDelegate, UISearchBarDelegate {
 
+	@IBOutlet weak var searchBar: UISearchBar!
 	@IBOutlet var sceneView: ARSCNView!
+//	@IBOutlet weak var otherSearchBar: UISearchBar!
+
+	var searchActive = false;
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		// Do any additional setup after loading the view, typically from a nib.
+		// Set search bar's delegate
+//		otherSearchBar.delegate = self
 
 		// Set the view's delegate
 		sceneView.delegate = self
 
 		// Show statistics such as fps and timing information
-		sceneView.showsStatistics = true
+		sceneView.showsStatistics = false
 
 		// Create a new scene
 		let scene = SCNScene(named: "art.scnassets/ship.scn")!
@@ -36,6 +41,9 @@ class ArViewController: UIViewController, ARSCNViewDelegate {
 
 		// Create a session configuration
 		let configuration = ARWorldTrackingConfiguration()
+
+		// Detect
+		print("ARKit supported?", ARWorldTrackingConfiguration.isSupported)
 
 		// Run the view's session
 		sceneView.session.run(configuration)
@@ -51,6 +59,27 @@ class ArViewController: UIViewController, ARSCNViewDelegate {
 	override func didReceiveMemoryWarning() {
 		super.didReceiveMemoryWarning()
 		// Release any cached data, images, etc that aren't in use.
+	}
+
+	/* Search Bar Handlers */
+	func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+		searchActive = true;
+		print("Search bar began editing");
+	}
+
+	func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+		searchActive = false;
+		print("Search bar stopped editing");
+	}
+
+	func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+		searchActive = false;
+		print("Search bar cancel clicked");
+	}
+
+	func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+		searchActive = false;
+		print("Search bar search clicked");
 	}
 
 	// MARK: - ARSCNViewDelegate

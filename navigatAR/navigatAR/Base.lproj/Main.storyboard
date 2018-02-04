@@ -10,10 +10,10 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--AR-->
+        <!--Navigate-->
         <scene sceneID="hNz-n2-bh7">
             <objects>
-                <viewController id="9pv-A4-QxB" userLabel="AR" customClass="ArViewController" customModule="navigatAR" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Nav" id="9pv-A4-QxB" userLabel="Navigate" customClass="NavViewController" customModule="navigatAR" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="tsR-hK-woN">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -22,18 +22,35 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES" flexibleMaxY="YES"/>
                             </arscnView>
+                            <searchBar contentMode="redraw" fixedFrame="YES" searchBarStyle="minimal" placeholder="Search" showsCancelButton="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IiA-Gv-oP7">
+                                <rect key="frame" x="0.0" y="44" width="375" height="56"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="barTintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <textInputTraits key="textInputTraits" returnKeyType="search"/>
+                            </searchBar>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <viewLayoutGuide key="safeArea" id="PQr-Ze-W5v"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="AR" image="first" id="acW-dT-cKf"/>
+                    <tabBarItem key="tabBarItem" title="Navigate" image="first" id="acW-dT-cKf"/>
                     <connections>
                         <outlet property="sceneView" destination="oa8-xz-7VX" id="DCP-Nm-WJc"/>
+                        <outlet property="searchBar" destination="IiA-Gv-oP7" id="Df3-U0-3jt"/>
+                        <outlet property="searchDisplayController" destination="EmP-H4-Bql" id="Wrc-f2-Bcu"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="W5J-7L-Pyd" sceneMemberID="firstResponder"/>
+                <searchDisplayController id="EmP-H4-Bql">
+                    <connections>
+                        <outlet property="delegate" destination="9pv-A4-QxB" id="xFg-XT-DXs"/>
+                        <outlet property="searchContentsController" destination="9pv-A4-QxB" id="Ras-Mq-Lqq"/>
+                        <outlet property="searchResultsDataSource" destination="9pv-A4-QxB" id="jBq-BE-E5j"/>
+                        <outlet property="searchResultsDelegate" destination="9pv-A4-QxB" id="9Vj-8Y-vc4"/>
+                    </connections>
+                </searchDisplayController>
             </objects>
-            <point key="canvasLocation" x="749.60000000000002" y="-320.68965517241384"/>
+            <point key="canvasLocation" x="749.60000000000002" y="-320.68965517241378"/>
         </scene>
         <!--Admin Panel-->
         <scene sceneID="Rms-kx-SzT">
@@ -235,35 +252,12 @@
                     </tabBar>
                     <connections>
                         <segue destination="9pv-A4-QxB" kind="relationship" relationship="viewControllers" id="u7Y-xg-7CH"/>
-                        <segue destination="6Qc-9F-U5I" kind="relationship" relationship="viewControllers" id="nym-Ci-ni0"/>
                         <segue destination="BMV-PT-P6H" kind="relationship" relationship="viewControllers" id="ySR-6T-gT7"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HuB-VB-40B" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="0.0" y="0.0"/>
-        </scene>
-        <!--Maps-->
-        <scene sceneID="4w7-xg-Xkn">
-            <objects>
-                <viewController id="6Qc-9F-U5I" userLabel="Maps" customClass="MapViewController" customModule="navigatAR" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="VQV-O8-Mhk">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="jk8-ty-0PL">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="618"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            </mapView>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <viewLayoutGuide key="safeArea" id="VU1-dP-jc0"/>
-                    </view>
-                    <tabBarItem key="tabBarItem" title="Map" image="first" id="ehe-J4-2g0" userLabel="Map"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="rzY-Wx-kH1" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="770.39999999999998" y="336.88155922038982"/>
         </scene>
         <!--Manage Nodes-->
         <scene sceneID="iEs-lM-Ctv">

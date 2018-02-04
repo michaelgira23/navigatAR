@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		1C73730B202553D200725F6D /* Building.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C73730A202553D200725F6D /* Building.swift */; };
 		1C73730D20255A1700725F6D /* Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C73730C20255A1700725F6D /* Node.swift */; };
+		1C7373112026302D00725F6D /* FirebaseUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C7373102026302D00725F6D /* FirebaseUtils.swift */; };
+		1C7373132026330100725F6D /* TagInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C7373122026330100725F6D /* TagInfo.swift */; };
+		1C73731720267CFC00725F6D /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C73731620267CFC00725F6D /* Location.swift */; };
+		1C73731B20276DF900725F6D /* Tag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C73731A20276DF800725F6D /* Tag.swift */; };
 		26AE44CF2025753800F8C75D /* AdminViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26AE44CE2025753800F8C75D /* AdminViewController.swift */; };
 		26AE44D52025934800F8C75D /* config.example.plist in Resources */ = {isa = PBXBuildFile; fileRef = 26AE44D42025934800F8C75D /* config.example.plist */; };
 		26AE44D72025936700F8C75D /* config.plist in Resources */ = {isa = PBXBuildFile; fileRef = 26AE44D62025936700F8C75D /* config.plist */; };
@@ -16,8 +20,7 @@
 		5690CC252022ECA400F298EE /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 5690CC242022ECA400F298EE /* art.scnassets */; };
 		56EC2A0120237BAF00924B5D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 56EC2A0020237BAE00924B5D /* GoogleService-Info.plist */; };
 		56F25B8B2022E79800B246D3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56F25B8A2022E79800B246D3 /* AppDelegate.swift */; };
-		56F25B8D2022E79800B246D3 /* ArViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56F25B8C2022E79800B246D3 /* ArViewController.swift */; };
-		56F25B8F2022E79800B246D3 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56F25B8E2022E79800B246D3 /* MapViewController.swift */; };
+		56F25B8D2022E79800B246D3 /* NavViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56F25B8C2022E79800B246D3 /* NavViewController.swift */; };
 		56F25B922022E79800B246D3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 56F25B902022E79800B246D3 /* Main.storyboard */; };
 		56F25B942022E79800B246D3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 56F25B932022E79800B246D3 /* Assets.xcassets */; };
 		56F25B972022E79800B246D3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 56F25B952022E79800B246D3 /* LaunchScreen.storyboard */; };
@@ -30,6 +33,10 @@
 /* Begin PBXFileReference section */
 		1C73730A202553D200725F6D /* Building.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Building.swift; sourceTree = "<group>"; };
 		1C73730C20255A1700725F6D /* Node.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Node.swift; sourceTree = "<group>"; };
+		1C7373102026302D00725F6D /* FirebaseUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseUtils.swift; sourceTree = "<group>"; };
+		1C7373122026330100725F6D /* TagInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagInfo.swift; sourceTree = "<group>"; };
+		1C73731620267CFC00725F6D /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
+		1C73731A20276DF800725F6D /* Tag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tag.swift; sourceTree = "<group>"; };
 		26AE44CE2025753800F8C75D /* AdminViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminViewController.swift; sourceTree = "<group>"; };
 		26AE44D42025934800F8C75D /* config.example.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = config.example.plist; sourceTree = "<group>"; };
 		26AE44D62025936700F8C75D /* config.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = config.plist; sourceTree = "<group>"; };
@@ -39,8 +46,7 @@
 		56EC2A0020237BAE00924B5D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		56F25B872022E79800B246D3 /* navigatAR.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = navigatAR.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		56F25B8A2022E79800B246D3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		56F25B8C2022E79800B246D3 /* ArViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArViewController.swift; sourceTree = "<group>"; wrapsLines = 0; };
-		56F25B8E2022E79800B246D3 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
+		56F25B8C2022E79800B246D3 /* NavViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavViewController.swift; sourceTree = "<group>"; wrapsLines = 0; };
 		56F25B912022E79800B246D3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		56F25B932022E79800B246D3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		56F25B962022E79800B246D3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -93,17 +99,19 @@
 		56F25B892022E79800B246D3 /* navigatAR */ = {
 			isa = PBXGroup;
 			children = (
+				1C73731A20276DF800725F6D /* Tag.swift */,
 				1C73730A202553D200725F6D /* Building.swift */,
+				1C7373122026330100725F6D /* TagInfo.swift */,
 				56EC2A0020237BAE00924B5D /* GoogleService-Info.plist */,
 				56F25B8A2022E79800B246D3 /* AppDelegate.swift */,
-				56F25B8C2022E79800B246D3 /* ArViewController.swift */,
-				56F25B8E2022E79800B246D3 /* MapViewController.swift */,
+				56F25B8C2022E79800B246D3 /* NavViewController.swift */,
 				26AE44CE2025753800F8C75D /* AdminViewController.swift */,
 				565A1BA820268B24007C56F5 /* ManageNodesViewController.swift */,
 				56FEE4C7202639970075CA75 /* UpsertNodeViewController.swift */,
 				56FEE4CB202683EE0075CA75 /* NodePositionViewController.swift */,
 				56FEE4C920266BE30075CA75 /* UpsertTagViewController.swift */,
 				1C73730C20255A1700725F6D /* Node.swift */,
+				1C73731620267CFC00725F6D /* Location.swift */,
 				56F25B902022E79800B246D3 /* Main.storyboard */,
 				56F25B932022E79800B246D3 /* Assets.xcassets */,
 				5690CC242022ECA400F298EE /* art.scnassets */,
@@ -111,6 +119,7 @@
 				56F25B982022E79800B246D3 /* Info.plist */,
 				26AE44D42025934800F8C75D /* config.example.plist */,
 				26AE44D62025936700F8C75D /* config.plist */,
+				1C7373102026302D00725F6D /* FirebaseUtils.swift */,
 			);
 			path = navigatAR;
 			sourceTree = "<group>";
@@ -206,6 +215,7 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-navigatAR/Pods-navigatAR-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/CodableFirebase/CodableFirebase.framework",
 				"${BUILT_PRODUCTS_DIR}/Eureka/Eureka.framework",
 				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
 				"${PODS_ROOT}/IndoorAtlas/indooratlas-ios-sdk/IndoorAtlas.framework",
@@ -214,6 +224,7 @@
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CodableFirebase.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Eureka.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/IndoorAtlas.framework",
@@ -265,16 +276,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				56F25B8F2022E79800B246D3 /* MapViewController.swift in Sources */,
+				1C7373132026330100725F6D /* TagInfo.swift in Sources */,
 				565A1BA920268B24007C56F5 /* ManageNodesViewController.swift in Sources */,
 				56FEE4CC202683EE0075CA75 /* NodePositionViewController.swift in Sources */,
 				26AE44CF2025753800F8C75D /* AdminViewController.swift in Sources */,
 				1C73730D20255A1700725F6D /* Node.swift in Sources */,
+				1C73731720267CFC00725F6D /* Location.swift in Sources */,
 				56FEE4C8202639970075CA75 /* UpsertNodeViewController.swift in Sources */,
 				56F25B8B2022E79800B246D3 /* AppDelegate.swift in Sources */,
-				56F25B8D2022E79800B246D3 /* ArViewController.swift in Sources */,
+				1C7373112026302D00725F6D /* FirebaseUtils.swift in Sources */,
+				56F25B8D2022E79800B246D3 /* NavViewController.swift in Sources */,
 				56FEE4CA20266BE30075CA75 /* UpsertTagViewController.swift in Sources */,
 				1C73730B202553D200725F6D /* Building.swift in Sources */,
+				1C73731B20276DF900725F6D /* Tag.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -413,7 +427,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = CKCJPG6PEM;
+				DEVELOPMENT_TEAM = CYWSRBS9VH;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = navigatAR/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -430,7 +444,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = CKCJPG6PEM;
+				DEVELOPMENT_TEAM = CYWSRBS9VH;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = navigatAR/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

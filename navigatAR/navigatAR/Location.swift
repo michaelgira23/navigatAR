@@ -14,7 +14,7 @@ struct Location: Codable {
 	let latitude: CLLocationDegrees
 	let longitude: CLLocationDegrees
 	let altitude: CLLocationDistance
-	let floorLvl: Int
+	let floor: Int
 	let verticalAccuracy: CLLocationAccuracy
 	let horizontalAccuracy: CLLocationAccuracy
 
@@ -22,7 +22,7 @@ struct Location: Codable {
 		latitude = ial.location!.coordinate.latitude
 		longitude = ial.location!.coordinate.longitude
 		altitude = ial.location!.altitude
-		floorLvl = ial.floor!.level
+		floor = ial.floor!.level
 		verticalAccuracy = ial.location!.verticalAccuracy
 		horizontalAccuracy = ial.location!.horizontalAccuracy
 	}

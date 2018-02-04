@@ -10,18 +10,31 @@ import UIKit
 import SceneKit
 import ARKit
 
-class NavViewController: UIViewController, ARSCNViewDelegate, UISearchBarDelegate {
+class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSource, UISearchBarDelegate {
 
+	@IBOutlet weak var searchBlur: UIVisualEffectView!
 	@IBOutlet weak var searchBar: UISearchBar!
+	@IBOutlet weak var tableView: UITableView!
 	@IBOutlet var sceneView: ARSCNView!
-//	@IBOutlet weak var otherSearchBar: UISearchBar!
 
-	var searchActive = false;
+	let data = ["New York, NY", "Los Angeles, CA", "Chicago, IL", "Houston, TX",
+				"Philadelphia, PA", "Phoenix, AZ", "San Diego, CA", "San Antonio, TX",
+				"Dallas, TX", "Detroit, MI", "San Jose, CA", "Indianapolis, IN",
+				"Jacksonville, FL", "San Francisco, CA", "Columbus, OH", "Austin, TX",
+				"Memphis, TN", "Baltimore, MD", "Charlotte, ND", "Fort Worth, TX"]
+
+	var filteredData: [String]!
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		// Set search bar's delegate
-//		otherSearchBar.delegate = self
+
+		/* Search Setup */
+
+		tableView.dataSource = self
+		searchBar.delegate = self
+		filteredData = data
+
+		/* AR Setup */
 
 		// Set the view's delegate
 		sceneView.delegate = self
@@ -61,25 +74,45 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UISearchBarDelegat
 		// Release any cached data, images, etc that aren't in use.
 	}
 
-	/* Search Bar Handlers */
-	func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-		searchActive = true;
-		print("Search bar began editing");
+	/* Search Handlers */
+
+	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+		let cell = tableView.dequeueReusableCell(withIdentifier: "TableCell", for: indexPath) as UITableViewCell
+		cell.textLabel?.text = filteredData[indexPath.row]
+		return cell
 	}
 
-	func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
-		searchActive = false;
-		print("Search bar stopped editing");
+	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+		return filteredData.count
+	}
+
+	// This method updates filteredData based on the text in the Search Box
+	func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+		// When there is no text, filteredData is the same as the original data
+		// When user has entered text into the search box
+		// Use the filter method to iterate over all items in the data array
+		// For each item, return true if the item should be included and false if the
+		// item should NOT be included
+		filteredData = searchText.isEmpty ? data : data.filter { (item: String) -> Bool in
+			// If dataItem matches the searchText, return true to include it
+			return item.range(of: searchText, options: .caseInsensitive, range: nil, locale: nil) != nil
+		}
+
+		tableView.reloadData()
+	}
+
+	func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+		self.searchBar.showsCancelButton = true
+		self.searchBlur.fadeIn()
+		self.tableView.fadeIn()
 	}
 
 	func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-		searchActive = false;
-		print("Search bar cancel clicked");
-	}
-
-	func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-		searchActive = false;
-		print("Search bar search clicked");
+		searchBar.showsCancelButton = false
+//		searchBar.text = ""
+		searchBar.resignFirstResponder()
+		self.tableView.fadeOut()
+		self.searchBlur.fadeOut()
 	}
 
 	// MARK: - ARSCNViewDelegate

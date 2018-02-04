@@ -17,6 +17,7 @@
 		26AE44D72025936700F8C75D /* config.plist in Resources */ = {isa = PBXBuildFile; fileRef = 26AE44D62025936700F8C75D /* config.plist */; };
 		565A1BA920268B24007C56F5 /* ManageNodesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565A1BA820268B24007C56F5 /* ManageNodesViewController.swift */; };
 		5690CC252022ECA400F298EE /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 5690CC242022ECA400F298EE /* art.scnassets */; };
+		569FA3892026D8EC00910CCE /* UIViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 569FA3882026D8EC00910CCE /* UIViewExtensions.swift */; };
 		56EC2A0120237BAF00924B5D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 56EC2A0020237BAE00924B5D /* GoogleService-Info.plist */; };
 		56F25B8B2022E79800B246D3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56F25B8A2022E79800B246D3 /* AppDelegate.swift */; };
 		56F25B8D2022E79800B246D3 /* NavViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56F25B8C2022E79800B246D3 /* NavViewController.swift */; };
@@ -41,6 +42,7 @@
 		3670E310BCDA21FEDDE0F541 /* Pods_navigatAR.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_navigatAR.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		565A1BA820268B24007C56F5 /* ManageNodesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageNodesViewController.swift; sourceTree = "<group>"; };
 		5690CC242022ECA400F298EE /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
+		569FA3882026D8EC00910CCE /* UIViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtensions.swift; sourceTree = "<group>"; };
 		56EC2A0020237BAE00924B5D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		56F25B872022E79800B246D3 /* navigatAR.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = navigatAR.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		56F25B8A2022E79800B246D3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -117,6 +119,7 @@
 				26AE44D42025934800F8C75D /* config.example.plist */,
 				26AE44D62025936700F8C75D /* config.plist */,
 				1C7373102026302D00725F6D /* FirebaseUtils.swift */,
+				569FA3882026D8EC00910CCE /* UIViewExtensions.swift */,
 			);
 			path = navigatAR;
 			sourceTree = "<group>";
@@ -276,6 +279,7 @@
 				1C7373132026330100725F6D /* TagInfo.swift in Sources */,
 				565A1BA920268B24007C56F5 /* ManageNodesViewController.swift in Sources */,
 				56FEE4CC202683EE0075CA75 /* NodePositionViewController.swift in Sources */,
+				569FA3892026D8EC00910CCE /* UIViewExtensions.swift in Sources */,
 				26AE44CF2025753800F8C75D /* AdminViewController.swift in Sources */,
 				1C73730D20255A1700725F6D /* Node.swift in Sources */,
 				1C73731720267CFC00725F6D /* Location.swift in Sources */,

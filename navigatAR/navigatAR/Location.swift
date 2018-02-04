@@ -27,4 +27,3 @@ struct Location: Codable {
 		horizontalAccuracy = ial.location!.horizontalAccuracy
 	}
 }
-

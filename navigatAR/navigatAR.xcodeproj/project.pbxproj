@@ -19,8 +19,7 @@
 		5690CC252022ECA400F298EE /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 5690CC242022ECA400F298EE /* art.scnassets */; };
 		56EC2A0120237BAF00924B5D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 56EC2A0020237BAE00924B5D /* GoogleService-Info.plist */; };
 		56F25B8B2022E79800B246D3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56F25B8A2022E79800B246D3 /* AppDelegate.swift */; };
-		56F25B8D2022E79800B246D3 /* ArViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56F25B8C2022E79800B246D3 /* ArViewController.swift */; };
-		56F25B8F2022E79800B246D3 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56F25B8E2022E79800B246D3 /* MapViewController.swift */; };
+		56F25B8D2022E79800B246D3 /* NavViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56F25B8C2022E79800B246D3 /* NavViewController.swift */; };
 		56F25B922022E79800B246D3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 56F25B902022E79800B246D3 /* Main.storyboard */; };
 		56F25B942022E79800B246D3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 56F25B932022E79800B246D3 /* Assets.xcassets */; };
 		56F25B972022E79800B246D3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 56F25B952022E79800B246D3 /* LaunchScreen.storyboard */; };
@@ -45,8 +44,7 @@
 		56EC2A0020237BAE00924B5D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		56F25B872022E79800B246D3 /* navigatAR.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = navigatAR.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		56F25B8A2022E79800B246D3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		56F25B8C2022E79800B246D3 /* ArViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArViewController.swift; sourceTree = "<group>"; wrapsLines = 0; };
-		56F25B8E2022E79800B246D3 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
+		56F25B8C2022E79800B246D3 /* NavViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavViewController.swift; sourceTree = "<group>"; wrapsLines = 0; };
 		56F25B912022E79800B246D3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		56F25B932022E79800B246D3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		56F25B962022E79800B246D3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -103,8 +101,7 @@
 				1C7373122026330100725F6D /* TagInfo.swift */,
 				56EC2A0020237BAE00924B5D /* GoogleService-Info.plist */,
 				56F25B8A2022E79800B246D3 /* AppDelegate.swift */,
-				56F25B8C2022E79800B246D3 /* ArViewController.swift */,
-				56F25B8E2022E79800B246D3 /* MapViewController.swift */,
+				56F25B8C2022E79800B246D3 /* NavViewController.swift */,
 				26AE44CE2025753800F8C75D /* AdminViewController.swift */,
 				565A1BA820268B24007C56F5 /* ManageNodesViewController.swift */,
 				56FEE4C7202639970075CA75 /* UpsertNodeViewController.swift */,
@@ -277,7 +274,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				1C7373132026330100725F6D /* TagInfo.swift in Sources */,
-				56F25B8F2022E79800B246D3 /* MapViewController.swift in Sources */,
 				565A1BA920268B24007C56F5 /* ManageNodesViewController.swift in Sources */,
 				56FEE4CC202683EE0075CA75 /* NodePositionViewController.swift in Sources */,
 				26AE44CF2025753800F8C75D /* AdminViewController.swift in Sources */,
@@ -286,7 +282,7 @@
 				56FEE4C8202639970075CA75 /* UpsertNodeViewController.swift in Sources */,
 				56F25B8B2022E79800B246D3 /* AppDelegate.swift in Sources */,
 				1C7373112026302D00725F6D /* FirebaseUtils.swift in Sources */,
-				56F25B8D2022E79800B246D3 /* ArViewController.swift in Sources */,
+				56F25B8D2022E79800B246D3 /* NavViewController.swift in Sources */,
 				56FEE4CA20266BE30075CA75 /* UpsertTagViewController.swift in Sources */,
 				1C73730B202553D200725F6D /* Building.swift in Sources */,
 			);

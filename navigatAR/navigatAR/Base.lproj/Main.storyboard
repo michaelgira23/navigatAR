@@ -114,10 +114,49 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="EqT-16-Wgj"/>
                     </view>
+                    <connections>
+                        <segue destination="WaG-9G-Vdg" kind="showDetail" identifier="NodePositionSegue" id="Vtm-GX-oY1"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="I02-mj-WIB" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="3506" y="1004"/>
+        </scene>
+        <!--Node Position-->
+        <scene sceneID="URq-mP-JSn">
+            <objects>
+                <viewController id="WaG-9G-Vdg" userLabel="Node Position" customClass="NodePositionViewController" customModule="navigatAR" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="ym2-Wm-huV">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Get phone positiong for node" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gSl-gy-gJ7">
+                                <rect key="frame" x="75" y="396" width="224" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6sd-jc-cef">
+                                <rect key="frame" x="101" y="608" width="172" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Once Positon Got Getted"/>
+                                <connections>
+                                    <action selector="getGotted" destination="WaG-9G-Vdg" eventType="touchUpInside" id="P2L-Ld-Ush"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="Odh-nP-Kg9"/>
+                    </view>
+                    <connections>
+                        <segue destination="07B-Fa-Et9" kind="unwind" identifier="unwindToManageNodesSegueId" unwindAction="unwindToManageNodesWithSegue:" id="evj-6t-WZ6"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="VEO-ca-7pa" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="07B-Fa-Et9" userLabel="Exit" sceneMemberID="exit"/>
+            </objects>
+            <point key="canvasLocation" x="4552.8000000000002" y="1003.448275862069"/>
         </scene>
         <!--Manage Tags-->
         <scene sceneID="F3r-9x-ifC">
@@ -233,7 +272,7 @@
         <!--Manage Nodes-->
         <scene sceneID="iEs-lM-Ctv">
             <objects>
-                <viewController title="Manage Nodes" id="rkc-8c-c3O" sceneMemberID="viewController">
+                <viewController title="Manage Nodes" id="rkc-8c-c3O" customClass="ManageNodesViewController" customModule="navigatAR" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="LTM-L3-vYj">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

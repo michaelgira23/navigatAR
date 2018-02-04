@@ -7,11 +7,8 @@
 //
 
 import Eureka
-import IndoorAtlas
 
 class UpsertNodeViewController: FormViewController {
-
-	let locationManager = IALocationManager.sharedInstance()
 
 	let nodeTypes = [[
 		"display": "Pathway",
@@ -35,8 +32,6 @@ class UpsertNodeViewController: FormViewController {
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		// Delegate methods to our custom location handler
-		locationManager.delegate = self
 
 		form +++ Section()
 			<<< TextRow("name") { row in
@@ -88,25 +83,8 @@ class UpsertNodeViewController: FormViewController {
 
 		/** @TODO Put Firebase logic here for adding node to database */
 
-		_ = navigationController?.popViewController(animated: true)
+//		_ = navigationController?.popViewController(animated: true)
+		performSegue(withIdentifier: "NodePositionSegue", sender: self)
 	}
 
-}
-
-// MARK: - IndoorAtlas delegates
-extension UpsertNodeViewController: IALocationManagerDelegate {
-	// recieve locaiton info
-	func indoorLocationManager(_ manager: IALocationManager, didUpdateLocations locations: [Any]) {
-
-		let l = locations.last as! IALocation
-
-		if let newLocation = l.location?.coordinate {
-			print("Position changed to coordinate: \(newLocation.latitude) \(newLocation.longitude)")
-		}
-	}
-
-	func indoorLocationManager(_ manager: IALocationManager, statusChanged status: IAStatus) {
-		let statusNum = String(status.type.rawValue)
-		print("Status: " + statusNum)
-	}
 }

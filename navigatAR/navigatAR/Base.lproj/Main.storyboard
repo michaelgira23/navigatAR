@@ -100,9 +100,11 @@
                         <segue destination="WaG-9G-Vdg" kind="popoverPresentation" identifier="NodePositionSegue" popoverAnchorView="hhb-SM-t9C" id="Vtm-GX-oY1">
                             <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
                         </segue>
+                        <segue destination="tO1-2K-P7y" kind="unwind" identifier="unwindToManageNodesWithUnwindSegue" unwindAction="unwindToManageNodesWithUnwindSegue:" id="RuD-Yu-QaM"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="I02-mj-WIB" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="tO1-2K-P7y" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="3506" y="1004"/>
         </scene>
@@ -120,6 +122,7 @@
                                 <state key="normal" title="Get Position"/>
                                 <connections>
                                     <action selector="getPosition" destination="WaG-9G-Vdg" eventType="touchUpInside" id="8Ce-hj-yCb"/>
+                                    <segue destination="07B-Fa-Et9" kind="unwind" identifier="unwindToUpsertNodesWithUnwindSegue" unwindAction="unwindToUpsertNodesWithUnwindSegue:" id="v0l-h7-rs2"/>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Calibration: " textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gSl-gy-gJ7">
@@ -144,7 +147,6 @@
                         <outlet property="accuracyText" destination="5Ly-iV-MHP" id="LmG-Zs-Ujj"/>
                         <outlet property="calibrationText" destination="gSl-gy-gJ7" id="NLg-xN-Ww4"/>
                         <outlet property="getPositionButton" destination="6sd-jc-cef" id="Qp6-KX-zfZ"/>
-                        <segue destination="07B-Fa-Et9" kind="unwind" identifier="unwindToManageNodesSegueId" unwindAction="unwindToManageNodesWithSegue:" id="evj-6t-WZ6"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VEO-ca-7pa" userLabel="First Responder" sceneMemberID="firstResponder"/>

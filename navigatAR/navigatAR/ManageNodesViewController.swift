@@ -10,7 +10,7 @@ import UIKit
 
 class ManageNodesViewController: UIViewController {
 
-	@IBAction func unwindToManageNodes(segue: UIStoryboardSegue) { }
+	@IBAction func unwindToManageNodes(unwindSegue: UIStoryboardSegue) { }
 
 	override func viewDidLoad() {
 		super.viewDidLoad()

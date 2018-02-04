@@ -13,9 +13,7 @@ class NodePositionViewController: UIViewController {
 
 	let locationManager = IALocationManager.sharedInstance()
 
-	var currentLocation: CLLocation?
-	var currentFloor: IAFloor?
-	var currentRegion: IARegion?
+	var currentLocation: IALocation?
 
 	@IBOutlet weak var calibrationText: UILabel!
 	@IBOutlet weak var accuracyText: UILabel!
@@ -45,9 +43,7 @@ class NodePositionViewController: UIViewController {
 
 		print("Got gotted");
 
-		/** @TODO Put Firebase logic here for adding node to database */
-
-		performSegue(withIdentifier: "unwindToManageNodesSegueId", sender: self)
+		performSegue(withIdentifier: "unwindToUpsertNodesWithUnwindSegue", sender: self)
 	}
 
 }
@@ -72,11 +68,9 @@ extension NodePositionViewController: IALocationManagerDelegate {
 	}
 	
 	func setLocation(location l: IALocation) {
-		currentFloor = l.floor
-		currentRegion = l.region
-		currentLocation = l.location
-		let ha = String(round(currentLocation!.horizontalAccuracy))
-		let va = String(round(currentLocation!.verticalAccuracy))
+		currentLocation = l
+		let ha = String(round(currentLocation!.location!.horizontalAccuracy))
+		let va = String(round(currentLocation!.location!.verticalAccuracy))
 		accuracyText.text = "Accuracy: (" + ha + ", " + va + ")"
 	}
 
@@ -91,5 +85,12 @@ extension NodePositionViewController: IALocationManagerDelegate {
 			qualityText = "Poor"
 		}
 		calibrationText.text = "Calibration: " + qualityText
+	}
+
+	//	Pass position data back to the creation page
+	override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+		if let UpsertNodeViewController = segue.destination as? UpsertNodeViewController {
+			UpsertNodeViewController.locationData = currentLocation
+		}
 	}
 }

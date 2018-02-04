@@ -31,7 +31,9 @@ class NodePositionViewController: UIViewController {
 		locationManager.delegate = self
 		locationManager.distanceFilter = 0.1
 		setQualityText(calibrationQuality: locationManager.calibration)
-		setLocation(location: locationManager.location!)
+		if let l = locationManager.location {
+			setLocation(location: l)
+		}
 	}
 
 	override func didReceiveMemoryWarning() {

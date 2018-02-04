@@ -119,7 +119,6 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Get Position"/>
                                 <connections>
-                                    <action selector="getGotted" destination="WaG-9G-Vdg" eventType="touchUpInside" id="P2L-Ld-Ush"/>
                                     <action selector="getPosition" destination="WaG-9G-Vdg" eventType="touchUpInside" id="8Ce-hj-yCb"/>
                                 </connections>
                             </button>

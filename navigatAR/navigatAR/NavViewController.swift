@@ -14,14 +14,14 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UISearchBarDelegat
 
 	@IBOutlet weak var searchBar: UISearchBar!
 	@IBOutlet var sceneView: ARSCNView!
-	@IBOutlet weak var otherSearchBar: UISearchBar!
+//	@IBOutlet weak var otherSearchBar: UISearchBar!
 
 	var searchActive = false;
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		// Set search bar's delegate
-		otherSearchBar.delegate = self
+//		otherSearchBar.delegate = self
 
 		// Set the view's delegate
 		sceneView.delegate = self

@@ -40,6 +40,7 @@ class UpsertNodeViewController: FormViewController {
 	)]
 	
 	var locationData: IALocation?
+//	var currentBuilding: Building?
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -66,8 +67,7 @@ class UpsertNodeViewController: FormViewController {
 				row.value = locationData != nil
 				row.disabled = true
 			}
-
-		form +++ ButtonRow() { row in
+			<<< ButtonRow() { row in
 			row.title = locationData == nil ? "Record Location" : "Record Location Again"
 			row.onCellSelection(self.recordPosition)
 		}
@@ -123,3 +123,10 @@ class UpsertNodeViewController: FormViewController {
 	}
 
 }
+
+//extension UpsertNodeViewController: IALocationManagerDelegate {
+//	func indoorLocationManager(_ manager: IALocationManager, didEnter region: IARegion) {
+//		try? currentBuilding = Building(fromIARegion: region)
+//	}
+//}
+

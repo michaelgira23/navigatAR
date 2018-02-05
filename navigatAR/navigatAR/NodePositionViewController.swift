@@ -46,6 +46,12 @@ class NodePositionViewController: UIViewController {
 		performSegue(withIdentifier: "unwindToUpsertNodesWithUnwindSegue", sender: self)
 	}
 
+	//	Pass position data back to the creation page
+	override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+		if let UpsertNodeViewController = segue.destination as? UpsertNodeViewController {
+			UpsertNodeViewController.locationData = currentLocation
+		}
+	}
 }
 
 // MARK: - IndoorAtlas delegates
@@ -85,12 +91,5 @@ extension NodePositionViewController: IALocationManagerDelegate {
 			qualityText = "Poor"
 		}
 		calibrationText.text = "Calibration: " + qualityText
-	}
-
-	//	Pass position data back to the creation page
-	override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-		if let UpsertNodeViewController = segue.destination as? UpsertNodeViewController {
-			UpsertNodeViewController.locationData = currentLocation
-		}
 	}
 }

@@ -17,22 +17,6 @@ class ManageNodesViewController: UIViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		// Do any additional setup after loading the view, typically from a nib.
-		
-		Database.database().reference().child("nodes/NodePushKey").observeSingleEvent(of: .value, with: { snapshot in
-			guard let value = snapshot.value else { return }
-			
-			do {
-				let node = try FirebaseDecoder().decode(Node.self, from: value)
-				print("building key: \(node.building)")
-				print("node name: \(node.name)")
-				print("node type: \(node.type)")
-				print("location: \(node.position)")
-				print("teachers: \(node.tags["teachers"]!)")
-				print("room number: \(node.tags["roomNumber"]!)")
-			} catch let error {
-				print(error)
-			}
-		})
 	}
 
 	override func didReceiveMemoryWarning() {

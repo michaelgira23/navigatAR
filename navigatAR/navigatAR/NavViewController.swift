@@ -14,9 +14,6 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UISearchBarDelegat
 
 	@IBOutlet weak var searchBar: UISearchBar!
 	@IBOutlet var sceneView: ARSCNView!
-//	@IBOutlet weak var otherSearchBar: UISearchBar!
-
-	var searchActive = false;
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -34,6 +31,7 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UISearchBarDelegat
 
 		// Set the scene to the view
 		sceneView.scene = scene
+        self.searchBar.delegate = self;
 	}
 
 	override func viewWillAppear(_ animated: Bool) {
@@ -63,22 +61,19 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UISearchBarDelegat
 
 	/* Search Bar Handlers */
 	func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-		searchActive = true;
 		print("Search bar began editing");
 	}
 
 	func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
-		searchActive = false;
 		print("Search bar stopped editing");
 	}
 
 	func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-		searchActive = false;
+        self.searchBar.resignFirstResponder();
 		print("Search bar cancel clicked");
 	}
 
 	func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-		searchActive = false;
 		print("Search bar search clicked");
 	}
 

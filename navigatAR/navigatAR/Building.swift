@@ -7,5 +7,7 @@
 //
 
 struct Building: Codable {
+	static var current: (id: FirebasePushKey, object: Building)? = nil
+	
 	let name: String
 }

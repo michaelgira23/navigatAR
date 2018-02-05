@@ -43,9 +43,9 @@ enum Tag: Codable {
 		case .boolean(let bool):
 			try value.encode(bool)
 		case .multipleStrings(let strs):
-			try value.encode(strs)
+			try value.encode(strs.reduce(into: [:], { (result, str) in result[str] = true }))
 		case .multipleNumbers(let nums):
-			try value.encode(nums)
+			try value.encode(nums.reduce(into: [:], { (result, num) in result[num] = true }))
 		}
 	}
 }

@@ -6,7 +6,9 @@
 //  Copyright © 2018 MICDS Programming. All rights reserved.
 //
 
+import CodableFirebase
 import Eureka
+import Firebase
 import IndoorAtlas
 
 class UpsertNodeViewController: FormViewController {
@@ -90,12 +92,10 @@ class UpsertNodeViewController: FormViewController {
 
 		var selectedNodeType: NodeType? = nil
 		for nodeType in nodeTypes {
-			if formValues[String(describing: nodeType.value)]! != nil {
+			if formValues[String(describing: nodeType.value)] != nil {
 				selectedNodeType = nodeType.value
 			}
 		}
-		
-		print(formValues)
 
 		// Make sure user selected type
 		/** @TODO Actually add form validation and disable button */
@@ -103,8 +103,16 @@ class UpsertNodeViewController: FormViewController {
 			return;
 		}
 		print("Create Node!", selectedNodeType!, form.validate(), form.values(), locationData ?? "No Location");
-
-		/** @TODO Put Firebase logic here for adding node to database (lcoation data is in property locationData) */
+		
+		let data = try! FirebaseEncoder().encode(Node(
+			building: "building_push_key", /** @TODO get actual building push key */
+			name: formValues["name"] as! String,
+			type: selectedNodeType!,
+			position: Location(fromIALocation: locationData!),
+			tags: [:]
+		))
+		
+		Database.database().reference().child("nodes").childByAutoId().setValue(data)
 
 //		_ = navigationController?.popViewController(animated: true)
 		performSegue(withIdentifier: "unwindToManageNodesWithUnwindSegue", sender: self)

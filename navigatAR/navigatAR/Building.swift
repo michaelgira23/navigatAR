@@ -6,14 +6,25 @@
 //  Copyright © 2018 MICDS Programming. All rights reserved.
 //
 
+import Firebase
 import IndoorAtlas
 
 struct Building: Codable {
-	static func current() -> Building? {
-		if let region = IALocationManager.sharedInstance().location?.region {
-			return try? Building(fromIARegion: region)
-		} else {
-			return nil
+	static var current: (id: FirebasePushKey?, object: Building)? {
+		get {
+			guard let region = IALocationManager.sharedInstance().location?.region else { return nil }
+			
+			var id: FirebasePushKey? = nil
+			
+			Database.database().reference().child("buildings").observeSingleEvent(of: .value, with: { snapshot in
+				let buildings = snapshot.value as! [FirebasePushKey: [String: String]]
+				
+				if let theBuilding = buildings.first(where: { $0.value["iaIdentifier"]! == region.identifier }) {
+					id = theBuilding.key
+				}
+			})
+			
+			return (id: id, object: try! Building(fromIARegion: region))
 		}
 	}
 	

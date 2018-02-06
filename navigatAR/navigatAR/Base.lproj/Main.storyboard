@@ -309,6 +309,9 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="nodeTable" destination="Khj-W3-XgD" id="Gom-Nu-2O6"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hkl-MX-zLz" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

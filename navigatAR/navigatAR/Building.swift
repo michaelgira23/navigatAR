@@ -11,21 +11,19 @@ import IndoorAtlas
 
 struct Building: Codable {
 	static var current: (id: FirebasePushKey?, object: Building)? {
-		get {
-			guard let region = IALocationManager.sharedInstance().location?.region else { return nil }
+		guard let region = IALocationManager.sharedInstance().location?.region else { return nil }
+		
+		var id: FirebasePushKey? = nil
+		
+		Database.database().reference().child("buildings").observeSingleEvent(of: .value, with: { snapshot in
+			let buildings = snapshot.value as! [FirebasePushKey: [String: String]]
 			
-			var id: FirebasePushKey? = nil
-			
-			Database.database().reference().child("buildings").observeSingleEvent(of: .value, with: { snapshot in
-				let buildings = snapshot.value as! [FirebasePushKey: [String: String]]
-				
-				if let theBuilding = buildings.first(where: { $0.value["iaIdentifier"]! == region.identifier }) {
-					id = theBuilding.key
-				}
-			})
-			
-			return (id: id, object: try! Building(fromIARegion: region))
-		}
+			if let theBuilding = buildings.first(where: { $0.value["iaIdentifier"]! == region.identifier }) {
+				id = theBuilding.key
+			}
+		})
+		
+		return (id: id, object: try! Building(fromIARegion: region))
 	}
 	
 	let name: String

@@ -35,7 +35,6 @@ class ManageNodesViewController: UIViewController {
 			
 			do {
 				self.nodes = Array((try FirebaseDecoder().decode([FirebasePushKey: Node].self, from: value)).values)
-				print(self.nodes)
 			} catch let error {
 				print(error) // properly handle error
 			}

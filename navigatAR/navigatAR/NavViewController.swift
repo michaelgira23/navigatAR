@@ -9,6 +9,8 @@
 import UIKit
 import SceneKit
 import ARKit
+import Firebase
+import CodableFirebase
 
 class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSource, UISearchBarDelegate {
 
@@ -17,11 +19,13 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 	@IBOutlet weak var tableView: UITableView!
 	@IBOutlet var sceneView: ARSCNView!
 
-	let data = ["New York, NY", "Los Angeles, CA", "Chicago, IL", "Houston, TX",
+	/*let data = ["New York, NY", "Los Angeles, CA", "Chicago, IL", "Houston, TX",
 				"Philadelphia, PA", "Phoenix, AZ", "San Diego, CA", "San Antonio, TX",
 				"Dallas, TX", "Detroit, MI", "San Jose, CA", "Indianapolis, IN",
 				"Jacksonville, FL", "San Francisco, CA", "Columbus, OH", "Austin, TX",
-				"Memphis, TN", "Baltimore, MD", "Charlotte, ND", "Fort Worth, TX"]
+				"Memphis, TN", "Baltimore, MD", "Charlotte, ND", "Fort Worth, TX"]*/
+    
+    var data: [String] = []
 
 	var filteredData: [String]!
 
@@ -47,6 +51,24 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 
 		// Set the scene to the view
 		sceneView.scene = scene
+        
+        // Get nodes from db and load into the array
+        let ref = Database.database().reference()
+        
+        ref.child("nodes").observe(.value, with: { snapshot in
+            guard let value = snapshot.value else { return }
+            
+            do {
+                let loc = Array((try FirebaseDecoder().decode([FirebasePushKey: Node].self, from: value)).values)
+                
+                for node in loc {
+                    self.data.append(node.name + "," + node.building)
+                }
+            }
+            catch let error {
+                print(error)
+            }
+        })
 	}
 
 	override func viewWillAppear(_ animated: Bool) {
@@ -78,7 +100,11 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		let cell = tableView.dequeueReusableCell(withIdentifier: "TableCell", for: indexPath) as UITableViewCell
-		cell.textLabel?.text = filteredData[indexPath.row]
+        var parsed = filteredData[indexPath.row].split(separator: ",")
+        
+        cell.textLabel?.text = String(describing: parsed[0])
+        cell.detailTextLabel?.text = String(describing: parsed[1])
+        //cell.!detailTextLabel.text = "hello"
 		return cell
 	}
 
@@ -105,6 +131,7 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 		self.searchBar.showsCancelButton = true
 		self.searchBlur.fadeIn()
 		self.tableView.fadeIn()
+        self.tableView.reloadData()
 	}
 
 	func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {

@@ -114,10 +114,10 @@ class UpsertNodeViewController: FormViewController {
 			
 			print("Create Node!", selectedNodeType!, self.form.validate(), self.form.values(), self.locationData ?? "No Location", currentBuilding);
 			
-			guard currentBuilding.id != nil else { print("id is nil wtf"); return }
+			guard let buildingId = currentBuilding.id else { print("id is nil wtf"); return }
 			
 			let data = try! FirebaseEncoder().encode(Node(
-				building: currentBuilding.id!,
+				building: buildingId,
 				name: formValues["name"] as! String,
 				type: selectedNodeType!,
 				position: Location(fromIALocation: self.locationData!),

@@ -10,7 +10,7 @@ import CodableFirebase
 import Firebase
 import UIKit
 
-class ManageNodesViewController: UIViewController {
+class ManageNodesViewController: UIViewController, UITableViewDataSource {
 	
 	@IBOutlet weak var nodeTable: UITableView!
 	@IBAction func unwindToManageNodes(unwindSegue: UIStoryboardSegue) { }
@@ -19,44 +19,35 @@ class ManageNodesViewController: UIViewController {
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
+		
 		// Do any additional setup after loading the view, typically from a nib.
 		
-		nodeTable.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
-		
-		nodeTable.delegate = self
 		nodeTable.dataSource = self
-		
 		
 		let ref = Database.database().reference()
 		
 		// Continuously update `nodes` from database
-		ref.child("nodes").observe(.value, with: { snapshot in
-			guard let value = snapshot.value else { return }
+		ref.observe(.value, with: { snapshot in
+			guard let value = snapshot.childSnapshot(forPath: "nodes").value else { return }
 			
 			do {
-				self.nodes = Array((try FirebaseDecoder().decode([FirebasePushKey: Node].self, from: value)).values)
+				guard let currentBuilding = Building.current(root: snapshot) else { print(""); return }
+				guard let buildingId = currentBuilding.id else { print("id is nil wtf"); return }
+				
+				self.nodes = Array((try FirebaseDecoder().decode([FirebasePushKey: Node].self, from: value)).values).filter({ $0.building == buildingId })
 			} catch let error {
-				print(error) // properly handle error
+				print(error) // TODO: properly handle error
 			}
 		})
-		
-//		ref.observeSingleEvent(of: .value, with: { snapshot in
-//			if let currentBuilding = Building.current(root: snapshot) {
-//				ref.child("buildings").childByAutoId().setValue(try! FirebaseEncoder().encode(currentBuilding.object))
-//			} else {
-//				print("well ok something went wrong here")
-//			}
-//		})
 	}
 	
 	override func didReceiveMemoryWarning() {
 		super.didReceiveMemoryWarning()
 		// Dispose of any resources that can be recreated.
 	}
-	
-}
 
-extension ManageNodesViewController: UITableViewDelegate, UITableViewDataSource {
+	// MARK: TableView functions
+	
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 		return nodes.count
 	}

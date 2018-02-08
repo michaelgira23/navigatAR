@@ -18,6 +18,9 @@ class UpsertTagViewController: FormViewController {
 	), (
 		display: "Number",
 		value: .number
+	), (
+		display: "True/False",
+		value: .boolean
 	)]
 
 	override func viewDidLoad() {
@@ -41,6 +44,13 @@ class UpsertTagViewController: FormViewController {
 				listRow.title = option.display
 				listRow.selectableValue = String(describing: option.value)
 				listRow.value = nil
+				
+				// Boolean tags cannot have multiple values cause that's dumb
+				if option.value == .boolean {
+					listRow.hidden = Condition.function(["multiple"], { form in
+						return (form.rowBy(tag: "multiple") as? SwitchRow)?.value ?? false
+					})
+				}
 			}
 		}
 
@@ -85,10 +95,10 @@ class UpsertTagViewController: FormViewController {
 			
 			print("Create Tag!", selectedTagValueType!, self.form.validate(), self.form.values());
 			
-			guard currentBuilding.id != nil else { print("id is nil wtf"); return }
+			guard let buildingId = currentBuilding.id else { print("id is nil wtf"); return }
 			
 			let data = try! FirebaseEncoder().encode(TagInfo(
-				building: currentBuilding.id!,
+				building: buildingId,
 				multiple: formValues["multiple"] as! Bool,
 				name: formValues["name"] as! String,
 				type: selectedTagValueType!

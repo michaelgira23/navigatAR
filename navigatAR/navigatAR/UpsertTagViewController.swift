@@ -74,19 +74,30 @@ class UpsertTagViewController: FormViewController {
 		if (formValues["name"] == nil || selectedTagValueType == nil) {
 			return;
 		}
-
-		print("Create Tag!", selectedTagValueType!, form.validate(), form.values());
 		
-		let data = try! FirebaseEncoder().encode(TagInfo(
-			building: "building_push_key", /** @TODO get actual building push key */
-			multiple: formValues["multiple"] as! Bool,
-			name: formValues["name"] as! String,
-			type: selectedTagValueType!
-		))
+		let ref = Database.database().reference()
+		
+		ref.observeSingleEvent(of: .value, with: { snapshot in
+			guard let currentBuilding = Building.current(root: snapshot) else {
+				print("not in a building")
+				return
+			}
+			
+			print("Create Tag!", selectedTagValueType!, self.form.validate(), self.form.values());
+			
+			guard currentBuilding.id != nil else { print("id is nil wtf"); return }
+			
+			let data = try! FirebaseEncoder().encode(TagInfo(
+				building: currentBuilding.id!,
+				multiple: formValues["multiple"] as! Bool,
+				name: formValues["name"] as! String,
+				type: selectedTagValueType!
+			))
 
-		Database.database().reference().child("tags").childByAutoId().setValue(data)
+			ref.child("tags").childByAutoId().setValue(data)
 
-		_ = navigationController?.popViewController(animated: true)
+			_ = self.navigationController?.popViewController(animated: true)
+		})
 	}
 
 }

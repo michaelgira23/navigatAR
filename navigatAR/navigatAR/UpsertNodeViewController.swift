@@ -100,22 +100,35 @@ class UpsertNodeViewController: FormViewController {
 		// Make sure user selected type
 		/** @TODO Actually add form validation and disable button */
 		if (formValues["name"] == nil || selectedNodeType == nil || locationData == nil) {
-			return;
+			return
 		}
-		print("Create Node!", selectedNodeType!, form.validate(), form.values(), locationData ?? "No Location");
 		
-		let data = try! FirebaseEncoder().encode(Node(
-			building: "building_push_key", /** @TODO get actual building push key */
-			name: formValues["name"] as! String,
-			type: selectedNodeType!,
-			position: Location(fromIALocation: locationData!),
-			tags: [:]
-		))
+		let ref: DatabaseReference = Database.database().reference()
 		
-		Database.database().reference().child("nodes").childByAutoId().setValue(data)
+		ref.observeSingleEvent(of: .value, with: { snapshot in
+			guard let currentBuilding = Building.current(root: snapshot) else {
+				print("not in a building")
+				return
+			}
+			
+			
+			print("Create Node!", selectedNodeType!, self.form.validate(), self.form.values(), self.locationData ?? "No Location", currentBuilding);
+			
+			guard currentBuilding.id != nil else { print("id is nil wtf"); return }
+			
+			let data = try! FirebaseEncoder().encode(Node(
+				building: currentBuilding.id!,
+				name: formValues["name"] as! String,
+				type: selectedNodeType!,
+				position: Location(fromIALocation: self.locationData!),
+				tags: ["test": Tag.string("TODO: actual values for these")]
+			))
+			
+			ref.child("nodes").childByAutoId().setValue(data)
 
-//		_ = navigationController?.popViewController(animated: true)
-		performSegue(withIdentifier: "unwindToManageNodesWithUnwindSegue", sender: self)
+	//		_ = navigationController?.popViewController(animated: true)
+			self.performSegue(withIdentifier: "unwindToManageNodesWithUnwindSegue", sender: self)
+		})
 	}
 	
 	func recordPosition(cell: ButtonCellOf<String>, row: ButtonRow) {

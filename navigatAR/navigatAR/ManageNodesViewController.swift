@@ -39,6 +39,14 @@ class ManageNodesViewController: UIViewController {
 				print(error) // properly handle error
 			}
 		})
+		
+//		ref.observeSingleEvent(of: .value, with: { snapshot in
+//			if let currentBuilding = Building.current(root: snapshot) {
+//				ref.child("buildings").childByAutoId().setValue(try! FirebaseEncoder().encode(currentBuilding.object))
+//			} else {
+//				print("well ok something went wrong here")
+//			}
+//		})
 	}
 	
 	override func didReceiveMemoryWarning() {

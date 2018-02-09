@@ -28,5 +28,5 @@ struct Node: Codable {
 	let name: String
 	let type: NodeType
 	let position: Location
-	// let tags: [String: Any] TODO
+	let tags: [String: Tag]
 }

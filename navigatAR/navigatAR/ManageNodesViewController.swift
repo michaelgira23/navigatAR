@@ -12,6 +12,7 @@ import UIKit
 
 class ManageNodesViewController: UIViewController, UITableViewDataSource {
 	
+	@IBOutlet weak var loadButtonOutlet: UIButton!
 	@IBOutlet weak var nodeTable: UITableView!
 	@IBAction func unwindToManageNodes(unwindSegue: UIStoryboardSegue) { }
 	
@@ -46,6 +47,11 @@ class ManageNodesViewController: UIViewController, UITableViewDataSource {
 		// Dispose of any resources that can be recreated.
 	}
 
+	@IBAction func loadButtonHandler(_ sender: UIButton) {
+		print("ayyuh")
+		nodeTable.reloadData()
+	}
+
 	// MARK: TableView functions
 	
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -54,7 +60,7 @@ class ManageNodesViewController: UIViewController, UITableViewDataSource {
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		print(nodes)
-		let cell: UITableViewCell = nodeTable.dequeueReusableCell(withIdentifier: "cell") as UITableViewCell!
+		let cell: UITableViewCell = nodeTable.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as UITableViewCell
 		cell.textLabel?.text = nodes[indexPath.row].name
 		
 		return cell

@@ -88,14 +88,10 @@ class UpsertTagViewController: FormViewController {
 		let ref = Database.database().reference()
 		
 		ref.observeSingleEvent(of: .value, with: { snapshot in
-			guard let currentBuilding = Building.current(root: snapshot) else {
-				print("not in a building")
-				return
-			}
+			guard let currentBuilding = Building.current(root: snapshot) else { print("not in a building"); return }
+			guard let buildingId = currentBuilding.id else { print("id is nil wtf"); return }
 			
 			print("Create Tag!", selectedTagValueType!, self.form.validate(), self.form.values());
-			
-			guard let buildingId = currentBuilding.id else { print("id is nil wtf"); return }
 			
 			let data = try! FirebaseEncoder().encode(TagInfo(
 				building: buildingId,

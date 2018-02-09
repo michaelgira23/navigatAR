@@ -39,6 +39,10 @@ class UpsertNodeViewController: FormViewController {
 		value: .sportsVenue
 	)]
 	
+	let ref = Database.database().reference()
+	
+	var tagInfos: [TagInfo] = []
+	
 	var locationData: IALocation?
 //	var currentBuilding: Building?
 
@@ -79,6 +83,48 @@ class UpsertNodeViewController: FormViewController {
 //			}
 			row.onCellSelection(self.createNode)
 		}
+		
+		ref.observeSingleEvent(of: .value, with: { snapshot in
+			guard let currentBuilding = Building.current(root: snapshot) else { print("not in a building"); return }
+			guard let buildingId = currentBuilding.id else { print("id is nil wtf"); return }
+			
+			guard let value = snapshot.childSnapshot(forPath: "tags").value else { return }
+			
+			do {
+				self.tagInfos = Array((try FirebaseDecoder().decode([FirebasePushKey: TagInfo].self, from: value)).values).filter({ $0.building == buildingId })
+			} catch let err {
+				print(err) // handle error properly
+				return
+			}
+			
+			
+			// TODO: figure out how to insert this in the right place
+			if !self.tagInfos.isEmpty {
+				self.form +++ Section("Tags")
+				
+				for tagInfo in self.tagInfos {
+					// TODO: Figure out multiple values
+					if !tagInfo.multiple {
+						switch tagInfo.type {
+						case .string:
+							self.form.last! <<< TextRow(tagInfo.name) { row in
+								row.title = camelToTitle(str: tagInfo.name)
+								row.placeholder = "String"
+							}
+						case .number:
+							self.form.last! <<< DecimalRow(tagInfo.name) { row in
+								row.title = camelToTitle(str: tagInfo.name)
+								row.placeholder = "Number"
+							}
+						case .boolean:
+							self.form.last! <<< SwitchRow(tagInfo.name) { row in
+								row.title = camelToTitle(str: tagInfo.name)
+							}
+						}
+					}
+				}
+			}
+		})
 
 	}
 
@@ -103,8 +149,6 @@ class UpsertNodeViewController: FormViewController {
 			return
 		}
 		
-		let ref: DatabaseReference = Database.database().reference()
-		
 		ref.observeSingleEvent(of: .value, with: { snapshot in
 			guard let currentBuilding = Building.current(root: snapshot) else {
 				print("not in a building")
@@ -124,7 +168,7 @@ class UpsertNodeViewController: FormViewController {
 				tags: ["test": Tag.string("TODO: actual values for these")]
 			))
 			
-			ref.child("nodes").childByAutoId().setValue(data)
+			self.ref.child("nodes").childByAutoId().setValue(data)
 
 	//		_ = navigationController?.popViewController(animated: true)
 			self.performSegue(withIdentifier: "unwindToManageNodesWithUnwindSegue", sender: self)

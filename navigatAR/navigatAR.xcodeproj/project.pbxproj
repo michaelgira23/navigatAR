@@ -123,12 +123,9 @@
 				56F25B982022E79800B246D3 /* Info.plist */,
 				26AE44D42025934800F8C75D /* config.example.plist */,
 				26AE44D62025936700F8C75D /* config.plist */,
-
 				569FA3882026D8EC00910CCE /* UIViewExtensions.swift */,
 				B431948F202D564700A2C284 /* Searching.swift */,
-
 				1C7373102026302D00725F6D /* Utils.swift */,
-
 			);
 			path = navigatAR;
 			sourceTree = "<group>";
@@ -440,11 +437,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = CKCJPG6PEM;
+				DEVELOPMENT_TEAM = CYWSRBS9VH;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = navigatAR/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = me.nickclifford.navigatAR;
+				PRODUCT_BUNDLE_IDENTIFIER = club.micdsprogramming.navigatAR;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -457,11 +454,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = CKCJPG6PEM;
+				DEVELOPMENT_TEAM = CYWSRBS9VH;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = navigatAR/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = me.nickclifford.navigatAR;
+				PRODUCT_BUNDLE_IDENTIFIER = club.micdsprogramming.navigatAR;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

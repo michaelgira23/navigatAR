@@ -138,7 +138,7 @@ class UpsertNodeViewController: FormViewController {
 
 		var selectedNodeType: NodeType? = nil
 		for nodeType in nodeTypes {
-			if formValues[String(describing: nodeType.value)] != nil {
+			if formValues[String(describing: nodeType.value)]! != nil {
 				selectedNodeType = nodeType.value
 			}
 		}
@@ -154,7 +154,6 @@ class UpsertNodeViewController: FormViewController {
 				print("not in a building")
 				return
 			}
-			
 			
 			print("Create Node!", selectedNodeType!, self.form.validate(), self.form.values(), self.locationData ?? "No Location", currentBuilding);
 			

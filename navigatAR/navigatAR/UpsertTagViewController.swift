@@ -74,7 +74,7 @@ class UpsertTagViewController: FormViewController {
 
 		var selectedTagValueType: TagType? = nil
 		for tagValueType in tagValueTypes {
-			if formValues[String(describing: tagValueType.value)] != nil {
+			if formValues[String(describing: tagValueType.value)]! != nil {
 				selectedTagValueType = tagValueType.value
 			}
 		}

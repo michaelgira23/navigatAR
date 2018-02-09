@@ -61,7 +61,10 @@ class ManageNodesViewController: UIViewController, UITableViewDataSource {
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		print(nodes)
 		let cell: UITableViewCell = nodeTable.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as UITableViewCell
-		cell.textLabel?.text = nodes[indexPath.row].name
+		let node = nodes[indexPath.row]
+
+		cell.textLabel?.text = node.name
+		cell.detailTextLabel?.text = String(describing: node.type)
 		
 		return cell
 	}

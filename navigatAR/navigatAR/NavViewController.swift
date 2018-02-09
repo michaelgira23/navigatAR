@@ -51,6 +51,7 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
             
             do {
                 let loc = Array((try FirebaseDecoder().decode([FirebasePushKey: Node].self, from: value)).values)
+                self.data = [] // clear the data out so appending can work properly
                 
                 for node in loc {
                     self.data.append(node.name + "," + node.building)

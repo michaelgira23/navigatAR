@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		1C73730B202553D200725F6D /* Building.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C73730A202553D200725F6D /* Building.swift */; };
 		1C73730D20255A1700725F6D /* Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C73730C20255A1700725F6D /* Node.swift */; };
-		1C7373112026302D00725F6D /* FirebaseUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C7373102026302D00725F6D /* FirebaseUtils.swift */; };
+		1C7373112026302D00725F6D /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C7373102026302D00725F6D /* Utils.swift */; };
 		1C7373132026330100725F6D /* TagInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C7373122026330100725F6D /* TagInfo.swift */; };
 		1C73731720267CFC00725F6D /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C73731620267CFC00725F6D /* Location.swift */; };
 		1C73731B20276DF900725F6D /* Tag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C73731A20276DF800725F6D /* Tag.swift */; };
@@ -35,7 +35,7 @@
 /* Begin PBXFileReference section */
 		1C73730A202553D200725F6D /* Building.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Building.swift; sourceTree = "<group>"; };
 		1C73730C20255A1700725F6D /* Node.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Node.swift; sourceTree = "<group>"; };
-		1C7373102026302D00725F6D /* FirebaseUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseUtils.swift; sourceTree = "<group>"; };
+		1C7373102026302D00725F6D /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		1C7373122026330100725F6D /* TagInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagInfo.swift; sourceTree = "<group>"; };
 		1C73731620267CFC00725F6D /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
 		1C73731A20276DF800725F6D /* Tag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tag.swift; sourceTree = "<group>"; };
@@ -123,9 +123,12 @@
 				56F25B982022E79800B246D3 /* Info.plist */,
 				26AE44D42025934800F8C75D /* config.example.plist */,
 				26AE44D62025936700F8C75D /* config.plist */,
-				1C7373102026302D00725F6D /* FirebaseUtils.swift */,
+
 				569FA3882026D8EC00910CCE /* UIViewExtensions.swift */,
 				B431948F202D564700A2C284 /* Searching.swift */,
+
+				1C7373102026302D00725F6D /* Utils.swift */,
+
 			);
 			path = navigatAR;
 			sourceTree = "<group>";
@@ -294,7 +297,7 @@
 				1C73731720267CFC00725F6D /* Location.swift in Sources */,
 				56FEE4C8202639970075CA75 /* UpsertNodeViewController.swift in Sources */,
 				56F25B8B2022E79800B246D3 /* AppDelegate.swift in Sources */,
-				1C7373112026302D00725F6D /* FirebaseUtils.swift in Sources */,
+				1C7373112026302D00725F6D /* Utils.swift in Sources */,
 				56F25B8D2022E79800B246D3 /* NavViewController.swift in Sources */,
 				56FEE4CA20266BE30075CA75 /* UpsertTagViewController.swift in Sources */,
 				1C73730B202553D200725F6D /* Building.swift in Sources */,
@@ -441,7 +444,7 @@
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = navigatAR/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = club.micdsprogramming.navigatAR;
+				PRODUCT_BUNDLE_IDENTIFIER = me.nickclifford.navigatAR;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -458,7 +461,7 @@
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = navigatAR/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = club.micdsprogramming.navigatAR;
+				PRODUCT_BUNDLE_IDENTIFIER = me.nickclifford.navigatAR;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

@@ -18,8 +18,11 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 	@IBOutlet weak var searchBar: UISearchBar!
 	@IBOutlet weak var tableView: UITableView!
 	@IBOutlet var sceneView: ARSCNView!
+<<<<<<< HEAD
     
     var data: [String] = [" , "]
+=======
+>>>>>>> admin-panel
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -42,6 +45,7 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 
 		// Set the scene to the view
 		sceneView.scene = scene
+<<<<<<< HEAD
         
         // Get nodes from db and load into the array
         let ref = Database.database().reference()
@@ -60,6 +64,9 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
                 print(error)
             }
         })
+=======
+        self.searchBar.delegate = self;
+>>>>>>> admin-panel
 	}
 
 	override func viewWillAppear(_ animated: Bool) {
@@ -87,6 +94,7 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 		// Release any cached data, images, etc that aren't in use.
 	}
 
+<<<<<<< HEAD
 	/* Search Handlers */
 
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -123,6 +131,24 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 		searchBar.resignFirstResponder()
 		self.tableView.fadeOut()
 		self.searchBlur.fadeOut()
+=======
+	/* Search Bar Handlers */
+	func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+		print("Search bar began editing");
+	}
+
+	func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+		print("Search bar stopped editing");
+	}
+
+	func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        self.searchBar.resignFirstResponder();
+		print("Search bar cancel clicked");
+	}
+
+	func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+		print("Search bar search clicked");
+>>>>>>> admin-panel
 	}
 
 	// MARK: - ARSCNViewDelegate

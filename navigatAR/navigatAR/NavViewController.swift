@@ -18,16 +18,8 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 	@IBOutlet weak var searchBar: UISearchBar!
 	@IBOutlet weak var tableView: UITableView!
 	@IBOutlet var sceneView: ARSCNView!
-
-	/*let data = ["New York, NY", "Los Angeles, CA", "Chicago, IL", "Houston, TX",
-				"Philadelphia, PA", "Phoenix, AZ", "San Diego, CA", "San Antonio, TX",
-				"Dallas, TX", "Detroit, MI", "San Jose, CA", "Indianapolis, IN",
-				"Jacksonville, FL", "San Francisco, CA", "Columbus, OH", "Austin, TX",
-				"Memphis, TN", "Baltimore, MD", "Charlotte, ND", "Fort Worth, TX"]*/
     
-    var data: [String] = []
-
-	var filteredData: [String]!
+    var data: [String] = [" , "]
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -36,7 +28,6 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 
 		tableView.dataSource = self
 		searchBar.delegate = self
-		filteredData = data
 
 		/* AR Setup */
 
@@ -100,7 +91,7 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		let cell = tableView.dequeueReusableCell(withIdentifier: "TableCell", for: indexPath) as UITableViewCell
-        var parsed = filteredData[indexPath.row].split(separator: ",")
+        var parsed = data[indexPath.row].split(separator: ",")
         
         cell.textLabel?.text = String(describing: parsed[0])
         cell.detailTextLabel?.text = String(describing: parsed[1])
@@ -109,22 +100,14 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 	}
 
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		return filteredData.count
+		return data.count
 	}
-
-	// This method updates filteredData based on the text in the Search Box
+    
 	func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-		// When there is no text, filteredData is the same as the original data
-		// When user has entered text into the search box
-		// Use the filter method to iterate over all items in the data array
-		// For each item, return true if the item should be included and false if the
-		// item should NOT be included
-		filteredData = searchText.isEmpty ? data : data.filter { (item: String) -> Bool in
-			// If dataItem matches the searchText, return true to include it
-			return item.range(of: searchText, options: .caseInsensitive, range: nil, locale: nil) != nil
-		}
-
-		tableView.reloadData()
+        //self.filteredData = self.data
+        
+        //filteredData = Searching.sort(searchitems: self.data, searchquery: searchText);
+        tableView.reloadData()
 	}
 
 	func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
@@ -143,15 +126,6 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 	}
 
 	// MARK: - ARSCNViewDelegate
-
-	/*
-	// Override to create and configure nodes for anchors added to the view's session.
-	func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
-	let node = SCNNode()
-
-	return node
-	}
-	*/
 
 	func session(_ session: ARSession, didFailWithError error: Error) {
 		// Present an error message to the user

@@ -114,11 +114,11 @@ class UpsertNodeViewController: FormViewController {
 								switch tagInfo.type {
 								case .string:
 									return TextRow() { row in
-										row.placeholder = camelToTitle(str: tagInfo.name)
+										row.placeholder = tagInfo.name
 									}
 								case .number:
 									return DecimalRow() { row in
-										row.placeholder = camelToTitle(str: tagInfo.name)
+										row.placeholder = tagInfo.name
 									}
 								default:
 									return BaseRow() // ok compiler, sure
@@ -132,17 +132,17 @@ class UpsertNodeViewController: FormViewController {
 						switch tagInfo.type {
 						case .string:
 							tagsSection <<< TextRow(tagInfo.name) { row in
-								row.title = camelToTitle(str: tagInfo.name)
+								row.title = tagInfo.name
 								row.placeholder = "String"
 							}
 						case .number:
 							tagsSection <<< DecimalRow(tagInfo.name) { row in
-								row.title = camelToTitle(str: tagInfo.name)
+								row.title = tagInfo.name
 								row.placeholder = "Number"
 							}
 						case .boolean:
 							tagsSection <<< SwitchRow(tagInfo.name) { row in
-								row.title = camelToTitle(str: tagInfo.name)
+								row.title = tagInfo.name
 							}
 						}
 					}

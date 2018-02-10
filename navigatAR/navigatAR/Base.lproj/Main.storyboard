@@ -245,33 +245,17 @@
         <scene sceneID="8Z7-DS-Hqq">
             <objects>
                 <viewController id="Ld1-Bd-biO" customClass="NodesConnectionViewController" customModule="navigatAR" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="K1u-yA-AX9">
+                    <mapView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" id="oj6-Io-BbI">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EZy-4V-USP">
-                                <rect key="frame" x="0.0" y="44" width="375" height="734"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6EK-wF-oWE">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="734"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    </imageView>
-                                </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            </view>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <viewLayoutGuide key="safeArea" id="HfP-mv-Tq5"/>
-                    </view>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    </mapView>
                     <connections>
-                        <outlet property="connectionsView" destination="EZy-4V-USP" id="29O-Gm-ai3"/>
-                        <outlet property="floorPlanImageView" destination="6EK-wF-oWE" id="L9e-jV-6j4"/>
+                        <outlet property="connectionsView" destination="oj6-Io-BbI" id="hOW-r9-tQL"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="w4u-fJ-98Z" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2452" y="338"/>
+            <point key="canvasLocation" x="2452" y="337.6847290640394"/>
         </scene>
         <!--Manage Nodes-->
         <scene sceneID="iEs-lM-Ctv">

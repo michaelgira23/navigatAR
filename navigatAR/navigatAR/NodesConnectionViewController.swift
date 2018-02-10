@@ -7,28 +7,31 @@
 //
 
 import UIKit
+import MapKit
 import IndoorAtlas
 
 class NodesConnectionViewController: UIViewController {
 
 	@IBOutlet weak var connectionsView: UIView!
-	@IBOutlet weak var floorPlanImageView: UIImageView!
 	
 	var locationManager: IALocationManager?
 	var resourceManager: IAResourceManager?
 	var floorPlan: IAFloorPlan?
 	var floorPlanImage = UIImage()
+	
+	var mapView: MKMapView
+	var mapOverLay: MKOverlay
 
     override func viewDidLoad() {
         super.viewDidLoad()
 		
         // Do any additional setup after loading the view.
+		// IA Stuff
 		locationManager = IALocationManager.sharedInstance()
 		resourceManager = IAResourceManager(locationManager: locationManager)
 		locationManager!.delegate = self
-		if let location = locationManager!.location {
-			setFloorPlanImage(region: location.region!)
-		}
+	
+		floorPlanImageView.contentMode = UIViewContentMode.scaleAspectFill
     }
 
     override func didReceiveMemoryWarning() {
@@ -55,7 +58,6 @@ class NodesConnectionViewController: UIViewController {
 						return
 					} else {
 						self.floorPlanImage = UIImage.init(data: data!)!
-						self.floorPlanImageView.image = self.floorPlanImage
 					}
 				}
 			}

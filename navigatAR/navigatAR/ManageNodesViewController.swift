@@ -33,9 +33,8 @@ class ManageNodesViewController: UIViewController, UITableViewDataSource {
 			
 			do {
 				guard let currentBuilding = Building.current(root: snapshot) else { print(""); return }
-				guard let buildingId = currentBuilding.id else { print("id is nil wtf"); return }
 				
-				self.nodes = Array((try FirebaseDecoder().decode([FirebasePushKey: Node].self, from: value)).values).filter({ $0.building == buildingId })
+				self.nodes = Array((try FirebaseDecoder().decode([FirebasePushKey: Node].self, from: value)).values).filter({ $0.building == currentBuilding.id })
 			} catch let error {
 				print(error) // TODO: properly handle error
 			}

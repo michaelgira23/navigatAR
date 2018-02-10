@@ -29,6 +29,10 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 
 	var filteredData: [String]!
 
+	@IBAction func debugPress() {
+		addArrow(z: -1, eulerX: 45, eulerY: 20);
+	}
+
 	override func viewDidLoad() {
 		super.viewDidLoad()
 
@@ -46,12 +50,18 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 		// Show statistics such as fps and timing information
 		sceneView.showsStatistics = false
 
+		sceneView.autoenablesDefaultLighting = true
+		sceneView.automaticallyUpdatesLighting = true
+
 		// Create a new scene
-		let scene = SCNScene(named: "art.scnassets/ship.scn")!
+//		let scene = SCNScene(named: "art.scnassets/ship.scn")!
+//		let scene = SCNScene(named: "art.scnassets/arrow/Arrow.scn")!
 
 		// Set the scene to the view
-		sceneView.scene = scene
-        
+//		sceneView.scene = scene
+
+//		addArrow(z: -1, eulerX: 1, eulerY: 0);
+
         // Get nodes from db and load into the array
         let ref = Database.database().reference()
         
@@ -76,6 +86,7 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 
 		// Create a session configuration
 		let configuration = ARWorldTrackingConfiguration()
+		configuration.planeDetection = [.horizontal]
 
 		// Detect
 		print("ARKit supported?", ARWorldTrackingConfiguration.isSupported)
@@ -144,14 +155,41 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 
 	// MARK: - ARSCNViewDelegate
 
-	/*
-	// Override to create and configure nodes for anchors added to the view's session.
-	func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
-	let node = SCNNode()
+	func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
+		// Place content only for anchors found by plane detection.
+		guard let planeAnchor = anchor as? ARPlaneAnchor else { return }
 
-	return node
+		// Create a SceneKit plane to visualize the plane anchor using its position and extent.
+		let plane = SCNPlane(width: CGFloat(planeAnchor.extent.x), height: CGFloat(planeAnchor.extent.z))
+		let planeNode = SCNNode(geometry: plane)
+		planeNode.simdPosition = float3(planeAnchor.center.x, 0, planeAnchor.center.z)
+
+		// `SCNPlane` is vertically oriented in its local coordinate space, so
+		// rotate the plane to match the horizontal orientation of `ARPlaneAnchor`.
+		planeNode.eulerAngles.x = -.pi / 2
+
+		// Make the plane visualization semitransparent to clearly show real-world placement.
+		planeNode.opacity = 0.25
+
+		// Add the plane visualization to the ARKit-managed node so that it tracks
+		// changes in the plane anchor as plane estimation continues.
+		node.addChildNode(planeNode)
 	}
-	*/
+
+	func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
+		// Update content only for plane anchors and nodes matching the setup created in `renderer(_:didAdd:for:)`.
+		guard let planeAnchor = anchor as?  ARPlaneAnchor,
+			let planeNode = node.childNodes.first,
+			let plane = planeNode.geometry as? SCNPlane
+			else { return }
+
+		// Plane estimation may shift the center of a plane relative to its anchor's transform.
+		planeNode.simdPosition = float3(planeAnchor.center.x, 0, planeAnchor.center.z)
+
+		// Plane estimation may also extend planes, or remove one plane to merge its extent into another.
+		plane.width = CGFloat(planeAnchor.extent.x)
+		plane.height = CGFloat(planeAnchor.extent.z)
+	}
 
 	func session(_ session: ARSession, didFailWithError error: Error) {
 		// Present an error message to the user
@@ -168,5 +206,37 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 
 	}
 
+	/* Augmented Reality */
+
+	func addArrow(x: Float = 0, y: Float = 0, z: Float = 0, eulerX: Float = 0, eulerY: Float = 0) {
+//		guard let arrowScene = SCNScene(named: "art.scnassets/arrow/Arrow.dae") else { return }
+		let arrowScene = SCNScene(named: "art.scnassets/arrow/Arrow.scn")!;
+//		let arrowScene = SCNScene(named: "art.scnassets/ship.scn")!;
+		print("Add arrow", arrowScene);
+		let arrowNode = SCNNode()
+		let arrowSceneChildNodes = arrowScene.rootNode.childNodes
+
+		for childNode in arrowSceneChildNodes {
+			arrowNode.addChildNode(childNode)
+		}
+
+//		for anchor in sceneView.session.currentFrame!.anchors {
+//			print("anchor", anchor)
+//		}
+
+		arrowNode.position = SCNVector3(x, y, z)
+//		carNode.position = SCNVector3(x, y, z)
+		arrowNode.eulerAngles = SCNVector3(degreesToRadians(eulerX), degreesToRadians(eulerY), 0)
+		arrowNode.scale = SCNVector3(0.5, 0.5, 0.5)
+//		print("child nodes", sceneView.scene.rootNode.childNodes)
+//		let debug = sceneView.scene;
+//		print(sceneView)
+		sceneView.scene.rootNode.addChildNode(arrowNode)
+	}
+
+}
+
+func degreesToRadians(_ degrees: Float) -> Float {
+	return degrees * (.pi / 180)
 }
 

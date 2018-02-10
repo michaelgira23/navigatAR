@@ -11,13 +11,26 @@ import SceneKit
 import ARKit
 import Firebase
 import CodableFirebase
+import IndoorAtlas
 
-class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSource, UISearchBarDelegate {
+// Coords outside Belltower Nook
+let targetLat = 38.6599490906118
+let targetLong = -90.3967783079035
+let targetAlt = 3.72000002861023
+
+class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSource, UISearchBarDelegate, IALocationManagerDelegate {
 
 	@IBOutlet weak var searchBlur: UIVisualEffectView!
 	@IBOutlet weak var searchBar: UISearchBar!
 	@IBOutlet weak var tableView: UITableView!
 	@IBOutlet var sceneView: ARSCNView!
+
+	let locationManager = IALocationManager.sharedInstance()
+	var bestHorizontalLocationAccuracy: Double = Double(INT_MAX)
+	var bestVerticalLocationAccuracy: Double = Double(INT_MAX)
+	var currentLat: Double = 0
+	var currentLong: Double = 0
+	var currentAlt: Double = 0
 
 	/*let data = ["New York, NY", "Los Angeles, CA", "Chicago, IL", "Houston, TX",
 				"Philadelphia, PA", "Phoenix, AZ", "San Diego, CA", "San Antonio, TX",
@@ -36,6 +49,9 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 	override func viewDidLoad() {
 		super.viewDidLoad()
 
+		/* Indoor Atlas Setup */
+		locationManager.delegate = self
+
 		/* Search Setup */
 
 		tableView.dataSource = self
@@ -52,15 +68,6 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 
 		sceneView.autoenablesDefaultLighting = true
 		sceneView.automaticallyUpdatesLighting = true
-
-		// Create a new scene
-//		let scene = SCNScene(named: "art.scnassets/ship.scn")!
-//		let scene = SCNScene(named: "art.scnassets/arrow/Arrow.scn")!
-
-		// Set the scene to the view
-//		sceneView.scene = scene
-
-//		addArrow(z: -1, eulerX: 1, eulerY: 0);
 
         // Get nodes from db and load into the array
         let ref = Database.database().reference()
@@ -153,8 +160,62 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 		self.searchBlur.fadeOut()
 	}
 
+	// MARK: - IndoorAtlas delegates
+
+	func indoorLocationManager(_ manager: IALocationManager, didUpdateLocations locations: [Any]) {
+
+		let l = locations.last as! IALocation
+
+		var positionChanged = false
+
+		if let horizontalAccuracy = l.location?.horizontalAccuracy, let newLocation = l.location?.coordinate {
+			if horizontalAccuracy.isLessThanOrEqualTo(bestHorizontalLocationAccuracy) {
+				bestHorizontalLocationAccuracy = horizontalAccuracy.magnitude
+				self.currentLat = newLocation.latitude
+				self.currentLong = newLocation.longitude
+				positionChanged = true
+			}
+		}
+
+		if let verticalAccuracy = l.location?.verticalAccuracy, let altitude = l.location?.altitude {
+			if verticalAccuracy.isLessThanOrEqualTo(bestVerticalLocationAccuracy) {
+				bestVerticalLocationAccuracy = verticalAccuracy.magnitude
+				self.currentAlt = altitude
+				positionChanged = true
+			}
+		}
+
+		if positionChanged {
+			print("Position changed to coordinate: \(currentLat) \(currentLong) \(currentAlt) with accuracy \(bestHorizontalLocationAccuracy) \(bestVerticalLocationAccuracy)")
+
+			let latDiff = currentLat - targetLat
+			let longDiff = currentLong - targetLong
+			let altDiff = currentAlt - targetAlt
+
+			print("DIFF", latDiff, longDiff, altDiff)
+
+			// Calculate offset (in meters)
+			// https://gis.stackexchange.com/a/2964
+
+			let averageLat = (currentLat + targetLat) / 2
+
+			let longOffset = longDiff * 111111
+			let latOffset = latDiff * 111111 * cos(degreesToRadians(averageLat))
+
+			clearArrows()
+			addArrow(x: latOffset, y: longOffset, z: altDiff)
+
+		}
+	}
+
+	func indoorLocationManager(_ manager: IALocationManager, statusChanged status: IAStatus) {
+		let statusNum = String(status.type.rawValue)
+		print("Status: " + statusNum)
+	}
+
 	// MARK: - ARSCNViewDelegate
 
+	/*
 	func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
 		// Place content only for anchors found by plane detection.
 		guard let planeAnchor = anchor as? ARPlaneAnchor else { return }
@@ -190,6 +251,7 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 		plane.width = CGFloat(planeAnchor.extent.x)
 		plane.height = CGFloat(planeAnchor.extent.z)
 	}
+	*/
 
 	func session(_ session: ARSession, didFailWithError error: Error) {
 		// Present an error message to the user
@@ -208,11 +270,11 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 
 	/* Augmented Reality */
 
-	func addArrow(x: Float = 0, y: Float = 0, z: Float = 0, eulerX: Float = 0, eulerY: Float = 0) {
-//		guard let arrowScene = SCNScene(named: "art.scnassets/arrow/Arrow.dae") else { return }
-		let arrowScene = SCNScene(named: "art.scnassets/arrow/Arrow.scn")!;
-//		let arrowScene = SCNScene(named: "art.scnassets/ship.scn")!;
-		print("Add arrow", arrowScene);
+	func addArrow(x: Double = 0, y: Double = 0, z: Double = 0, eulerX: Double = 0, eulerY: Double = 0) {
+
+		print("Add arrow", x, y, z, eulerX, eulerY);
+
+		guard let arrowScene = SCNScene(named: "art.scnassets/arrow/Arrow.scn") else { return }
 		let arrowNode = SCNNode()
 		let arrowSceneChildNodes = arrowScene.rootNode.childNodes
 
@@ -220,23 +282,23 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 			arrowNode.addChildNode(childNode)
 		}
 
-//		for anchor in sceneView.session.currentFrame!.anchors {
-//			print("anchor", anchor)
-//		}
-
 		arrowNode.position = SCNVector3(x, y, z)
-//		carNode.position = SCNVector3(x, y, z)
 		arrowNode.eulerAngles = SCNVector3(degreesToRadians(eulerX), degreesToRadians(eulerY), 0)
 		arrowNode.scale = SCNVector3(0.5, 0.5, 0.5)
-//		print("child nodes", sceneView.scene.rootNode.childNodes)
-//		let debug = sceneView.scene;
-//		print(sceneView)
 		sceneView.scene.rootNode.addChildNode(arrowNode)
+	}
+
+	func clearArrows() {
+		let sceneChildNodes = sceneView.scene.rootNode.childNodes
+
+		for childNode in sceneChildNodes {
+			childNode.removeFromParentNode()
+		}
 	}
 
 }
 
-func degreesToRadians(_ degrees: Float) -> Float {
+func degreesToRadians(_ degrees: Double) -> Double {
 	return degrees * (.pi / 180)
 }
 

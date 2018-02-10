@@ -23,7 +23,7 @@ class ManageNodesViewController: UIViewController, UITableViewDataSource {
 		
 		// Do any additional setup after loading the view, typically from a nib.
 		
-		nodeTable.dataSource = self
+//		nodeTable.dataSource = self
 		
 		let ref = Database.database().reference()
 		

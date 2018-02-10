@@ -37,6 +37,9 @@ class UpsertNodeViewController: FormViewController {
 	), (
 		display: "Sports Venue",
 		value: .sportsVenue
+	), (
+		display: "Point of Interest",
+		value: .pointOfInterest
 	)]
 	
 	let ref = Database.database().reference()
@@ -98,12 +101,12 @@ class UpsertNodeViewController: FormViewController {
 			if !self.tagInfos.isEmpty {
 				// TODO: figure out how to insert this in the right place
 				let tagsSection = Section("Tags")
-				self.form +++ tagsSection
+				self.form.insert(tagsSection, at: 3 /* After location */)
 				
 				for tagInfo in self.tagInfos {
 					// TODO: Figure out multiple values
 					if tagInfo.multiple {
-						self.form +++ MultivaluedSection(multivaluedOptions: [.Insert, .Delete]) { section in
+						self.form.insert(MultivaluedSection(multivaluedOptions: [.Insert, .Delete]) { section in
 							section.addButtonProvider = { _ in
 								return ButtonRow() { row in
 									row.title = "Add New Value"
@@ -117,7 +120,7 @@ class UpsertNodeViewController: FormViewController {
 										row.placeholder = tagInfo.name
 									}
 								case .number:
-									return DecimalRow() { row in
+									return IntRow() { row in
 										row.placeholder = tagInfo.name
 									}
 								default:
@@ -127,7 +130,7 @@ class UpsertNodeViewController: FormViewController {
 							
 							section.multivaluedRowToInsertAt = rowCallback
 							section <<< rowCallback(0)
-						}
+						}, at: 4)
 					} else {
 						switch tagInfo.type {
 						case .string:
@@ -136,7 +139,7 @@ class UpsertNodeViewController: FormViewController {
 								row.placeholder = "String"
 							}
 						case .number:
-							tagsSection <<< DecimalRow(tagInfo.name) { row in
+							tagsSection <<< IntRow(tagInfo.name) { row in
 								row.title = tagInfo.name
 								row.placeholder = "Number"
 							}

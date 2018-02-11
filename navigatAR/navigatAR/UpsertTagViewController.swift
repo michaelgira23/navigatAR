@@ -6,17 +6,25 @@
 //  Copyright © 2018 MICDS Programming. All rights reserved.
 //
 
+import CodableFirebase
 import Eureka
+import Firebase
 
 class UpsertTagViewController: FormViewController {
 
-	let tagValueTypes = [[
-		"display": "String",
-		"value": "string"
-	], [
-		"display": "Number",
-		"value": "number"
-	]]
+	let tagValueTypes: [(display: String, value: TagType, canBeMultiple: Bool)] = [(
+		display: "Text",
+		value: .string,
+		canBeMultiple: true
+	), (
+		display: "Number",
+		value: .number,
+		canBeMultiple: true
+	), (
+		display: "True/False",
+		value: .boolean,
+		canBeMultiple: false
+	)]
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -35,10 +43,16 @@ class UpsertTagViewController: FormViewController {
 			+++ SelectableSection<ListCheckRow<String>>("Value Type", selectionType: .singleSelection(enableDeselection: false))
 
 		for option in tagValueTypes {
-			form.last! <<< ListCheckRow<String>(option["value"]){ listRow in
-				listRow.title = option["display"]
-				listRow.selectableValue = option["value"]
+			form.last! <<< ListCheckRow<String>(String(describing: option.value)){ listRow in
+				listRow.title = option.display
+				listRow.selectableValue = String(describing: option.value)
 				listRow.value = nil
+
+				if !option.canBeMultiple {
+					listRow.hidden = Condition.function(["multiple"], { form in
+						return (form.rowBy(tag: "multiple") as? SwitchRow)?.value ?? false
+					})
+				}
 			}
 		}
 
@@ -60,24 +74,39 @@ class UpsertTagViewController: FormViewController {
 	func createTag(cell: ButtonCellOf<String>, row: ButtonRow) {
 		let formValues = form.values()
 
-		var selectedTagValueType: String = ""
-		for tagValueType in tagValueTypes {
-			if formValues[tagValueType["value"]!]! != nil {
-				selectedTagValueType = tagValueType["value"]!
+		var selectedTagValueType: TagType? = nil
+
+		let tagValues = formValues["multiple"]! as! Bool ? tagValueTypes.filter { $0.canBeMultiple } : tagValueTypes
+		for tagValueType in tagValues {
+			if formValues[String(describing: tagValueType.value)]! != nil {
+				selectedTagValueType = tagValueType.value
 			}
 		}
 
 		// Make sure user selected type
 		/** @TODO Actually add form validation and disable button */
-		if (formValues["name"]! == nil || selectedTagValueType == "") {
+		if (formValues["name"] == nil || selectedTagValueType == nil) {
 			return;
 		}
+		
+		let ref = Database.database().reference()
+		
+		ref.observeSingleEvent(of: .value, with: { snapshot in
+			guard let currentBuilding = Building.current(root: snapshot) else { print("not in a building"); return }
+			
+			print("Create Tag!", selectedTagValueType!, self.form.validate(), self.form.values());
+			
+			let data = try! FirebaseEncoder().encode(TagInfo(
+				building: currentBuilding.id,
+				multiple: formValues["multiple"] as! Bool,
+				name: formValues["name"] as! String,
+				type: selectedTagValueType!
+			))
 
-		print("Create Tag!", selectedTagValueType, form.validate(), form.values());
+			ref.child("tags").childByAutoId().setValue(data)
 
-		/** @TODO Put Firebase logic here for adding tag to database */
-
-		_ = navigationController?.popViewController(animated: true)
+			_ = self.navigationController?.popViewController(animated: true)
+		})
 	}
 
 }

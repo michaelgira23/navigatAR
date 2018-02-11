@@ -6,8 +6,6 @@
 //  Copyright © 2018 MICDS Programming. All rights reserved.
 //
 
-import CoreLocation
-
 enum NodeType: String, Codable {
 	// Generic stuff
 	case pointOfInterest

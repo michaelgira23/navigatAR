@@ -9,10 +9,11 @@
 /* Begin PBXBuildFile section */
 		1C73730B202553D200725F6D /* Building.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C73730A202553D200725F6D /* Building.swift */; };
 		1C73730D20255A1700725F6D /* Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C73730C20255A1700725F6D /* Node.swift */; };
-		1C7373112026302D00725F6D /* FirebaseUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C7373102026302D00725F6D /* FirebaseUtils.swift */; };
+		1C7373112026302D00725F6D /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C7373102026302D00725F6D /* Utils.swift */; };
 		1C7373132026330100725F6D /* TagInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C7373122026330100725F6D /* TagInfo.swift */; };
 		1C73731720267CFC00725F6D /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C73731620267CFC00725F6D /* Location.swift */; };
 		1C73731B20276DF900725F6D /* Tag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C73731A20276DF800725F6D /* Tag.swift */; };
+		1CB71F49202FE864000666BC /* ManageTagsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CB71F48202FE864000666BC /* ManageTagsViewController.swift */; };
 		26AE44CF2025753800F8C75D /* AdminViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26AE44CE2025753800F8C75D /* AdminViewController.swift */; };
 		26AE44D52025934800F8C75D /* config.example.plist in Resources */ = {isa = PBXBuildFile; fileRef = 26AE44D42025934800F8C75D /* config.example.plist */; };
 		26AE44D72025936700F8C75D /* config.plist in Resources */ = {isa = PBXBuildFile; fileRef = 26AE44D62025936700F8C75D /* config.plist */; };
@@ -29,15 +30,17 @@
 		56FEE4CA20266BE30075CA75 /* UpsertTagViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56FEE4C920266BE30075CA75 /* UpsertTagViewController.swift */; };
 		56FEE4CC202683EE0075CA75 /* NodePositionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56FEE4CB202683EE0075CA75 /* NodePositionViewController.swift */; };
 		A959D60230803839364FEB5D /* Pods_navigatAR.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3670E310BCDA21FEDDE0F541 /* Pods_navigatAR.framework */; };
+		B4319490202D564700A2C284 /* Searching.swift in Sources */ = {isa = PBXBuildFile; fileRef = B431948F202D564700A2C284 /* Searching.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		1C73730A202553D200725F6D /* Building.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Building.swift; sourceTree = "<group>"; };
 		1C73730C20255A1700725F6D /* Node.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Node.swift; sourceTree = "<group>"; };
-		1C7373102026302D00725F6D /* FirebaseUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseUtils.swift; sourceTree = "<group>"; };
+		1C7373102026302D00725F6D /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		1C7373122026330100725F6D /* TagInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagInfo.swift; sourceTree = "<group>"; };
 		1C73731620267CFC00725F6D /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
 		1C73731A20276DF800725F6D /* Tag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tag.swift; sourceTree = "<group>"; };
+		1CB71F48202FE864000666BC /* ManageTagsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageTagsViewController.swift; sourceTree = "<group>"; };
 		26AE44CE2025753800F8C75D /* AdminViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminViewController.swift; sourceTree = "<group>"; };
 		26AE44D42025934800F8C75D /* config.example.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = config.example.plist; sourceTree = "<group>"; };
 		26AE44D62025936700F8C75D /* config.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = config.plist; sourceTree = "<group>"; };
@@ -57,6 +60,7 @@
 		56FEE4C920266BE30075CA75 /* UpsertTagViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpsertTagViewController.swift; sourceTree = "<group>"; };
 		56FEE4CB202683EE0075CA75 /* NodePositionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodePositionViewController.swift; sourceTree = "<group>"; };
 		5E69BC90EE3E34F49CA3FF4C /* Pods-navigatAR.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-navigatAR.release.xcconfig"; path = "Pods/Target Support Files/Pods-navigatAR/Pods-navigatAR.release.xcconfig"; sourceTree = "<group>"; };
+		B431948F202D564700A2C284 /* Searching.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Searching.swift; sourceTree = "<group>"; };
 		DEAAEDCA81AD21BBBF3786A2 /* Pods-navigatAR.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-navigatAR.debug.xcconfig"; path = "Pods/Target Support Files/Pods-navigatAR/Pods-navigatAR.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -121,8 +125,10 @@
 				56F25B982022E79800B246D3 /* Info.plist */,
 				26AE44D42025934800F8C75D /* config.example.plist */,
 				26AE44D62025936700F8C75D /* config.plist */,
-				1C7373102026302D00725F6D /* FirebaseUtils.swift */,
 				569FA3882026D8EC00910CCE /* UIViewExtensions.swift */,
+				B431948F202D564700A2C284 /* Searching.swift */,
+				1C7373102026302D00725F6D /* Utils.swift */,
+				1CB71F48202FE864000666BC /* ManageTagsViewController.swift */,
 			);
 			path = navigatAR;
 			sourceTree = "<group>";
@@ -285,12 +291,14 @@
 				565A1BA920268B24007C56F5 /* ManageNodesViewController.swift in Sources */,
 				56FEE4CC202683EE0075CA75 /* NodePositionViewController.swift in Sources */,
 				569FA3892026D8EC00910CCE /* UIViewExtensions.swift in Sources */,
+				B4319490202D564700A2C284 /* Searching.swift in Sources */,
 				26AE44CF2025753800F8C75D /* AdminViewController.swift in Sources */,
+				1CB71F49202FE864000666BC /* ManageTagsViewController.swift in Sources */,
 				1C73730D20255A1700725F6D /* Node.swift in Sources */,
 				1C73731720267CFC00725F6D /* Location.swift in Sources */,
 				56FEE4C8202639970075CA75 /* UpsertNodeViewController.swift in Sources */,
 				56F25B8B2022E79800B246D3 /* AppDelegate.swift in Sources */,
-				1C7373112026302D00725F6D /* FirebaseUtils.swift in Sources */,
+				1C7373112026302D00725F6D /* Utils.swift in Sources */,
 				56F25B8D2022E79800B246D3 /* NavViewController.swift in Sources */,
 				56FEE4CA20266BE30075CA75 /* UpsertTagViewController.swift in Sources */,
 				1C73730B202553D200725F6D /* Building.swift in Sources */,

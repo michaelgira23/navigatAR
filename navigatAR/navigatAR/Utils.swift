@@ -1,5 +1,5 @@
 //
-//  FirebaseUtils.swift
+//  Utils.swift
 //  navigatAR
 //
 //  Created by Nick Clifford on 2/3/18.

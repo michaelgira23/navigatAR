@@ -9,6 +9,7 @@
 enum TagType: String, Codable {
 	case string
 	case number
+	case boolean
 }
 
 struct TagInfo: Codable {

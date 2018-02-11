@@ -7,16 +7,23 @@
 //
 
 import CoreLocation
+import IndoorAtlas
 
 // NOTE: This is used instead of just CLLocation because of Codable conformance.
 struct Location: Codable {
 	let latitude: CLLocationDegrees
 	let longitude: CLLocationDegrees
 	let altitude: CLLocationDistance
-	
-	init(fromCoreLocation cl: CLLocation) {
-		latitude = cl.coordinate.latitude
-		longitude = cl.coordinate.longitude
-		altitude = cl.altitude
+	let floor: Int
+	let verticalAccuracy: CLLocationAccuracy
+	let horizontalAccuracy: CLLocationAccuracy
+
+	init(fromIALocation ial: IALocation) {
+		latitude = ial.location!.coordinate.latitude
+		longitude = ial.location!.coordinate.longitude
+		altitude = ial.location!.altitude
+		floor = ial.floor!.level
+		verticalAccuracy = ial.location!.verticalAccuracy
+		horizontalAccuracy = ial.location!.horizontalAccuracy
 	}
 }

@@ -11,8 +11,7 @@ import Firebase
 import UIKit
 
 class ManageNodesViewController: UIViewController, UITableViewDataSource {
-	
-	@IBOutlet weak var loadButtonOutlet: UIButton!
+
 	@IBOutlet weak var nodeTable: UITableView!
 	@IBAction func unwindToManageNodes(unwindSegue: UIStoryboardSegue) { }
 	
@@ -23,7 +22,7 @@ class ManageNodesViewController: UIViewController, UITableViewDataSource {
 		
 		// Do any additional setup after loading the view, typically from a nib.
 		
-//		nodeTable.dataSource = self
+		nodeTable.dataSource = self
 		
 		let ref = Database.database().reference()
 		
@@ -32,9 +31,10 @@ class ManageNodesViewController: UIViewController, UITableViewDataSource {
 			guard let value = snapshot.childSnapshot(forPath: "nodes").value else { return }
 			
 			do {
-				guard let currentBuilding = Building.current(root: snapshot) else { print(""); return }
+				//guard let currentBuilding = Building.current(root: snapshot) else { print(""); return }
 				
-				self.nodes = Array((try FirebaseDecoder().decode([FirebasePushKey: Node].self, from: value)).values).filter({ $0.building == currentBuilding.id })
+				self.nodes = Array((try FirebaseDecoder().decode([FirebasePushKey: Node].self, from: value)).values)//.filter({ $0.building == currentBuilding.id })
+				self.nodeTable.reloadData()
 			} catch let error {
 				print(error) // TODO: properly handle error
 			}
@@ -46,11 +46,6 @@ class ManageNodesViewController: UIViewController, UITableViewDataSource {
 		// Dispose of any resources that can be recreated.
 	}
 
-	@IBAction func loadButtonHandler(_ sender: UIButton) {
-		print("ayyuh")
-		nodeTable.reloadData()
-	}
-
 	// MARK: TableView functions
 	
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -58,7 +53,6 @@ class ManageNodesViewController: UIViewController, UITableViewDataSource {
 	}
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-		print(nodes)
 		let cell: UITableViewCell = nodeTable.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as UITableViewCell
 		let node = nodes[indexPath.row]
 

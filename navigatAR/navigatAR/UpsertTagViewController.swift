@@ -13,7 +13,7 @@ import Firebase
 class UpsertTagViewController: FormViewController {
 
 	let tagValueTypes: [(display: String, value: TagType, canBeMultiple: Bool)] = [(
-		display: "String",
+		display: "Text",
 		value: .string,
 		canBeMultiple: true
 	), (

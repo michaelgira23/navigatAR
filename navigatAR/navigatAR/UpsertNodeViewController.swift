@@ -136,7 +136,7 @@ class UpsertNodeViewController: FormViewController {
 						case .string:
 							tagsSection <<< TextRow(tagInfo.name) { row in
 								row.title = tagInfo.name
-								row.placeholder = "String"
+								row.placeholder = "Text"
 							}
 						case .number:
 							tagsSection <<< IntRow(tagInfo.name) { row in

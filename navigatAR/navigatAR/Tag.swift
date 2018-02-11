@@ -7,23 +7,23 @@
 
 enum Tag: Codable {
 	case string(String)
-	case number(Double)
+	case number(Int)
 	case boolean(Bool)
 	case multipleStrings([String])
-	case multipleNumbers([Double])
+	case multipleNumbers([Int])
 	
 	init(from decoder: Decoder) throws {
 		let value = try decoder.singleValueContainer()
 		
 		if let str = try? value.decode(String.self) {
 			self = .string(str)
-		} else if let num = try? value.decode(Double.self) {
+		} else if let num = try? value.decode(Int.self) {
 			self = .number(num)
 		} else if let bool = try? value.decode(Bool.self) {
 			self = .boolean(bool)
 		} else if let strs = try? value.decode([String: Bool].self) {
 			self = .multipleStrings(Array(strs.keys))
-		} else if let nums = try? value.decode([Double: Bool].self) {
+		} else if let nums = try? value.decode([Int: Bool].self) {
 			self = .multipleNumbers(Array(nums.keys))
 		} else {
 			// Should never happen, but just to make the compiler happy (and I don't want to bother with throwing an error)

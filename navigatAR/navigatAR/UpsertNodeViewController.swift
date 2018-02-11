@@ -88,11 +88,11 @@ class UpsertNodeViewController: FormViewController {
 		}
 		
 		ref.observeSingleEvent(of: .value, with: { snapshot in
-			guard let currentBuilding = Building.current(root: snapshot) else { print("not in a building"); return }
+//			guard let currentBuilding = Building.current(root: snapshot) else { print("not in a building"); return }
 			guard let value = snapshot.childSnapshot(forPath: "tags").value else { return }
 			
 			do {
-				self.tagInfos = Array((try FirebaseDecoder().decode([FirebasePushKey: TagInfo].self, from: value)).values).filter({ $0.building == currentBuilding.id })
+				self.tagInfos = Array((try FirebaseDecoder().decode([FirebasePushKey: TagInfo].self, from: value)).values)//.filter({ $0.building == currentBuilding.id })
 			} catch let err {
 				print(err) // handle error properly
 				return
@@ -106,7 +106,8 @@ class UpsertNodeViewController: FormViewController {
 				for tagInfo in self.tagInfos {
 					// TODO: Figure out multiple values
 					if tagInfo.multiple {
-						self.form.insert(MultivaluedSection(multivaluedOptions: [.Insert, .Delete]) { section in
+						self.form.insert(MultivaluedSection(multivaluedOptions: [.Insert, .Delete], header: tagInfo.name) { section in
+							section.tag = tagInfo.name
 							section.addButtonProvider = { _ in
 								return ButtonRow() { row in
 									row.title = "Add New Value"
@@ -177,19 +178,41 @@ class UpsertNodeViewController: FormViewController {
 		}
 		
 		ref.observeSingleEvent(of: .value, with: { snapshot in
-			guard let currentBuilding = Building.current(root: snapshot) else {
-				print("not in a building")
-				return
+//			guard let currentBuilding = Building.current(root: snapshot) else {
+//				print("not in a building")
+//				return
+//			}
+			
+			let tags: [String: Tag] = self.tagInfos.reduce(into: [:]) { (result, tagInfo) in
+				let formValue = formValues[tagInfo.name]!
+				var tagValue: Tag? = nil
+				
+				switch (tagInfo.type, tagInfo.multiple) {
+				case (.string, false):
+					tagValue = Tag.string(formValue as! String)
+				case (.number, false):
+					tagValue = Tag.number(formValue as! Int)
+				case (.boolean, false):
+					tagValue = Tag.boolean(formValue as! Bool)
+				case (.string, true):
+					tagValue = Tag.multipleStrings(formValue.flatMap { $0 } as! [String])
+				case (.number, true):
+					tagValue = Tag.multipleNumbers(formValue.flatMap { $0 } as! [Int])
+				default:
+					break // thanks, compiler
+				}
+				
+				result[tagInfo.name] = tagValue!
 			}
 			
-			print("Create Node!", selectedNodeType!, self.form.validate(), self.form.values(), self.locationData ?? "No Location", currentBuilding);
+			print("Create Node!", selectedNodeType!, self.form.validate(), self.form.values(), self.locationData ?? "No Location"/*, currentBuilding*/);
 			
 			let data = try! FirebaseEncoder().encode(Node(
-				building: currentBuilding.id,
+				building: "-L4w0mZgmdxmreRZe9No", // currentBuilding.id,
 				name: formValues["name"] as! String,
 				type: selectedNodeType!,
 				position: Location(fromIALocation: self.locationData!),
-				tags: ["test": Tag.string("TODO: actual values for these")]
+				tags: tags
 			))
 			
 			self.ref.child("nodes").childByAutoId().setValue(data)

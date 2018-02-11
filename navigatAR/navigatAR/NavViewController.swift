@@ -63,6 +63,7 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
             do {
                 let loc = Array((try FirebaseDecoder().decode([FirebasePushKey: Node].self, from: value)).values)
                 self.data = [] // clear the data out so appending can work properly
+                self.filteredData = []
                 
                 for node in loc {
                     self.data.append(node.name + "," + String(describing: node.type))
@@ -128,6 +129,7 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 	}
 
 	func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        self.updateDBData()
 		self.searchBar.showsCancelButton = true
 		self.searchBlur.fadeIn()
 		self.tableView.fadeIn()

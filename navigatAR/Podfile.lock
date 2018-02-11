@@ -30,6 +30,7 @@ PODS:
     - nanopb/encode (= 0.3.8)
   - nanopb/decode (0.3.8)
   - nanopb/encode (0.3.8)
+  - SVProgressHUD (2.2.2)
 
 DEPENDENCIES:
   - CodableFirebase
@@ -37,6 +38,16 @@ DEPENDENCIES:
   - Firebase/Core
   - Firebase/Database
   - IndoorAtlas
+  - SVProgressHUD (from `https://github.com/SVProgressHUD/SVProgressHUD.git`)
+
+EXTERNAL SOURCES:
+  SVProgressHUD:
+    :git: https://github.com/SVProgressHUD/SVProgressHUD.git
+
+CHECKOUT OPTIONS:
+  SVProgressHUD:
+    :commit: 4f2b40ecb711f741aa52fd6abceba645059c62b5
+    :git: https://github.com/SVProgressHUD/SVProgressHUD.git
 
 SPEC CHECKSUMS:
   CodableFirebase: b13321acfec878cbcda93faf84c985f4d69ec2f1
@@ -50,7 +61,8 @@ SPEC CHECKSUMS:
   IndoorAtlas: 96d794362e397d018d33a7922386fe8b87f6310b
   leveldb-library: 08cba283675b7ed2d99629a4bc5fd052cd2bb6a5
   nanopb: 5601e6bca2dbf1ed831b519092ec110f66982ca3
+  SVProgressHUD: 59b2d3dabacbd051576d21d32293ca7228dc18b0
 
-PODFILE CHECKSUM: 6dafb23e547c2055325ee7865f422a9bc91b5aac
+PODFILE CHECKSUM: 08abbb8dbcc298f3aa3b89467e2e91992fa10006
 
 COCOAPODS: 1.4.0

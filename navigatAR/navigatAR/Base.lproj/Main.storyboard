@@ -245,13 +245,12 @@
         <scene sceneID="8Z7-DS-Hqq">
             <objects>
                 <viewController id="Ld1-Bd-biO" customClass="NodesConnectionViewController" customModule="navigatAR" customModuleProvider="target" sceneMemberID="viewController">
-                    <mapView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" id="oj6-Io-BbI">
+                    <view key="view" contentMode="scaleToFill" id="8Ud-sU-no8">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    </mapView>
-                    <connections>
-                        <outlet property="connectionsView" destination="oj6-Io-BbI" id="hOW-r9-tQL"/>
-                    </connections>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="Jzz-ta-Cqe"/>
+                    </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="w4u-fJ-98Z" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

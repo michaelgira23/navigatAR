@@ -26,6 +26,9 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 	@IBOutlet var sceneView: ARSCNView!
 
 	let locationManager = IALocationManager.sharedInstance()
+
+	var cameraPosition = SCNVector3(0, 0, 0)
+
 	var bestHorizontalLocationAccuracy: Double = Double(INT_MAX)
 	var bestVerticalLocationAccuracy: Double = Double(INT_MAX)
 	var currentLat: Double = 0
@@ -93,7 +96,8 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 
 		// Create a session configuration
 		let configuration = ARWorldTrackingConfiguration()
-		configuration.planeDetection = [.horizontal]
+		configuration.worldAlignment = .gravityAndHeading
+//		configuration.planeDetection = [.horizontal]
 
 		// Detect
 		print("ARKit supported?", ARWorldTrackingConfiguration.isSupported)
@@ -169,23 +173,23 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 		var positionChanged = false
 
 		if let horizontalAccuracy = l.location?.horizontalAccuracy, let newLocation = l.location?.coordinate {
-			if horizontalAccuracy.isLessThanOrEqualTo(bestHorizontalLocationAccuracy) {
+//			if horizontalAccuracy.isLessThanOrEqualTo(bestHorizontalLocationAccuracy) {
 				bestHorizontalLocationAccuracy = horizontalAccuracy.magnitude
 				self.currentLat = newLocation.latitude
 				self.currentLong = newLocation.longitude
 				positionChanged = true
-			}
+//			}
 		}
 
 		if let verticalAccuracy = l.location?.verticalAccuracy, let altitude = l.location?.altitude {
-			if verticalAccuracy.isLessThanOrEqualTo(bestVerticalLocationAccuracy) {
-				bestVerticalLocationAccuracy = verticalAccuracy.magnitude
+//			if verticalAccuracy.isLessThanOrEqualTo(bestVerticalLocationAccuracy) {
+//				bestVerticalLocationAccuracy = verticalAccuracy.magnitude
 				self.currentAlt = altitude
-				positionChanged = true
-			}
+//				positionChanged = true
+//			}
 		}
 
-		if positionChanged {
+//		if positionChanged {
 			print("Position changed to coordinate: \(currentLat) \(currentLong) \(currentAlt) with accuracy \(bestHorizontalLocationAccuracy) \(bestVerticalLocationAccuracy)")
 
 			let latDiff = currentLat - targetLat
@@ -202,10 +206,12 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 			let longOffset = longDiff * 111111
 			let latOffset = latDiff * 111111 * cos(degreesToRadians(averageLat))
 
+			// @TODO - Take into account camera's current position because (0, 0, 0) is when AR session is first started
+
 			clearArrows()
 			addArrow(x: latOffset, y: longOffset, z: altDiff)
 
-		}
+//		}
 	}
 
 	func indoorLocationManager(_ manager: IALocationManager, statusChanged status: IAStatus) {
@@ -215,43 +221,19 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 
 	// MARK: - ARSCNViewDelegate
 
-	/*
-	func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
-		// Place content only for anchors found by plane detection.
-		guard let planeAnchor = anchor as? ARPlaneAnchor else { return }
+//	func session(_ session: ARSession, didUpdate frame: ARFrame) {
+//		let cameraTransform = frame.camera.transform.columns
+//		cameraX = cameraTransform.0
+//		cameraY = cameraTransform.1
+//		cameraZ = cameraTransform.2
+//		print("camera transform", cameraTransform.0, cameraTransform.1, cameraTransform.2, cameraTransform.3)
+//	}
 
-		// Create a SceneKit plane to visualize the plane anchor using its position and extent.
-		let plane = SCNPlane(width: CGFloat(planeAnchor.extent.x), height: CGFloat(planeAnchor.extent.z))
-		let planeNode = SCNNode(geometry: plane)
-		planeNode.simdPosition = float3(planeAnchor.center.x, 0, planeAnchor.center.z)
-
-		// `SCNPlane` is vertically oriented in its local coordinate space, so
-		// rotate the plane to match the horizontal orientation of `ARPlaneAnchor`.
-		planeNode.eulerAngles.x = -.pi / 2
-
-		// Make the plane visualization semitransparent to clearly show real-world placement.
-		planeNode.opacity = 0.25
-
-		// Add the plane visualization to the ARKit-managed node so that it tracks
-		// changes in the plane anchor as plane estimation continues.
-		node.addChildNode(planeNode)
+	func renderer(_ renderer: SCNSceneRenderer, willRenderScene scene: SCNScene, atTime time: TimeInterval) {
+		guard let pointOfView = sceneView.pointOfView else { return }
+		let transform = pointOfView.transform
+		cameraPosition = SCNVector3(transform.m41, transform.m42, transform.m43)
 	}
-
-	func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
-		// Update content only for plane anchors and nodes matching the setup created in `renderer(_:didAdd:for:)`.
-		guard let planeAnchor = anchor as?  ARPlaneAnchor,
-			let planeNode = node.childNodes.first,
-			let plane = planeNode.geometry as? SCNPlane
-			else { return }
-
-		// Plane estimation may shift the center of a plane relative to its anchor's transform.
-		planeNode.simdPosition = float3(planeAnchor.center.x, 0, planeAnchor.center.z)
-
-		// Plane estimation may also extend planes, or remove one plane to merge its extent into another.
-		plane.width = CGFloat(planeAnchor.extent.x)
-		plane.height = CGFloat(planeAnchor.extent.z)
-	}
-	*/
 
 	func session(_ session: ARSession, didFailWithError error: Error) {
 		// Present an error message to the user

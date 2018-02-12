@@ -57,7 +57,6 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
     func updateDBData() {
         // Get nodes from db and load into the array
         let ref = Database.database().reference()
-        
         ref.child("nodes").observe(.value, with: { snapshot in
             guard let value = snapshot.value else { return }
             
@@ -67,8 +66,8 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
                 self.filteredData = []
                 
                 for node in loc {
-                    self.data.append(node.name + "," + String(describing: node.type))
-                    self.filteredData.append(node.name + "," + String(describing: node.type))
+                    self.data.append(node.name + "," + String(describing: node.type) + "," + String(describing: node.building))
+                    self.filteredData.append(node.name + "," + String(describing: node.type) + "," + String(describing: node.building))
                 }
             }
             catch let error {

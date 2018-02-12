@@ -12,15 +12,18 @@ import Firebase
 
 class UpsertTagViewController: FormViewController {
 
-	let tagValueTypes: [(display: String, value: TagType)] = [(
-		display: "String",
-		value: .string
+	let tagValueTypes: [(display: String, value: TagType, canBeMultiple: Bool)] = [(
+		display: "Text",
+		value: .string,
+		canBeMultiple: true
 	), (
 		display: "Number",
-		value: .number
+		value: .number,
+		canBeMultiple: true
 	), (
 		display: "True/False",
-		value: .boolean
+		value: .boolean,
+		canBeMultiple: false
 	)]
 
 	override func viewDidLoad() {
@@ -44,9 +47,8 @@ class UpsertTagViewController: FormViewController {
 				listRow.title = option.display
 				listRow.selectableValue = String(describing: option.value)
 				listRow.value = nil
-				
-				// Boolean tags cannot have multiple values cause that's dumb
-				if option.value == .boolean {
+
+				if !option.canBeMultiple {
 					listRow.hidden = Condition.function(["multiple"], { form in
 						return (form.rowBy(tag: "multiple") as? SwitchRow)?.value ?? false
 					})
@@ -73,8 +75,10 @@ class UpsertTagViewController: FormViewController {
 		let formValues = form.values()
 
 		var selectedTagValueType: TagType? = nil
-		for tagValueType in tagValueTypes {
-			if formValues[String(describing: tagValueType.value)] != nil {
+
+		let tagValues = formValues["multiple"]! as! Bool ? tagValueTypes.filter { $0.canBeMultiple } : tagValueTypes
+		for tagValueType in tagValues {
+			if formValues[String(describing: tagValueType.value)]! != nil {
 				selectedTagValueType = tagValueType.value
 			}
 		}
@@ -89,12 +93,11 @@ class UpsertTagViewController: FormViewController {
 		
 		ref.observeSingleEvent(of: .value, with: { snapshot in
 			guard let currentBuilding = Building.current(root: snapshot) else { print("not in a building"); return }
-			guard let buildingId = currentBuilding.id else { print("id is nil wtf"); return }
 			
 			print("Create Tag!", selectedTagValueType!, self.form.validate(), self.form.values());
 			
 			let data = try! FirebaseEncoder().encode(TagInfo(
-				building: buildingId,
+				building: currentBuilding.id,
 				multiple: formValues["multiple"] as! Bool,
 				name: formValues["name"] as! String,
 				type: selectedTagValueType!

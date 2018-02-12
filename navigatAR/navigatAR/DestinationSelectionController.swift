@@ -10,6 +10,7 @@ import Foundation
 import UIKit
 import Firebase
 import CodableFirebase
+import FuzzyMatchingSwift
 
 class DestinationSelectionController: UIViewController {
     
@@ -34,16 +35,13 @@ class DestinationSelectionController: UIViewController {
         
         ref = Database.database().reference()
         
-        ref.child("buildings").child(id).observeSingleEvent(of: .value, with: { (snapshot) in
+        ref.child("buildings").observe(.value, with: { (snapshot) in
             guard let value = snapshot.value else { return }
-            do {
-                let loc = Array((try FirebaseDecoder().decode([FirebasePushKey: Building].self, from: value)).values)
-                
-                self.building.text = "Building: " + (String(describing: loc[0].name))
-            }
-            catch let error {
-                print(error)
-            }
+            let buildings = try! FirebaseDecoder().decode([FirebasePushKey: Building].self, from: value)
+            
+            let name = buildings.first(where: { $0.key == id })!.value.name
+            
+            self.building.text = "Building: " + String(describing: name)
         })
     }
 }

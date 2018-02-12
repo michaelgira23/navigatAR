@@ -13,7 +13,7 @@ import Firebase
 import CodableFirebase
 import FuzzyMatchingSwift
 
-class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSource, UISearchBarDelegate {
+class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSource, UISearchBarDelegate, UITableViewDelegate {
 
 	@IBOutlet weak var searchBlur: UIVisualEffectView!
 	@IBOutlet weak var searchBar: UISearchBar!
@@ -30,6 +30,7 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 
 		tableView.dataSource = self
 		searchBar.delegate = self
+        tableView.delegate = self
 
 		/* AR Setup */
 
@@ -118,6 +119,10 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 		return filteredData.count
 	}
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        performSegue(withIdentifier: "showDestinationDetail", sender: self.filteredData[indexPath.row]);
+    }
+    
 	func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if (searchText.isEmpty) {
             self.filteredData = self.data
@@ -159,5 +164,13 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 		// Reset tracking and/or remove existing anchors if consistent tracking is required
 
 	}
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if (segue.identifier == "showDestinationDetail") {
+            if let destination = segue.destination as? DestinationSelectionController {
+                destination.dest = sender as! String
+            }
+        }
+    }
 
 }

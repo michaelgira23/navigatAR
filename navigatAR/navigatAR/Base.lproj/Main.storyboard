@@ -128,7 +128,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Close"/>
                                 <connections>
-                                    <segue destination="9pv-A4-QxB" kind="show" id="hgR-ly-1S9"/>
+                                    <segue destination="49e-Tb-3d3" kind="show" id="eOQ-gb-1UD"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -418,7 +418,4 @@
         <image name="first" width="30" height="30"/>
         <image name="second" width="30" height="30"/>
     </resources>
-    <inferredMetricsTieBreakers>
-        <segue reference="hgR-ly-1S9"/>
-    </inferredMetricsTieBreakers>
 </document>

@@ -1,8 +1,8 @@
 //
-//  ManageNodesViewController.swift
+//  ManageTagsViewController.swift
 //  navigatAR
 //
-//  Created by Michael Gira on 2/3/18.
+//  Created by Nick Clifford on 2/10/18.
 //  Copyright © 2018 MICDS Programming. All rights reserved.
 //
 
@@ -10,31 +10,30 @@ import CodableFirebase
 import Firebase
 import UIKit
 
-class ManageNodesViewController: UIViewController, UITableViewDataSource {
-
-	@IBOutlet weak var nodeTable: UITableView!
+class ManageTagsViewController: UIViewController, UITableViewDataSource {
+	@IBOutlet weak var tagsTable: UITableView!
 	@IBAction func unwindToManageNodes(unwindSegue: UIStoryboardSegue) { }
 	
-	var nodes: [Node] = []
+	var tags: [TagInfo] = []
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		
 		// Do any additional setup after loading the view, typically from a nib.
 		
-		nodeTable.dataSource = self
+		tagsTable.dataSource = self
 		
 		let ref = Database.database().reference()
 		
-		// Continuously update `nodes` from database
+		// Continuously update `tags` from database
 		ref.observe(.value, with: { snapshot in
-			guard let value = snapshot.childSnapshot(forPath: "nodes").value else { return }
+			guard let value = snapshot.childSnapshot(forPath: "tags").value else { return }
 			
 			do {
 				//guard let currentBuilding = Building.current(root: snapshot) else { print(""); return }
 				
-				self.nodes = Array((try FirebaseDecoder().decode([FirebasePushKey: Node].self, from: value)).values)//.filter({ $0.building == currentBuilding.id })
-				self.nodeTable.reloadData()
+				self.tags = Array((try FirebaseDecoder().decode([FirebasePushKey: TagInfo].self, from: value)).values)//.filter({ $0.building == currentBuilding.id })
+				self.tagsTable.reloadData()
 			} catch let error {
 				print(error) // TODO: properly handle error
 			}
@@ -45,19 +44,19 @@ class ManageNodesViewController: UIViewController, UITableViewDataSource {
 		super.didReceiveMemoryWarning()
 		// Dispose of any resources that can be recreated.
 	}
-
+	
 	// MARK: TableView functions
 	
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		return nodes.count
+		return tags.count
 	}
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-		let cell = nodeTable.dequeueReusableCell(withIdentifier: "NodeCell", for: indexPath) as UITableViewCell
-		let node = nodes[indexPath.row]
-
-		cell.textLabel?.text = node.name
-		cell.detailTextLabel?.text = String(describing: node.type)
+		let cell = tagsTable.dequeueReusableCell(withIdentifier: "TagCell", for: indexPath) as UITableViewCell
+		let tag = tags[indexPath.row]
+		
+		cell.textLabel?.text = tag.name
+		cell.detailTextLabel?.text = String(describing: tag.type)
 		
 		return cell
 	}

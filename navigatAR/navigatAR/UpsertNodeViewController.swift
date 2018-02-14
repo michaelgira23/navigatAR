@@ -37,6 +37,9 @@ class UpsertNodeViewController: FormViewController {
 	), (
 		display: "Sports Venue",
 		value: .sportsVenue
+	), (
+		display: "Point of Interest",
+		value: .pointOfInterest
 	)]
 	
 	let ref = Database.database().reference()
@@ -57,13 +60,13 @@ class UpsertNodeViewController: FormViewController {
 	
 		+++ SelectableSection<ListCheckRow<String>>("Node Type", selectionType: .singleSelection(enableDeselection: true))
 
-			for option in nodeTypes {
-				form.last! <<< ListCheckRow<String>(String(describing: option.value)){ listRow in
-					listRow.title = option.display
-					listRow.selectableValue = String(describing: option.value)
-					listRow.value = nil
-				}
+		for option in nodeTypes {
+			form.last! <<< ListCheckRow<String>(String(describing: option.value)){ listRow in
+				listRow.title = option.display
+				listRow.selectableValue = String(describing: option.value)
+				listRow.value = nil
 			}
+		}
 
 		form +++ Section("Location")
 			<<< CheckRow("location") { row in
@@ -85,40 +88,65 @@ class UpsertNodeViewController: FormViewController {
 		}
 		
 		ref.observeSingleEvent(of: .value, with: { snapshot in
-			guard let currentBuilding = Building.current(root: snapshot) else { print("not in a building"); return }
-			guard let buildingId = currentBuilding.id else { print("id is nil wtf"); return }
-			
+//			guard let currentBuilding = Building.current(root: snapshot) else { print("not in a building"); return }
 			guard let value = snapshot.childSnapshot(forPath: "tags").value else { return }
 			
 			do {
-				self.tagInfos = Array((try FirebaseDecoder().decode([FirebasePushKey: TagInfo].self, from: value)).values).filter({ $0.building == buildingId })
+				self.tagInfos = Array((try FirebaseDecoder().decode([FirebasePushKey: TagInfo].self, from: value)).values)//.filter({ $0.building == currentBuilding.id })
 			} catch let err {
 				print(err) // handle error properly
 				return
 			}
-			
-			
-			// TODO: figure out how to insert this in the right place
+
 			if !self.tagInfos.isEmpty {
-				self.form +++ Section("Tags")
+				// TODO: figure out how to insert this in the right place
+				let tagsSection = Section("Tags")
+				self.form.insert(tagsSection, at: 3 /* After location */)
 				
 				for tagInfo in self.tagInfos {
 					// TODO: Figure out multiple values
-					if !tagInfo.multiple {
+					if tagInfo.multiple {
+						self.form.insert(MultivaluedSection(multivaluedOptions: [.Insert, .Delete], header: tagInfo.name) { section in
+							section.tag = tagInfo.name
+							section.addButtonProvider = { _ in
+								return ButtonRow() { row in
+									row.title = "Add New Value"
+								}
+							}
+							
+							let rowCallback = { (_: Int) -> BaseRow in
+								switch tagInfo.type {
+								case .string:
+									return TextRow() { row in
+										row.placeholder = tagInfo.name
+									}
+								case .number:
+									return IntRow() { row in
+										row.placeholder = tagInfo.name
+									}
+								default:
+									return BaseRow() // ok compiler, sure
+								}
+							}
+							
+							section.multivaluedRowToInsertAt = rowCallback
+							section <<< rowCallback(0)
+						}, at: 4)
+					} else {
 						switch tagInfo.type {
 						case .string:
-							self.form.last! <<< TextRow(tagInfo.name) { row in
-								row.title = camelToTitle(str: tagInfo.name)
-								row.placeholder = "String"
+							tagsSection <<< TextRow(tagInfo.name) { row in
+								row.title = tagInfo.name
+								row.placeholder = "Text"
 							}
 						case .number:
-							self.form.last! <<< DecimalRow(tagInfo.name) { row in
-								row.title = camelToTitle(str: tagInfo.name)
+							tagsSection <<< IntRow(tagInfo.name) { row in
+								row.title = tagInfo.name
 								row.placeholder = "Number"
 							}
 						case .boolean:
-							self.form.last! <<< SwitchRow(tagInfo.name) { row in
-								row.title = camelToTitle(str: tagInfo.name)
+							tagsSection <<< SwitchRow(tagInfo.name) { row in
+								row.title = tagInfo.name
 							}
 						}
 					}
@@ -150,21 +178,41 @@ class UpsertNodeViewController: FormViewController {
 		}
 		
 		ref.observeSingleEvent(of: .value, with: { snapshot in
-			guard let currentBuilding = Building.current(root: snapshot) else {
-				print("not in a building")
-				return
+//			guard let currentBuilding = Building.current(root: snapshot) else {
+//				print("not in a building")
+//				return
+//			}
+			
+			let tags: [String: Tag] = self.tagInfos.reduce(into: [:]) { (result, tagInfo) in
+				let formValue = formValues[tagInfo.name]!
+				var tagValue: Tag? = nil
+				
+				switch (tagInfo.type, tagInfo.multiple) {
+				case (.string, false):
+					tagValue = Tag.string(formValue as! String)
+				case (.number, false):
+					tagValue = Tag.number(formValue as! Int)
+				case (.boolean, false):
+					tagValue = Tag.boolean(formValue as! Bool)
+				case (.string, true):
+					tagValue = Tag.multipleStrings(formValue.flatMap { $0 } as! [String])
+				case (.number, true):
+					tagValue = Tag.multipleNumbers(formValue.flatMap { $0 } as! [Int])
+				default:
+					break // thanks, compiler
+				}
+				
+				result[tagInfo.name] = tagValue!
 			}
 			
-			print("Create Node!", selectedNodeType!, self.form.validate(), self.form.values(), self.locationData ?? "No Location", currentBuilding);
-			
-			guard let buildingId = currentBuilding.id else { print("id is nil wtf"); return }
+			print("Create Node!", selectedNodeType!, self.form.validate(), self.form.values(), self.locationData ?? "No Location"/*, currentBuilding*/);
 			
 			let data = try! FirebaseEncoder().encode(Node(
-				building: buildingId,
+				building: "-L4w0mZgmdxmreRZe9No", // currentBuilding.id,
 				name: formValues["name"] as! String,
 				type: selectedNodeType!,
 				position: Location(fromIALocation: self.locationData!),
-				tags: ["test": Tag.string("TODO: actual values for these")]
+				tags: tags
 			))
 			
 			self.ref.child("nodes").childByAutoId().setValue(data)

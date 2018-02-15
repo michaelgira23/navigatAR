@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1C5365AD20353392003198EB /* FirebaseArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C5365AC20353392003198EB /* FirebaseArray.swift */; };
 		1C73730B202553D200725F6D /* Building.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C73730A202553D200725F6D /* Building.swift */; };
 		1C73730D20255A1700725F6D /* Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C73730C20255A1700725F6D /* Node.swift */; };
 		1C7373112026302D00725F6D /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C7373102026302D00725F6D /* Utils.swift */; };
@@ -34,6 +35,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1C5365AC20353392003198EB /* FirebaseArray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseArray.swift; sourceTree = "<group>"; };
 		1C73730A202553D200725F6D /* Building.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Building.swift; sourceTree = "<group>"; };
 		1C73730C20255A1700725F6D /* Node.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Node.swift; sourceTree = "<group>"; };
 		1C7373102026302D00725F6D /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
@@ -129,6 +131,7 @@
 				B431948F202D564700A2C284 /* Searching.swift */,
 				1C7373102026302D00725F6D /* Utils.swift */,
 				1CB71F48202FE864000666BC /* ManageTagsViewController.swift */,
+				1C5365AC20353392003198EB /* FirebaseArray.swift */,
 			);
 			path = navigatAR;
 			sourceTree = "<group>";
@@ -293,6 +296,7 @@
 				569FA3892026D8EC00910CCE /* UIViewExtensions.swift in Sources */,
 				B4319490202D564700A2C284 /* Searching.swift in Sources */,
 				26AE44CF2025753800F8C75D /* AdminViewController.swift in Sources */,
+				1C5365AD20353392003198EB /* FirebaseArray.swift in Sources */,
 				1CB71F49202FE864000666BC /* ManageTagsViewController.swift in Sources */,
 				1C73730D20255A1700725F6D /* Node.swift in Sources */,
 				1C73731720267CFC00725F6D /* Location.swift in Sources */,

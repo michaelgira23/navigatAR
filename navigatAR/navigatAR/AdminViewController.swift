@@ -6,6 +6,7 @@
 //  Copyright © 2018 MICDS Programming. All rights reserved.
 //
 
+import Firebase
 import UIKit
 import IndoorAtlas
 
@@ -17,6 +18,15 @@ class AdminViewController: UIViewController {
 		super.viewDidLoad()
 		// Do any additional setup after loading the view.
 		// Delegate methods to our custom location handler
+		
+		Database.database().reference().observeSingleEvent(of: .value, with: { snapshot in
+			guard let (nodes, graph) = populateGraph(rootSnapshot: snapshot) else { print("unable to get graph"); return }
+
+			let myHouse = nodes["-L5VHbFv1Fwx3bHFvX_I"]!
+			let stem252 = nodes["-L50XlMkv4OWKSN6y75D"]!
+			
+			print(graph.findPath(from: myHouse, to: stem252))
+		})
 	}
 
 	override func didReceiveMemoryWarning() {

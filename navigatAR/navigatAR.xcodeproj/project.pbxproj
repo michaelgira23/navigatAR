@@ -32,6 +32,7 @@
 		56FEE4CC202683EE0075CA75 /* NodePositionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56FEE4CB202683EE0075CA75 /* NodePositionViewController.swift */; };
 		A959D60230803839364FEB5D /* Pods_navigatAR.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3670E310BCDA21FEDDE0F541 /* Pods_navigatAR.framework */; };
 		B4319490202D564700A2C284 /* Searching.swift in Sources */ = {isa = PBXBuildFile; fileRef = B431948F202D564700A2C284 /* Searching.swift */; };
+		B4B6464C20312E3900BAA571 /* DestinationSelectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4B6464B20312E3900BAA571 /* DestinationSelectionController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -63,6 +64,7 @@
 		56FEE4CB202683EE0075CA75 /* NodePositionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodePositionViewController.swift; sourceTree = "<group>"; };
 		5E69BC90EE3E34F49CA3FF4C /* Pods-navigatAR.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-navigatAR.release.xcconfig"; path = "Pods/Target Support Files/Pods-navigatAR/Pods-navigatAR.release.xcconfig"; sourceTree = "<group>"; };
 		B431948F202D564700A2C284 /* Searching.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Searching.swift; sourceTree = "<group>"; };
+		B4B6464B20312E3900BAA571 /* DestinationSelectionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DestinationSelectionController.swift; sourceTree = "<group>"; };
 		DEAAEDCA81AD21BBBF3786A2 /* Pods-navigatAR.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-navigatAR.debug.xcconfig"; path = "Pods/Target Support Files/Pods-navigatAR/Pods-navigatAR.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -130,6 +132,7 @@
 				569FA3882026D8EC00910CCE /* UIViewExtensions.swift */,
 				B431948F202D564700A2C284 /* Searching.swift */,
 				1C7373102026302D00725F6D /* Utils.swift */,
+				B4B6464B20312E3900BAA571 /* DestinationSelectionController.swift */,
 				1CB71F48202FE864000666BC /* ManageTagsViewController.swift */,
 				1C5365AC20353392003198EB /* FirebaseArray.swift */,
 			);
@@ -303,6 +306,7 @@
 				56FEE4C8202639970075CA75 /* UpsertNodeViewController.swift in Sources */,
 				56F25B8B2022E79800B246D3 /* AppDelegate.swift in Sources */,
 				1C7373112026302D00725F6D /* Utils.swift in Sources */,
+				B4B6464C20312E3900BAA571 /* DestinationSelectionController.swift in Sources */,
 				56F25B8D2022E79800B246D3 /* NavViewController.swift in Sources */,
 				56FEE4CA20266BE30075CA75 /* UpsertTagViewController.swift in Sources */,
 				1C73730B202553D200725F6D /* Building.swift in Sources */,

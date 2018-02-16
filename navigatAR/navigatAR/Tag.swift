@@ -9,8 +9,8 @@ enum Tag: Codable {
 	case string(String)
 	case number(Int)
 	case boolean(Bool)
-	case multipleStrings([String])
-	case multipleNumbers([Int])
+	case multipleStrings(FirebaseArray<String>)
+	case multipleNumbers(FirebaseArray<Int>)
 	
 	init(from decoder: Decoder) throws {
 		let value = try decoder.singleValueContainer()
@@ -21,10 +21,10 @@ enum Tag: Codable {
 			self = .number(num)
 		} else if let bool = try? value.decode(Bool.self) {
 			self = .boolean(bool)
-		} else if let strs = try? value.decode([String: Bool].self) {
-			self = .multipleStrings(Array(strs.keys))
-		} else if let nums = try? value.decode([Int: Bool].self) {
-			self = .multipleNumbers(Array(nums.keys))
+		} else if let strs = try? value.decode(FirebaseArray<String>.self) {
+			self = .multipleStrings(strs)
+		} else if let nums = try? value.decode(FirebaseArray<Int>.self) {
+			self = .multipleNumbers(nums)
 		} else {
 			// Should never happen, but just to make the compiler happy (and I don't want to bother with throwing an error)
 			self = .string("")
@@ -43,9 +43,9 @@ enum Tag: Codable {
 		case .boolean(let bool):
 			try value.encode(bool)
 		case .multipleStrings(let strs):
-			try value.encode(strs.reduce(into: [:], { (result, str) in result[str] = true }))
+			try value.encode(strs)
 		case .multipleNumbers(let nums):
-			try value.encode(nums.reduce(into: [:], { (result, num) in result[num] = true }))
+			try value.encode(nums)
 		}
 	}
 }

@@ -11,5 +11,6 @@ target 'navigatAR' do
   pod 'Firebase/Core'
   pod 'Firebase/Database'
   pod 'IndoorAtlas'
+  pod 'FuzzyMatchingSwift'
 
 end

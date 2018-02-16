@@ -8,4 +8,8 @@
 
 public typealias FirebasePushKey = String
 
-// TODO: add convenience methods
+// TODO: add more convenience methods
+
+func degreesToRadians(_ degrees: Double) -> Double {
+	return degrees * (.pi / 180)
+}

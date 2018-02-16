@@ -27,7 +27,7 @@ class GKNodeWrapper: GKGraphNode {
 		return costs[node] ?? 0
 	}
 	
-	func addConnection(to nodes: [GKNodeWrapper]) {
+	func addConnections(to nodes: [GKNodeWrapper]) {
 		addConnections(to: nodes, bidirectional: true)
 		
 		for node in nodes {
@@ -35,5 +35,18 @@ class GKNodeWrapper: GKGraphNode {
 			node.costs[self] = Float(node.wrappedNode.position.distanceTo(wrappedNode.position))
 		}
 	}
+}
+
+func populateGraph(rootSnapshot snapshot: DataSnapshot) -> (nodes: [FirebasePushKey: GKNodeWrapper], graph: GKGraph)? {
+	guard let nodeValues = snapshot.childSnapshot(forPath: "nodes").value else { return nil }
+	guard let allNodes = try? FirebaseDecoder().decode([FirebasePushKey: Node].self, from: nodeValues) else { return nil }
+	let allWrappedNodes = allNodes.mapValues({ GKNodeWrapper(node: $0) })
+	let graph = GKGraph(Array(allWrappedNodes.values))
+	
+	for node in allWrappedNodes.values {
+		node.addConnections(to: (node.wrappedNode.connectedTo ?? []).flatMap { allWrappedNodes[$0] })
+	}
+	
+	return (nodes: allWrappedNodes, graph: graph)
 }
 

@@ -11,11 +11,7 @@ import MapKit
 import IndoorAtlas
 import SVProgressHUD
 import Firebase
-
-// Function to convert degrees to radians
-func degreesToRadians(_ x:Double) -> Double {
-	return (Double.pi * x / 180.0)
-}
+import CodableFirebase
 
 // Blue dot annotation class
 class BlueDotAnnotation: MKPointAnnotation {
@@ -91,6 +87,7 @@ class NodesConnectionViewController: UIViewController, IALocationManagerDelegate
 	var camera = MKMapCamera()
 	var circle = MKCircle()
 	var currentCircle: BlueDotAnnotation? = nil
+	var nodeCircles: [BlueDotAnnotation?] = []
 	var updateCamera = true
 	
 	var floorPlan = IAFloorPlan()
@@ -106,10 +103,14 @@ class NodesConnectionViewController: UIViewController, IALocationManagerDelegate
 		ref = Database.database().reference()
 		
 		refHandle = ref.child("nodes").observe(.value, with: { snapshot in
-			print(snapshot.value)
-			for node in snapshot.children {
-				
+			let nodes = Array(try! FirebaseDecoder().decode([FirebasePushKey: Node].self, from: snapshot.value!).values)
+			for node in nodes {
+				let nodeCircle = BlueDotAnnotation(radius: 20)
+				nodeCircle.coordinate = CLLocationCoordinate2D(latitude: node.position.latitude, longitude: node.position.longitude)
+				self.map.addAnnotation(nodeCircle)
+				self.nodeCircles.append(nodeCircle)
 			}
+			print(self.nodeCircles)
 		})
 
 		SVProgressHUD.show(withStatus: NSLocalizedString("Waiting for location data", comment: ""))

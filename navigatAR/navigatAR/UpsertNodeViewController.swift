@@ -195,9 +195,9 @@ class UpsertNodeViewController: FormViewController {
 				case (.boolean, false):
 					tagValue = Tag.boolean(formValue as! Bool)
 				case (.string, true):
-					tagValue = Tag.multipleStrings(formValue.flatMap { $0 } as! [String])
+					tagValue = Tag.multipleStrings(formValue.flatMap { $0 } as! FirebaseArray<String>)
 				case (.number, true):
-					tagValue = Tag.multipleNumbers(formValue.flatMap { $0 } as! [Int])
+					tagValue = Tag.multipleNumbers(formValue.flatMap { $0 } as! FirebaseArray<Int>)
 				default:
 					break // thanks, compiler
 				}

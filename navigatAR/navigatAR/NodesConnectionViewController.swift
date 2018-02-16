@@ -10,6 +10,7 @@ import UIKit
 import MapKit
 import IndoorAtlas
 import SVProgressHUD
+import Firebase
 
 // Function to convert degrees to radians
 func degreesToRadians(_ x:Double) -> Double {
@@ -78,6 +79,9 @@ class MapOverlayRenderer: MKOverlayRenderer {
 
 class NodesConnectionViewController: UIViewController, IALocationManagerDelegate, MKMapViewDelegate {
 	
+	var ref: DatabaseReference!
+	var refHandle: UInt!
+	
 	var floorPlanFetch:IAFetchTask!
 	var imageFetch:AnyObject!
 	
@@ -99,7 +103,14 @@ class NodesConnectionViewController: UIViewController, IALocationManagerDelegate
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
+		ref = Database.database().reference()
 		
+		refHandle = ref.child("nodes").observe(.value, with: { snapshot in
+			print(snapshot.value)
+			for node in snapshot.children {
+				
+			}
+		})
 
 		SVProgressHUD.show(withStatus: NSLocalizedString("Waiting for location data", comment: ""))
 	}

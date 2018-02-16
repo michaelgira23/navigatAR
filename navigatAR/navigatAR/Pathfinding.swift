@@ -27,8 +27,13 @@ class GKNodeWrapper: GKGraphNode {
 		return costs[node] ?? 0
 	}
 	
-	func addConnection(to node: GKNodeWrapper) {
-		// TODO: implement this
+	func addConnection(to nodes: [GKNodeWrapper]) {
+		addConnections(to: nodes, bidirectional: true)
+		
+		for node in nodes {
+			costs[node] = Float(wrappedNode.position.distanceTo(node.wrappedNode.position))
+			node.costs[self] = Float(node.wrappedNode.position.distanceTo(wrappedNode.position))
+		}
 	}
 }
 

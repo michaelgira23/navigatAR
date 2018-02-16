@@ -69,6 +69,21 @@
             </objects>
             <point key="canvasLocation" x="294" y="1030"/>
         </scene>
+        <!--New Building-->
+        <scene sceneID="6KK-4d-XRG">
+            <objects>
+                <viewController id="cBy-YM-oQa" userLabel="New Building" customClass="NewBuildingViewController" customModule="navigatAR" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="I5i-Tx-RT9">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <viewLayoutGuide key="safeArea" id="ome-AK-mqz"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="MPu-eh-aLM" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1449" y="310"/>
+        </scene>
         <!--Admin Panel-->
         <scene sceneID="foH-qn-ob4">
             <objects>
@@ -91,6 +106,14 @@
                                 <state key="normal" title="Manage Nodes"/>
                                 <connections>
                                     <segue destination="rkc-8c-c3O" kind="show" identifier="ManageNodesSegue" id="jNb-BP-YyS"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eUN-jB-nD8">
+                                <rect key="frame" x="137" y="197" width="102" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="New Building"/>
+                                <connections>
+                                    <segue destination="cBy-YM-oQa" kind="show" identifier="" id="ghT-qr-OVC"/>
                                 </connections>
                             </button>
                         </subviews>

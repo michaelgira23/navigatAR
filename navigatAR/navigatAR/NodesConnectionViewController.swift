@@ -120,19 +120,13 @@ class NodesConnectionViewController: UIViewController, IALocationManagerDelegate
 	var label = UILabel()
 	
 	var connectionFrom: NodeCircle?
-	@IBOutlet weak var saveButton: UIBarButtonItem!
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		ref = Database.database().reference()
 		
-		refHandle = ref.child("nodes").observe(.value, with: { snapshot in
-			let nodes = try! FirebaseDecoder().decode([FirebasePushKey: Node].self, from: snapshot.value!)
-			for node in nodes {
-				let nodeCircle = NodeCircle(mapView: self.map!, nodeInfo: node)
-				self.nodeCircles.append(nodeCircle)
-			}
-		})
+		ref = Database.database().reference()
+
+		NodeCircle.getNodeCircles(from: ref, map: map!, callback: { self.nodeCircles = $0 })
 
 		SVProgressHUD.show(withStatus: NSLocalizedString("Waiting for location data", comment: ""))
 	}
@@ -194,12 +188,85 @@ class NodesConnectionViewController: UIViewController, IALocationManagerDelegate
 	}
 	
 	func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {
-		let selectedCircle = view.annotation as! MKPointAnnotation
-		// find the annotation from list of node annotations
-		for nodeCircle in nodeCircles {
-			if (selectedCircle == nodeCircle.MKAnnotation) {
+//		let selectedCircle = view.annotation as! MKPointAnnotation
+//		// find the annotation from list of node annotations
+//		for nodeCircle in nodeCircles {
+//			if (selectedCircle == nodeCircle.MKAnnotation) {
+//			}
+//		}
+	}
+	
+	@IBAction func mapTapped(_ tap: UITapGestureRecognizer) {
+		if tap.state == .recognized && tap.state == .recognized {
+			// Get map coordinate from touch point
+			let touchPt: CGPoint = tap.location(in: map)
+			let coord: CLLocationCoordinate2D = map!.convert(touchPt, toCoordinateFrom: map)
+			let maxMeters: Double = meters(fromPixel: 22, at: touchPt)
+			var nearestDistance: Float = MAXFLOAT
+			var nearestPoly: MKPolyline? = nil
+			// for every overlay ...
+			for overlay: MKOverlay in map!.overlays {
+				// .. if MKPolyline ...
+				if (overlay is MKPolyline) {
+					// ... get the distance ...
+					let distance: Float = Float(distanceOf(pt: MKMapPointForCoordinate(coord), toPoly: overlay as! MKPolyline))
+					// ... and find the nearest one
+					if distance < nearestDistance {
+						nearestDistance = distance
+						nearestPoly = overlay as? MKPolyline
+					}
+					
+				}
+			}
+			
+			if Double(nearestDistance) <= maxMeters {
+				print("Touched poly: \(String(describing: nearestPoly)) distance: \(nearestDistance)")
+				for fromCircle in nodeCircles {
+					for (line, toCircle) in fromCircle.connections {
+						if line == nearestPoly {
+							fromCircle.removeConnection(to: toCircle)
+							connectionFrom = nil
+						}
+					}
+				}
+				
 			}
 		}
+	}
+	
+	func distanceOf(pt: MKMapPoint, toPoly poly: MKPolyline) -> Double {
+		var distance: Double = Double(MAXFLOAT)
+		for n in 0..<poly.pointCount - 1 {
+			let ptA = poly.points()[n]
+			let ptB = poly.points()[n + 1]
+			let xDelta: Double = ptB.x - ptA.x
+			let yDelta: Double = ptB.y - ptA.y
+			if xDelta == 0.0 && yDelta == 0.0 {
+				// Points must not be equal
+				continue
+			}
+			let u: Double = ((pt.x - ptA.x) * xDelta + (pt.y - ptA.y) * yDelta) / (xDelta * xDelta + yDelta * yDelta)
+			var ptClosest: MKMapPoint
+			if u < 0.0 {
+				ptClosest = ptA
+			}
+			else if u > 1.0 {
+				ptClosest = ptB
+			}
+			else {
+				ptClosest = MKMapPointMake(ptA.x + u * xDelta, ptA.y + u * yDelta)
+			}
+			
+			distance = min(distance, MKMetersBetweenMapPoints(ptClosest, pt))
+		}
+		return distance
+	}
+	
+	func meters(fromPixel px: Int, at pt: CGPoint) -> Double {
+		let ptB = CGPoint(x: pt.x + CGFloat(px), y: pt.y)
+		let coordA: CLLocationCoordinate2D = map!.convert(pt, toCoordinateFrom: map)
+		let coordB: CLLocationCoordinate2D = map!.convert(ptB, toCoordinateFrom: map)
+		return MKMetersBetweenMapPoints(MKMapPointForCoordinate(coordA), MKMapPointForCoordinate(coordB))
 	}
 	
 	// Function to change the map overlay
@@ -341,13 +408,18 @@ class NodesConnectionViewController: UIViewController, IALocationManagerDelegate
 		super.viewWillAppear(true)
 		updateCamera = true
 		
-		map = MKMapView()
 		map?.frame = view.bounds
 		map?.delegate = self
 		map?.isPitchEnabled = false
 		view.addSubview(map!)
 		view.sendSubview(toBack: map!)
 		
+		let mapTap = UITapGestureRecognizer()
+		mapTap.numberOfTapsRequired = 1
+		mapTap.numberOfTouchesRequired = 1
+		mapTap.addTarget(self, action: #selector(NodesConnectionViewController.mapTapped(_:)))
+		map?.addGestureRecognizer(mapTap)
+
 		label.frame = CGRect(x: 8, y: 14, width: view.bounds.width - 16, height: 42)
 		label.textAlignment = NSTextAlignment.center
 		label.adjustsFontSizeToFitWidth = true
@@ -364,6 +436,7 @@ class NodesConnectionViewController: UIViewController, IALocationManagerDelegate
 		locationManager.stopUpdatingLocation()
 		locationManager.delegate = nil
 		
+		// clean ram
 		switch (self.map!.mapType) {
 		case MKMapType.hybrid:
 				self.map!.mapType = MKMapType.standard
@@ -422,30 +495,56 @@ class NodeCircle {
 	var nodeInfo: (FirebasePushKey, Node)
 	var map: MKMapView
 	var connections: [(MKPolyline, NodeCircle)] = []
+	var ref: DatabaseReference!
 
-	init(mapView map: MKMapView, nodeInfo node: (FirebasePushKey, Node)) {
+	init(db: DatabaseReference, mapView map: MKMapView, nodeInfo node: (FirebasePushKey, Node)) {
 		self.map = map
 		nodeInfo = node
 		MKAnnotation = MKPointAnnotation()
 		MKAnnotation.coordinate = CLLocationCoordinate2D(latitude: node.1.position.latitude, longitude: node.1.position.longitude)
 		map.addAnnotation(MKAnnotation)
+		print(map.annotations)
+		ref = db
 	}
 
-	func touched(_ touched: Bool) {
-		if touched {
+//	func touched(_ touched: Bool) {
+//		if touched {
 //			// change node point style
-			self.touched = true
+//			self.touched = true
 //			map.removeAnnotation(MKAnnotation)
 //			MKAnnotation.radius = 50
 //			map.addAnnotation(MKAnnotation)
-		} else {
-			self.touched = false
+//		} else {
+//			self.touched = false
 //			map.removeAnnotation(MKAnnotation)
 //			MKAnnotation.radius = 50
 //			map.addAnnotation(MKAnnotation)
-		}
-	}
+//		}
+//	}
 	
+	static func getNodeCircles(from ref: DatabaseReference, map: MKMapView, callback: @escaping (_ nodes: [NodeCircle]) -> Void) -> Void {
+		// Only query WWT nodes
+		var nodeCircles: [NodeCircle] = []
+		ref.child("nodes").queryOrdered(byChild: "building").queryEqual(toValue: "-L4w0mZgmdxmreRZe9No").observeSingleEvent(of: .value, with: { snapshot in
+			let nodes = try! FirebaseDecoder().decode([FirebasePushKey: Node].self, from: snapshot.value!)
+			for node in nodes {
+				let newNodeCircle = NodeCircle(db: ref, mapView: map, nodeInfo: node)
+				nodeCircles.append(newNodeCircle)
+				if newNodeCircle.nodeInfo.1.connectedTo != nil {
+					for pushKey in newNodeCircle.nodeInfo.1.connectedTo! {
+						for nodeCircle in nodeCircles {
+							if pushKey == nodeCircle.nodeInfo.0 {
+								newNodeCircle.makeConnection(to: nodeCircle)
+							}
+						}
+					}
+				}
+			}
+			print(nodeCircles)
+			callback(nodeCircles)
+		})
+	}
+
 	func makeConnection(to nodeCircle: NodeCircle) {
 		if nodeCircle.MKAnnotation != self.MKAnnotation {
 			if nodeCircle.nodeInfo.1.connectedTo == nil {
@@ -463,11 +562,12 @@ class NodeCircle {
 			if !alreadyConnected {
 				self.nodeInfo.1.connectedTo?.values.append(nodeCircle.nodeInfo.0)
 				print(self.nodeInfo.1.connectedTo?.values)
+				try! ref.child("nodes").child(nodeInfo.0).setValue(FirebaseEncoder().encode(nodeInfo.1))
+				let points = [nodeCircle.nodeInfo.1.position.toCLLocationCoordinate2D(), self.nodeInfo.1.position.toCLLocationCoordinate2D()]
+				let line = MKPolyline(coordinates: points, count: points.count)
+				connections.append((line, nodeCircle))
+				map.add(line)
 			}
-			let points = [nodeCircle.nodeInfo.1.position.toCLLocationCoordinate2D(), self.nodeInfo.1.position.toCLLocationCoordinate2D()]
-			let line = MKPolyline(coordinates: points, count: points.count)
-			connections.append((line, nodeCircle))
-			map.add(line)
 //			map.deselectAnnotation(nodeCircle.MKAnnotation, animated: false)
 		}
 	}
@@ -475,11 +575,24 @@ class NodeCircle {
 	func removeConnection(to nodeCircle: NodeCircle) {
 		var index = 0
 		connections.forEach({ connection in
-			index += 1
 			if connection.1.MKAnnotation == nodeCircle.MKAnnotation {
 				map.remove(connection.0)
 				connections.remove(at: index)
+				for (index, pushKey) in self.nodeInfo.1.connectedTo!.values.enumerated() {
+					if pushKey == nodeCircle.nodeInfo.0 {
+						self.nodeInfo.1.connectedTo!.values.remove(at: index)
+						break
+					}
+				}
+//				ref.updateChildValues(["/nodes/\(self.nodeInfo.0)/connectedTo": FirebaseArray(values: self.nodeInfo.1.connectedTo!.values)])
+				try! ref.child("nodes").child(nodeInfo.0).setValue(FirebaseEncoder().encode(nodeInfo.1))
+
 			}
+			index += 1
 		})
 	}
+	
+//	func updateDBConnection() {
+//
+//	}
 }

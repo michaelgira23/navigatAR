@@ -13,7 +13,8 @@ import CodableFirebase
 
 class NewEventViewController: FormViewController {
 	
-	var availableNodes: [String] = [];
+	var availableNodes: [String] = []
+	var nodeCells: SelectableSection<ListCheckRow<String>>!
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -49,27 +50,34 @@ class NewEventViewController: FormViewController {
 				row.title = "End Time"
 			}
 			
-			+++ SelectableSection<ListCheckRow<String>>("Pick a location", selectionType: .singleSelection(enableDeselection: true))
-		
 			+++ ButtonRow() { row in
 				row.title = "Create"
 				row.onCellSelection { row, cell in
 					// now we create the event
-					let newEvent: Event = Event(name: self.form.values()["eventname"] as! String, description: self.form.values()["eventdescription"] as! String, nodeId: "dummyfornow", start: "\(self.form.values()["eventstartdate"] )@\(self.form.values()["eventstarttime"])", end: "\(self.form.values()["eventenddate"])@\(self.form.values()["eventendtime"])") // TODO: get the selected location
+					let name: String = String(describing: self.form.values()["eventname"])
+					let description: String = String(describing: self.form.values()["eventdescription"])
+					
+					let startDate: String = String(describing: self.form.values()["eventstartdata"])
+					let startTime: String = String(describing: self.form.values()["eventstarttime"])
+					
+					let endDate: String = String(describing: self.form.values()["eventenddata"])
+					let endTime: String = String(describing: self.form.values()["eventenddata"])
+					
+					let nodeId: String = "dummy id" // TODO: put in the id
+					
+					let newEvent: Event = Event(name: name, description: description, nodeId: nodeId, start: "\(startDate)@\(startTime)", end: "\(endDate)@\(endTime)")
 					
 					let ref = Database.database().reference()
 					ref.child("events").childByAutoId().setValue(try! FirebaseEncoder().encode(newEvent))
 				}
 			}
+			
+			+++ Section("Pick a location")
 		
-		// let continents = ["Africa", "Antarctica", "Asia", "Australia", "Europe", "North America", "South America"]
+		self.nodeCells = SelectableSection<ListCheckRow<String>>("Pick a location", selectionType: .singleSelection(enableDeselection: true))
 		
-		for option in self.availableNodes {
-			form.last! <<< ListCheckRow<String>(option){ listRow in
-				listRow.title = option
-				listRow.selectableValue = option
-				listRow.value = nil
-			}
+		self.nodeCells.onSelectSelectableRow = { (cell, cellRow) in
+			print("A thing has been clicked")
 		}
 	}
 	
@@ -85,19 +93,30 @@ class NewEventViewController: FormViewController {
 				
 				for node in loc {
 					self.availableNodes.append(String(describing: node.name))
-					self.availableNodes.append("Some dummy data")
-					print(String(describing: node.name))
 				}
+				
+				// print out the array before loading
+				print("Available nodes array")
+				
+				// TODO: figure out how to reload the section so that our data actually is visible
+				for option in self.availableNodes {
+					self.form.last! <<< ListCheckRow<String>(option){ listRow in
+						listRow.title = option
+						listRow.selectableValue = option
+						listRow.value = nil
+						listRow.deselect()
+					}
+				}
+				
+				self.availableNodes = []
 			}
 			catch let error {
 				print(error)
 			}
 		})
-		
-		for section in form.allSections {
-			section.reload()
-		}
-		
-		// TODO: figure out how to reload the section so that our data actually is visible
+	}
+	
+	override func viewWillDisappear(_ animated: Bool) {
+		self.availableNodes = []
 	}
 }

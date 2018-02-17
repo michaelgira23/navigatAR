@@ -46,4 +46,8 @@ struct Location: Codable {
 		let (deltaLat, deltaLong, deltaAlt) = distanceDeltas(with: other)
 		return sqrt(pow(deltaLat, 2) + pow(deltaLong, 2) + pow(deltaAlt, 2))
 	}
+	
+	func toCLLocationCoordinate2D() -> CLLocationCoordinate2D {
+		return CLLocationCoordinate2D(latitude: self.latitude, longitude: self.longitude)
+	}
 }

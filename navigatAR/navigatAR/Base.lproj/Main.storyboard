@@ -373,6 +373,13 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="Jzz-ta-Cqe"/>
                     </view>
+                    <toolbarItems>
+                        <barButtonItem title="Save" width="408.66666666666669" style="done" id="EkJ-jP-1If"/>
+                    </toolbarItems>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="saveButton" destination="EkJ-jP-1If" id="DSe-Dk-B2D"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="w4u-fJ-98Z" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

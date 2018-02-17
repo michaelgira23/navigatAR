@@ -16,9 +16,11 @@ import CodableFirebase
 // Blue dot annotation class
 class BlueDotAnnotation: MKPointAnnotation {
 	var radius: Double
-	
+//	var color: UIColor
+
 	required init(radius: Double) {
 		self.radius = radius
+//		self.color = color
 		super.init()
 	}
 	
@@ -26,6 +28,25 @@ class BlueDotAnnotation: MKPointAnnotation {
 		fatalError("init(coder:) has not been implemented")
 	}
 }
+
+//class nodeConnectionOverlay: NSObject, MKPolyline {
+//	var fromCoordinate: CLLocationCoordinate2D
+//	var toCoordinate: CLLocationCoordinate2D
+//	var coordinate: CLLocationCoordinate2D
+//	var boundingMapRect: MKMapRect
+//
+//	required init(from: CLLocationCoordinate2D, to: CLLocationCoordinate2D) {
+//		self.fromCoordinate = from
+//		self.toCoordinate = to
+//		self.coordinate = CLLocationCoordinate2D.init(latitude: (from.latitude + to.latitude) / 2, longitude: (from.longitude + to.longitude) / 2)
+//		self.boundingMapRect = MKMapRectMake(from.latitude, from.longitude, abs(to.latitude - from.latitude), abs(from.longitude - to.longitude))
+//		super.init()
+//	}
+//}
+//
+//class nodeConnectionAnnotationView: MKAnnotationView {
+//
+//}
 
 // Class for map overlay object
 class MapOverlay: NSObject, MKOverlay {
@@ -83,11 +104,11 @@ class NodesConnectionViewController: UIViewController, IALocationManagerDelegate
 	
 	var fpImage = UIImage()
 	
-	var map = MKMapView()
+	var map: MKMapView? = MKMapView()
 	var camera = MKMapCamera()
 	var circle = MKCircle()
 	var currentCircle: BlueDotAnnotation? = nil
-	var nodeCircles: [BlueDotAnnotation?] = []
+	var nodeCircles: [NodeCircle] = []
 	var updateCamera = true
 	
 	var floorPlan = IAFloorPlan()
@@ -98,22 +119,87 @@ class NodesConnectionViewController: UIViewController, IALocationManagerDelegate
 	
 	var label = UILabel()
 	
+	var connectionFrom: NodeCircle?
+	@IBOutlet weak var saveButton: UIBarButtonItem!
+	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		ref = Database.database().reference()
 		
 		refHandle = ref.child("nodes").observe(.value, with: { snapshot in
-			let nodes = Array(try! FirebaseDecoder().decode([FirebasePushKey: Node].self, from: snapshot.value!).values)
+			let nodes = try! FirebaseDecoder().decode([FirebasePushKey: Node].self, from: snapshot.value!)
 			for node in nodes {
-				let nodeCircle = BlueDotAnnotation(radius: 20)
-				nodeCircle.coordinate = CLLocationCoordinate2D(latitude: node.position.latitude, longitude: node.position.longitude)
-				self.map.addAnnotation(nodeCircle)
+				let nodeCircle = NodeCircle(mapView: self.map!, nodeInfo: node)
 				self.nodeCircles.append(nodeCircle)
 			}
-			print(self.nodeCircles)
 		})
 
 		SVProgressHUD.show(withStatus: NSLocalizedString("Waiting for location data", comment: ""))
+	}
+	
+//	// functions to handle drags and touches
+//
+//	override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+//		print("Begin")
+//	}
+//
+//	override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+//		if touches.first!.view is MKAnnotationView, (touches.first!.view as! MKAnnotationView).annotation is MKPointAnnotation  {
+//			let circleView = touches.first!.view as! MKAnnotationView
+//			let touchedCircle = circleView.annotation as! BlueDotAnnotation
+//			// find the annotation from list of node annotations and change state
+//			for nodeCircle in nodeCircles {
+//				if (touchedCircle == nodeCircle.MKAnnotation && nodeCircle.touched == false) {
+//					nodeCircle.touched(true)
+//					connectionFrom = nodeCircle
+//				}
+//			}
+////			print((touches.first!.view as! MKAnnotationView).annotation)
+//		}
+//	}
+//
+//	override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+//		for nodeCircle in nodeCircles {
+//			nodeCircle.touched(false)
+//		}
+//		if connectionFrom != nil, touches.first!.view is MKAnnotationView, (touches.first!.view as! MKAnnotationView).annotation is MKPointAnnotation  {
+//			print("hi")
+//			let circleView = touches.first!.view as! MKAnnotationView
+//			let touchedCircle = circleView.annotation as! BlueDotAnnotation
+//			// find the annotation from list of node annotations and connect nodes
+//			for nodeCircle in nodeCircles {
+//				if (touchedCircle == nodeCircle.MKAnnotation && nodeCircle.touched == false) {
+//					connectionFrom?.makeConnection(to: nodeCircle)
+//				}
+//			}
+//		}
+////		if touches.first!.view is MKOverlayView, (touches.first!.view as! MKOverlayView)
+//	}
+	
+	func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+		let selectedCircle = view.annotation as! MKPointAnnotation
+		// find the annotation from list of node annotations and connect nodes
+		for nodeCircle in nodeCircles {
+			if selectedCircle == nodeCircle.MKAnnotation {
+				if connectionFrom != nil {
+					print("yuh")
+					connectionFrom?.makeConnection(to: nodeCircle)
+					connectionFrom = nodeCircle
+				} else {
+					connectionFrom = nodeCircle
+				}
+			}
+		}
+		
+	}
+	
+	func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {
+		let selectedCircle = view.annotation as! MKPointAnnotation
+		// find the annotation from list of node annotations
+		for nodeCircle in nodeCircles {
+			if (selectedCircle == nodeCircle.MKAnnotation) {
+			}
+		}
 	}
 	
 	// Function to change the map overlay
@@ -128,12 +214,13 @@ class NodesConnectionViewController: UIViewController, IALocationManagerDelegate
 		let a = degreesToRadians(self.floorPlan.bearing)
 		rotated = cgRect.applying(CGAffineTransform(rotationAngle: CGFloat(a)));
 		let overlay = MapOverlay(floorPlan: floorPlan, andRotatedRect: rotated)
-		map.add(overlay)
+		map?.add(overlay)
 	}
 	
 	// Function for rendering overlay objects
 	func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
 		var circleRenderer:MKCircleRenderer!
+		var polyLineRenderer: MKPolylineRenderer!
 		
 		// If it is possible to convert overlay to MKCircle then render the circle with given properties. Else if the overlay is class of MapOverlay set up its own MapOverlayRenderer. Else render red circle.
 		if let overlay = overlay as? MKCircle {
@@ -145,6 +232,11 @@ class NodesConnectionViewController: UIViewController, IALocationManagerDelegate
 			let overlayView = MapOverlayRenderer(overlay: overlay, overlayImage: fpImage, fp: floorPlan, rotated: rotated)
 			return overlayView
 			
+		} else if let overlay = overlay as? MKPolyline {
+			polyLineRenderer = MKPolylineRenderer(polyline: overlay)
+			polyLineRenderer.lineWidth = 5
+			polyLineRenderer.strokeColor = UIColor.blue
+			return polyLineRenderer
 		} else {
 			circleRenderer = MKCircleRenderer(overlay: overlay)
 			circleRenderer.fillColor = UIColor.init(red: 1, green: 0, blue: 0, alpha: 1.0)
@@ -176,7 +268,7 @@ class NodesConnectionViewController: UIViewController, IALocationManagerDelegate
 			// Remove the previous circle overlay and set up a new overlay
 			if currentCircle == nil {
 				currentCircle = BlueDotAnnotation(radius: 25)
-				map.addAnnotation(currentCircle!)
+				map?.addAnnotation(currentCircle!)
 			}
 			currentCircle?.coordinate = newLocation
 			
@@ -189,7 +281,7 @@ class NodesConnectionViewController: UIViewController, IALocationManagerDelegate
 				camera = MKMapCamera(lookingAtCenter: (l.location?.coordinate)!, fromEyeCoordinate: (l.location?.coordinate)!, eyeAltitude: 300)
 				
 				// Assign the camera to your map view.
-				map.camera = camera
+				map?.camera = camera
 				updateCamera = false
 			}
 		}
@@ -250,11 +342,11 @@ class NodesConnectionViewController: UIViewController, IALocationManagerDelegate
 		updateCamera = true
 		
 		map = MKMapView()
-		map.frame = view.bounds
-		map.delegate = self
-		map.isPitchEnabled = false
-		view.addSubview(map)
-		view.sendSubview(toBack: map)
+		map?.frame = view.bounds
+		map?.delegate = self
+		map?.isPitchEnabled = false
+		view.addSubview(map!)
+		view.sendSubview(toBack: map!)
 		
 		label.frame = CGRect(x: 8, y: 14, width: view.bounds.width - 16, height: 42)
 		label.textAlignment = NSTextAlignment.center
@@ -272,11 +364,25 @@ class NodesConnectionViewController: UIViewController, IALocationManagerDelegate
 		locationManager.stopUpdatingLocation()
 		locationManager.delegate = nil
 		
-		map.delegate = nil
-		map.removeFromSuperview()
+		switch (self.map!.mapType) {
+		case MKMapType.hybrid:
+				self.map!.mapType = MKMapType.standard
+				break;
+			case MKMapType.standard:
+				self.map!.mapType = MKMapType.hybrid
+				break;
+			default:
+				break;
+		}
+		self.map!.showsUserLocation = false
+		self.map!.delegate = nil
+		self.map!.removeFromSuperview()
+		self.map = nil
 		label.removeFromSuperview()
 		
 		SVProgressHUD.dismiss()
+		
+		ref.removeAllObservers()
 	}
 	
 	func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
@@ -284,12 +390,12 @@ class NodesConnectionViewController: UIViewController, IALocationManagerDelegate
 			let type = "blueDot"
 			let color = UIColor(red: 0, green: 125/255, blue: 1, alpha: 1)
 			let alpha: CGFloat = 1.0
-			
+
 			let borderWidth:CGFloat = 3
 			let borderColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1)
-			
-			let annotationView: MKAnnotationView = map.dequeueReusableAnnotationView(withIdentifier: type) ?? MKAnnotationView.init(annotation: annotation, reuseIdentifier: type)
-			
+
+			let annotationView: MKAnnotationView = map!.dequeueReusableAnnotationView(withIdentifier: type) ?? MKAnnotationView.init(annotation: annotation, reuseIdentifier: type)
+
 			annotationView.annotation = annotation
 			annotationView.frame = CGRect(x: 0, y: 0, width: annotation.radius, height: annotation.radius)
 			annotationView.backgroundColor = color
@@ -301,10 +407,79 @@ class NodesConnectionViewController: UIViewController, IALocationManagerDelegate
 			let mask = CAShapeLayer()
 			mask.path = UIBezierPath(ovalIn: annotationView.frame).cgPath
 			annotationView.layer.mask = mask
-			
+
 			return annotationView
 			
 		}
+
 		return nil
+	}
+}
+
+class NodeCircle {
+	var MKAnnotation: MKPointAnnotation
+	var touched: Bool = false
+	var nodeInfo: (FirebasePushKey, Node)
+	var map: MKMapView
+	var connections: [(MKPolyline, NodeCircle)] = []
+
+	init(mapView map: MKMapView, nodeInfo node: (FirebasePushKey, Node)) {
+		self.map = map
+		nodeInfo = node
+		MKAnnotation = MKPointAnnotation()
+		MKAnnotation.coordinate = CLLocationCoordinate2D(latitude: node.1.position.latitude, longitude: node.1.position.longitude)
+		map.addAnnotation(MKAnnotation)
+	}
+
+	func touched(_ touched: Bool) {
+		if touched {
+//			// change node point style
+			self.touched = true
+//			map.removeAnnotation(MKAnnotation)
+//			MKAnnotation.radius = 50
+//			map.addAnnotation(MKAnnotation)
+		} else {
+			self.touched = false
+//			map.removeAnnotation(MKAnnotation)
+//			MKAnnotation.radius = 50
+//			map.addAnnotation(MKAnnotation)
+		}
+	}
+	
+	func makeConnection(to nodeCircle: NodeCircle) {
+		if nodeCircle.MKAnnotation != self.MKAnnotation {
+			if nodeCircle.nodeInfo.1.connectedTo == nil {
+				nodeCircle.nodeInfo.1.connectedTo = []
+			}
+			if self.nodeInfo.1.connectedTo == nil {
+				self.nodeInfo.1.connectedTo = []
+			}
+			var alreadyConnected = false
+			for pushKey in self.nodeInfo.1.connectedTo! {
+				if pushKey == nodeCircle.nodeInfo.0 {
+					alreadyConnected = true
+				}
+			}
+			if !alreadyConnected {
+				self.nodeInfo.1.connectedTo?.values.append(nodeCircle.nodeInfo.0)
+				print(self.nodeInfo.1.connectedTo?.values)
+			}
+			let points = [nodeCircle.nodeInfo.1.position.toCLLocationCoordinate2D(), self.nodeInfo.1.position.toCLLocationCoordinate2D()]
+			let line = MKPolyline(coordinates: points, count: points.count)
+			connections.append((line, nodeCircle))
+			map.add(line)
+//			map.deselectAnnotation(nodeCircle.MKAnnotation, animated: false)
+		}
+	}
+	
+	func removeConnection(to nodeCircle: NodeCircle) {
+		var index = 0
+		connections.forEach({ connection in
+			index += 1
+			if connection.1.MKAnnotation == nodeCircle.MKAnnotation {
+				map.remove(connection.0)
+				connections.remove(at: index)
+			}
+		})
 	}
 }

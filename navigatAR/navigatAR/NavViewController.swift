@@ -15,9 +15,19 @@ import IndoorAtlas
 import FuzzyMatchingSwift
 
 // Coords outside Belltower Nook
-let targetLat = 38.6599490906118
-let targetLong = -90.3967783079035
-let targetAlt = 3.72000002861023
+//let targetLat = 38.6599490906118
+//let targetLong = -90.3967783079035
+//let targetAlt = 3.72000002861023
+
+// Coords in hotel room
+//let targetLat = 40.6156844503972
+//let targetLong = -111.511259579059
+//let targetAlt = 0.0
+
+// Coords in hotel hall
+//let targetLat = 0.
+//let targetLong = -111.51127900449085
+//let targetAlt = 0.0
 
 class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSource, UISearchBarDelegate, UITableViewDelegate, IALocationManagerDelegate {
 
@@ -35,7 +45,11 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 	var currentLat: Double = 0
 	var currentLong: Double = 0
 	var currentAlt: Double = 0
-	
+//	var cameraX: float4 = float4(0, 0, 0, 0)
+//	var cameraY: float4 = float4(0, 0, 0, 0)
+//	var cameraZ: float4 = float4(0, 0, 0, 0)
+	var targets: [GKNodeWrapper] = [];
+
 	var data: [String] = [" , "]
 	var filteredData: [String] = [" , "]
 
@@ -60,6 +74,22 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 
 		sceneView.autoenablesDefaultLighting = true
 		sceneView.automaticallyUpdatesLighting = true
+
+		/* AR Debug */
+
+		Database.database().reference().observeSingleEvent(of: .value, with: { snapshot in
+			guard let (nodes, _) = populateGraph(rootSnapshot: snapshot) else { print("unable to get graph"); return }
+			self.targets = [
+				nodes["-L5VwfdJwyl85ftvhGuR"]!,
+				nodes["-L5W6_wCzliQ5q-VdWvi"]!,
+				nodes["-L5W6wlziHejka5f8utU"]!
+			]
+//			let targetNode = nodes["-L5VwfdJwyl85ftvhGuR"]!
+//			self.target = targetNode.wrappedNode.position
+//			print("Target acquired", targetNode, self.target!)
+		})
+
+		addArrow(x: 0, y: 0, z: 0)
 
 		/* Search Setup */
 
@@ -181,51 +211,15 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 	// MARK: - IndoorAtlas delegates
 
 	func indoorLocationManager(_ manager: IALocationManager, didUpdateLocations locations: [Any]) {
-
-		let l = locations.last as! IALocation
-
-		var positionChanged = false
-
-		if let horizontalAccuracy = l.location?.horizontalAccuracy, let newLocation = l.location?.coordinate {
-			//			if horizontalAccuracy.isLessThanOrEqualTo(bestHorizontalLocationAccuracy) {
-			bestHorizontalLocationAccuracy = horizontalAccuracy.magnitude
-			self.currentLat = newLocation.latitude
-			self.currentLong = newLocation.longitude
-			positionChanged = true
-			//			}
-		}
-
-		if let verticalAccuracy = l.location?.verticalAccuracy, let altitude = l.location?.altitude {
-			//			if verticalAccuracy.isLessThanOrEqualTo(bestVerticalLocationAccuracy) {
-			//				bestVerticalLocationAccuracy = verticalAccuracy.magnitude
-			self.currentAlt = altitude
-			//				positionChanged = true
-			//			}
-		}
-
-		//		if positionChanged {
-		print("Position changed to coordinate: \(currentLat) \(currentLong) \(currentAlt) with accuracy \(bestHorizontalLocationAccuracy) \(bestVerticalLocationAccuracy)")
-
-		let latDiff = currentLat - targetLat
-		let longDiff = currentLong - targetLong
-		let altDiff = currentAlt - targetAlt
-
-		print("DIFF", latDiff, longDiff, altDiff)
-
-		// Calculate offset (in meters)
-		// https://gis.stackexchange.com/a/2964
-
-		let averageLat = (currentLat + targetLat) / 2
-
-		let longOffset = longDiff * 111111
-		let latOffset = latDiff * 111111 * cos(degreesToRadians(averageLat))
-
-		// @TODO - Take into account camera's current position because (0, 0, 0) is when AR session is first started
-
+		print("pos update")
 		clearArrows()
-		addArrow(x: latOffset, y: longOffset, z: altDiff)
-
-		//		}
+		for target in targets {
+			let location = Location.init(fromIALocation: locations.last as! IALocation)
+			let (lat, long, alt) = location.distanceDeltas(with: target.wrappedNode.position)
+//			addArrow(x: lat, y: long, z: alt)
+//			addArrow(x: lat, y: alt, z: -long)
+			addArrow(x: long, y: alt, z: -lat)
+		}
 	}
 
 	func indoorLocationManager(_ manager: IALocationManager, statusChanged status: IAStatus) {
@@ -235,18 +229,11 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 
 	// MARK: - ARSCNViewDelegate
 
-	//	func session(_ session: ARSession, didUpdate frame: ARFrame) {
-	//		let cameraTransform = frame.camera.transform.columns
-	//		cameraX = cameraTransform.0
-	//		cameraY = cameraTransform.1
-	//		cameraZ = cameraTransform.2
-	//		print("camera transform", cameraTransform.0, cameraTransform.1, cameraTransform.2, cameraTransform.3)
-	//	}
-
 	func renderer(_ renderer: SCNSceneRenderer, willRenderScene scene: SCNScene, atTime time: TimeInterval) {
 		guard let pointOfView = sceneView.pointOfView else { return }
 		let transform = pointOfView.transform
 		cameraPosition = SCNVector3(transform.m41, transform.m42, transform.m43)
+//		print("Camera postiion", cameraPosition)
 	}
 
 	func session(_ session: ARSession, didFailWithError error: Error) {
@@ -268,7 +255,7 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 
 	func addArrow(x: Double = 0, y: Double = 0, z: Double = 0, eulerX: Double = 0, eulerY: Double = 0) {
 
-		print("Add arrow", x, y, z, eulerX, eulerY);
+//		print("Add arrow", x, y, z, eulerX, eulerY);
 
 		guard let arrowScene = SCNScene(named: "art.scnassets/arrow/Arrow.scn") else { return }
 		let arrowNode = SCNNode()
@@ -278,7 +265,8 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 			arrowNode.addChildNode(childNode)
 		}
 
-		arrowNode.position = SCNVector3(x, y, z)
+		arrowNode.position = SCNVector3(x + Double(cameraPosition.x), y + Double(cameraPosition.y), z + Double(cameraPosition.z))
+//		arrowNode.position = SCNVector3(x, y, z)
 		arrowNode.eulerAngles = SCNVector3(degreesToRadians(eulerX), degreesToRadians(eulerY), 0)
 		arrowNode.scale = SCNVector3(0.5, 0.5, 0.5)
 		sceneView.scene.rootNode.addChildNode(arrowNode)

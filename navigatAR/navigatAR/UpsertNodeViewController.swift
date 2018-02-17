@@ -195,9 +195,9 @@ class UpsertNodeViewController: FormViewController {
 				case (.boolean, false):
 					tagValue = Tag.boolean(formValue as! Bool)
 				case (.string, true):
-					tagValue = Tag.multipleStrings(formValue.flatMap { $0 } as! FirebaseArray<String>)
+					tagValue = Tag.multipleStrings(FirebaseArray(values: formValue.flatMap { $0 } as! [String]))
 				case (.number, true):
-					tagValue = Tag.multipleNumbers(formValue.flatMap { $0 } as! FirebaseArray<Int>)
+					tagValue = Tag.multipleNumbers(FirebaseArray(values: formValue.flatMap { $0 } as! [Int]))
 				default:
 					break // thanks, compiler
 				}
@@ -212,7 +212,8 @@ class UpsertNodeViewController: FormViewController {
 				name: formValues["name"] as! String,
 				type: selectedNodeType!,
 				position: Location(fromIALocation: self.locationData!),
-				tags: tags
+				tags: tags,
+				connectedTo: []
 			))
 			
 			self.ref.child("nodes").childByAutoId().setValue(data)

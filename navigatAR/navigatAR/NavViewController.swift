@@ -38,7 +38,7 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 	var filteredData: [String] = [" , "]
 
 	@IBAction func debugPress() {
-		addArrow(z: -1, eulerX: 45, eulerY: 20);
+		_ = addArrow(z: -1, eulerX: 45, eulerY: 20);
 	}
 
 	override func viewDidLoad() {
@@ -197,10 +197,9 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 	func indoorLocationManager(_ manager: IALocationManager, didUpdateLocations locations: [Any]) {
 		print("pos update")
 		clearNodes()
-		let location = Location.init(fromIALocation: locations.last as! IALocation)
-		currentLocation = location
+		currentLocation = Location(fromIALocation: locations.last as! IALocation)
 		for target in targets {
-			let (lat, long, alt) = location.distanceDeltas(with: nodes[target]!.wrappedNode.position)
+			let (lat, long, alt) = currentLocation!.distanceDeltas(with: nodes[target]!.wrappedNode.position)
 			arNodes[target] = addArrow(x: long, y: alt, z: -lat)
 		}
 		navigate(from: "-L5W6_wCzliQ5q-VdWvi", to: "-L5W6wlziHejka5f8utU")
@@ -235,9 +234,10 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 	/* Navigation */
 
 	func navigate(from: String, to: String) {
+		if (arNodes.count == 0) { return }
 		let fromArNode: SCNNode = arNodes[from]!
 		let toArNode: SCNNode = arNodes[to]!
-		addLine(from: fromArNode, to: toArNode)
+		_ = addLine(from: fromArNode, to: toArNode)
 	}
 
 //	func closestNode() -> Node {
@@ -261,18 +261,29 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 		}
 
 		arrowNode.position = SCNVector3(x + Double(cameraPosition.x), y + Double(cameraPosition.y), z + Double(cameraPosition.z))
-//		arrowNode.position = SCNVector3(x, y, z)
 		arrowNode.eulerAngles = SCNVector3(degreesToRadians(eulerX), degreesToRadians(eulerY), 0)
 		arrowNode.scale = SCNVector3(0.5, 0.5, 0.5)
 		sceneView.scene.rootNode.addChildNode(arrowNode)
 		return arrowNode
 	}
 
-	func addLine(from: SCNNode, to: SCNNode) {
-		let lineGeometry = lineFrom(fromVector: from.position, toVector: to.position)
-		let lineNode = SCNNode(geometry: lineGeometry)
-		lineNode.geometry?.firstMaterial?.diffuse.contents = UIColor.white
+	func addLine(from: SCNNode, to: SCNNode) -> SCNNode? {
+		guard let lineScene = SCNScene(named: "art.scnassets/arrow/Line.scn") else { return nil }
+
+		let lineNode = SCNNode()
+		let lineSceneChildNodes = lineScene.rootNode.childNodes
+
+		for childNode in lineSceneChildNodes {
+			lineNode.addChildNode(childNode)
+		}
+
+		let distance = from.position.distance(vector: to.position)
+		lineNode.position = from.position
+		lineNode.scale = SCNVector3(1, 1, distance)
+		lineNode.look(at: to.position)
+
 		sceneView.scene.rootNode.addChildNode(lineNode)
+		return lineNode
 	}
 
 	func lineFrom(fromVector: SCNVector3, toVector: SCNVector3) -> SCNGeometry {

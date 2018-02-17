@@ -13,21 +13,7 @@ import Firebase
 import CodableFirebase
 import IndoorAtlas
 import FuzzyMatchingSwift
-
-// Coords outside Belltower Nook
-//let targetLat = 38.6599490906118
-//let targetLong = -90.3967783079035
-//let targetAlt = 3.72000002861023
-
-// Coords in hotel room
-//let targetLat = 40.6156844503972
-//let targetLong = -111.511259579059
-//let targetAlt = 0.0
-
-// Coords in hotel hall
-//let targetLat = 0.
-//let targetLong = -111.51127900449085
-//let targetAlt = 0.0
+import GameplayKit
 
 class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSource, UISearchBarDelegate, UITableViewDelegate, IALocationManagerDelegate {
 
@@ -38,17 +24,15 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 
 	let locationManager = IALocationManager.sharedInstance()
 
+	var currentLocation: Location? = nil
 	var cameraPosition = SCNVector3(0, 0, 0)
+	var targets: [String] = [];
 
-	var bestHorizontalLocationAccuracy: Double = Double(INT_MAX)
-	var bestVerticalLocationAccuracy: Double = Double(INT_MAX)
-	var currentLat: Double = 0
-	var currentLong: Double = 0
-	var currentAlt: Double = 0
-//	var cameraX: float4 = float4(0, 0, 0, 0)
-//	var cameraY: float4 = float4(0, 0, 0, 0)
-//	var cameraZ: float4 = float4(0, 0, 0, 0)
-	var targets: [GKNodeWrapper] = [];
+	var dbSnapshot: DataSnapshot? = nil
+	var nodes: [FirebasePushKey: GKNodeWrapper] = [:]
+	var nodesGraph: GKGraph? = nil
+
+	var arNodes: [FirebasePushKey: SCNNode] = [:]
 
 	var data: [String] = [" , "]
 	var filteredData: [String] = [" , "]
@@ -75,21 +59,21 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 		sceneView.autoenablesDefaultLighting = true
 		sceneView.automaticallyUpdatesLighting = true
 
-		/* AR Debug */
+		/* Navigation */
 
-		Database.database().reference().observeSingleEvent(of: .value, with: { snapshot in
-			guard let (nodes, _) = populateGraph(rootSnapshot: snapshot) else { print("unable to get graph"); return }
+		Database.database().reference().observe(DataEventType.value, with: { snapshot in
+			guard let (nodes, graph) = populateGraph(rootSnapshot: snapshot) else { print("unable to get graph"); return }
+			self.dbSnapshot = snapshot
+			self.nodes = nodes
+			self.nodesGraph = graph
+
 			self.targets = [
-				nodes["-L5VwfdJwyl85ftvhGuR"]!,
-				nodes["-L5W6_wCzliQ5q-VdWvi"]!,
-				nodes["-L5W6wlziHejka5f8utU"]!
+				"-L5VwfdJwyl85ftvhGuR",
+				"-L5W6_wCzliQ5q-VdWvi",
+				"-L5W6wlziHejka5f8utU"
 			]
-//			let targetNode = nodes["-L5VwfdJwyl85ftvhGuR"]!
-//			self.target = targetNode.wrappedNode.position
-//			print("Target acquired", targetNode, self.target!)
-		})
 
-		addArrow(x: 0, y: 0, z: 0)
+		})
 
 		/* Search Setup */
 
@@ -111,7 +95,7 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 		// Create a session configuration
 		let configuration = ARWorldTrackingConfiguration()
 		configuration.worldAlignment = .gravityAndHeading
-		//		configuration.planeDetection = [.horizontal]
+//		configuration.planeDetection = [.horizontal]
 
 		// Detect
 		print("ARKit supported?", ARWorldTrackingConfiguration.isSupported)
@@ -212,14 +196,14 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 
 	func indoorLocationManager(_ manager: IALocationManager, didUpdateLocations locations: [Any]) {
 		print("pos update")
-		clearArrows()
+		clearNodes()
+		let location = Location.init(fromIALocation: locations.last as! IALocation)
+		currentLocation = location
 		for target in targets {
-			let location = Location.init(fromIALocation: locations.last as! IALocation)
-			let (lat, long, alt) = location.distanceDeltas(with: target.wrappedNode.position)
-//			addArrow(x: lat, y: long, z: alt)
-//			addArrow(x: lat, y: alt, z: -long)
-			addArrow(x: long, y: alt, z: -lat)
+			let (lat, long, alt) = location.distanceDeltas(with: nodes[target]!.wrappedNode.position)
+			arNodes[target] = addArrow(x: long, y: alt, z: -lat)
 		}
+		navigate(from: "-L5W6_wCzliQ5q-VdWvi", to: "-L5W6wlziHejka5f8utU")
 	}
 
 	func indoorLocationManager(_ manager: IALocationManager, statusChanged status: IAStatus) {
@@ -238,26 +222,37 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 
 	func session(_ session: ARSession, didFailWithError error: Error) {
 		// Present an error message to the user
-
 	}
 
 	func sessionWasInterrupted(_ session: ARSession) {
 		// Inform the user that the session has been interrupted, for example, by presenting an overlay
-
 	}
 
 	func sessionInterruptionEnded(_ session: ARSession) {
 		// Reset tracking and/or remove existing anchors if consistent tracking is required
-
 	}
+
+	/* Navigation */
+
+	func navigate(from: String, to: String) {
+		let fromArNode: SCNNode = arNodes[from]!
+		let toArNode: SCNNode = arNodes[to]!
+		addLine(from: fromArNode, to: toArNode)
+	}
+
+//	func closestNode() -> Node {
+//		for node of nodes {
+//
+//		}
+//	}
 
 	/* Augmented Reality */
 
-	func addArrow(x: Double = 0, y: Double = 0, z: Double = 0, eulerX: Double = 0, eulerY: Double = 0) {
+	func addArrow(x: Double = 0, y: Double = 0, z: Double = 0, eulerX: Double = 0, eulerY: Double = 0) -> SCNNode? {
 
 //		print("Add arrow", x, y, z, eulerX, eulerY);
 
-		guard let arrowScene = SCNScene(named: "art.scnassets/arrow/Arrow.scn") else { return }
+		guard let arrowScene = SCNScene(named: "art.scnassets/arrow/Arrow.scn") else { return nil }
 		let arrowNode = SCNNode()
 		let arrowSceneChildNodes = arrowScene.rootNode.childNodes
 
@@ -270,9 +265,24 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 		arrowNode.eulerAngles = SCNVector3(degreesToRadians(eulerX), degreesToRadians(eulerY), 0)
 		arrowNode.scale = SCNVector3(0.5, 0.5, 0.5)
 		sceneView.scene.rootNode.addChildNode(arrowNode)
+		return arrowNode
 	}
 
-	func clearArrows() {
+	func addLine(from: SCNNode, to: SCNNode) {
+		let lineGeometry = lineFrom(fromVector: from.position, toVector: to.position)
+		let lineNode = SCNNode(geometry: lineGeometry)
+		lineNode.geometry?.firstMaterial?.diffuse.contents = UIColor.white
+		sceneView.scene.rootNode.addChildNode(lineNode)
+	}
+
+	func lineFrom(fromVector: SCNVector3, toVector: SCNVector3) -> SCNGeometry {
+		let indices: [Int32] = [0, 1]
+		let source = SCNGeometrySource(vertices: [fromVector, toVector])
+		let element = SCNGeometryElement(indices: indices, primitiveType: .line)
+		return SCNGeometry(sources: [source], elements: [element])
+	}
+
+	func clearNodes() {
 		let sceneChildNodes = sceneView.scene.rootNode.childNodes
 
 		for childNode in sceneChildNodes {

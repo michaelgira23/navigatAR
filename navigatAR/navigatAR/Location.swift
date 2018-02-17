@@ -11,21 +11,6 @@ import IndoorAtlas
 
 // NOTE: This is used instead of just IALocation because of Codable conformance.
 struct Location: Codable {
-	// https://en.wikipedia.org/wiki/Geographic_coordinate_system#Expressing_latitude_and_longitude_as_linear_units
-	static func metersPerLatitude(degrees: Double) -> Double {
-		let radians = degreesToRadians(degrees)
-		
-		// Swift compiler is having difficulty parsing these all inlined for whatever reason
-		let val1 = 559.82 * cos(2 * radians)
-		let val2 = 1.175 * cos(4 * radians)
-		let val3 = 0.0023 * cos(6 * radians)
-		return 111132.92 - val1 + val2 - val3
-	}
-	static func metersPerLongitude(degrees: Double) -> Double {
-		let radians = degreesToRadians(degrees)
-		return (111412.84 * cos(radians)) - (93.5 * cos(3 * radians)) + (0.118 * cos(5 * radians))
-	}
-	
 	let latitude: CLLocationDegrees
 	let longitude: CLLocationDegrees
 	let altitude: CLLocationDistance
@@ -42,11 +27,23 @@ struct Location: Codable {
 		horizontalAccuracy = ial.location!.horizontalAccuracy
 	}
 	
-	func distanceTo(_ other: Location) -> Double {
-		let deltaLatitude = fabs(latitude - other.latitude)
-		let deltaLongitude = fabs(longitude - other.longitude)
-		let deltaAltitude = fabs(altitude - other.altitude)
+	func distanceDeltas(with other: Location) -> (latitude: Double, longitude: Double, altitude: Double) {
+		// https://en.wikipedia.org/wiki/Geographic_coordinate_system#Expressing_latitude_and_longitude_as_linear_units
+		let latRadians = degreesToRadians(latitude)
+		// Swift compiler is having difficulty parsing these all inlined for whatever reason
+		let val1 = 559.82 * cos(2 * latRadians)
+		let val2 = 1.175 * cos(4 * latRadians)
+		let val3 = 0.0023 * cos(6 * latRadians)
+		let metersPerLatitude = 111132.92 - val1 + val2 - val3
 		
-		return sqrt(pow(Location.metersPerLatitude(degrees: deltaLatitude), 2) + pow(Location.metersPerLongitude(degrees: deltaLongitude), 2) + pow(deltaAltitude, 2))
+		let longRadians = degreesToRadians(longitude)
+		let metersPerLongitude = (111412.84 * cos(longRadians)) - (93.5 * cos(3 * longRadians)) + (0.118 * cos(5 * longRadians))
+		
+		return (latitude: fabs(latitude - other.latitude) * metersPerLatitude, longitude: fabs(longitude - other.longitude) * metersPerLongitude, altitude: fabs(altitude - other.altitude))
+	}
+	
+	func distanceTo(_ other: Location) -> Double {
+		let (deltaLat, deltaLong, deltaAlt) = distanceDeltas(with: other)
+		return sqrt(pow(deltaLat, 2) + pow(deltaLong, 2) + pow(deltaAlt, 2))
 	}
 }

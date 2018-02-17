@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1C2BE07620364E960066C89E /* Pathfinding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C2BE07520364E960066C89E /* Pathfinding.swift */; };
 		1C5365AD20353392003198EB /* FirebaseArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C5365AC20353392003198EB /* FirebaseArray.swift */; };
 		1C73730B202553D200725F6D /* Building.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C73730A202553D200725F6D /* Building.swift */; };
 		1C73730D20255A1700725F6D /* Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C73730C20255A1700725F6D /* Node.swift */; };
@@ -39,6 +40,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1C2BE07520364E960066C89E /* Pathfinding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pathfinding.swift; sourceTree = "<group>"; };
 		1C5365AC20353392003198EB /* FirebaseArray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseArray.swift; sourceTree = "<group>"; };
 		1C73730A202553D200725F6D /* Building.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Building.swift; sourceTree = "<group>"; };
 		1C73730C20255A1700725F6D /* Node.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Node.swift; sourceTree = "<group>"; };
@@ -128,6 +130,7 @@
 				56FEE4C920266BE30075CA75 /* UpsertTagViewController.swift */,
 				1C73730C20255A1700725F6D /* Node.swift */,
 				1C73731620267CFC00725F6D /* Location.swift */,
+				1C2BE07520364E960066C89E /* Pathfinding.swift */,
 				56F25B902022E79800B246D3 /* Main.storyboard */,
 				56F25B932022E79800B246D3 /* Assets.xcassets */,
 				5690CC242022ECA400F298EE /* art.scnassets */,
@@ -320,6 +323,7 @@
 				56F25B8D2022E79800B246D3 /* NavViewController.swift in Sources */,
 				56FEE4CA20266BE30075CA75 /* UpsertTagViewController.swift in Sources */,
 				1C73730B202553D200725F6D /* Building.swift in Sources */,
+				1C2BE07620364E960066C89E /* Pathfinding.swift in Sources */,
 				1C73731B20276DF900725F6D /* Tag.swift in Sources */,
 				B43EACB020389C25000E11B5 /* Event.swift in Sources */,
 				B40E810D2036895E006C2278 /* NewBuildingViewController.swift in Sources */,

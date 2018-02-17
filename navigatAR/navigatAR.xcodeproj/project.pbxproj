@@ -33,6 +33,8 @@
 		A959D60230803839364FEB5D /* Pods_navigatAR.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3670E310BCDA21FEDDE0F541 /* Pods_navigatAR.framework */; };
 		B40E810D2036895E006C2278 /* NewBuildingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B40E810C2036895E006C2278 /* NewBuildingViewController.swift */; };
 		B4319490202D564700A2C284 /* Searching.swift in Sources */ = {isa = PBXBuildFile; fileRef = B431948F202D564700A2C284 /* Searching.swift */; };
+		B43EACAE20389978000E11B5 /* NewEventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43EACAD20389978000E11B5 /* NewEventViewController.swift */; };
+		B43EACB020389C25000E11B5 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43EACAF20389C25000E11B5 /* Event.swift */; };
 		B4B6464C20312E3900BAA571 /* DestinationSelectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4B6464B20312E3900BAA571 /* DestinationSelectionController.swift */; };
 /* End PBXBuildFile section */
 
@@ -66,6 +68,8 @@
 		5E69BC90EE3E34F49CA3FF4C /* Pods-navigatAR.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-navigatAR.release.xcconfig"; path = "Pods/Target Support Files/Pods-navigatAR/Pods-navigatAR.release.xcconfig"; sourceTree = "<group>"; };
 		B40E810C2036895E006C2278 /* NewBuildingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewBuildingViewController.swift; sourceTree = "<group>"; };
 		B431948F202D564700A2C284 /* Searching.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Searching.swift; sourceTree = "<group>"; };
+		B43EACAD20389978000E11B5 /* NewEventViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewEventViewController.swift; sourceTree = "<group>"; };
+		B43EACAF20389C25000E11B5 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 		B4B6464B20312E3900BAA571 /* DestinationSelectionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DestinationSelectionController.swift; sourceTree = "<group>"; };
 		DEAAEDCA81AD21BBBF3786A2 /* Pods-navigatAR.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-navigatAR.debug.xcconfig"; path = "Pods/Target Support Files/Pods-navigatAR/Pods-navigatAR.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -138,6 +142,8 @@
 				1CB71F48202FE864000666BC /* ManageTagsViewController.swift */,
 				B40E810C2036895E006C2278 /* NewBuildingViewController.swift */,
 				1C5365AC20353392003198EB /* FirebaseArray.swift */,
+				B43EACAD20389978000E11B5 /* NewEventViewController.swift */,
+				B43EACAF20389C25000E11B5 /* Event.swift */,
 			);
 			path = navigatAR;
 			sourceTree = "<group>";
@@ -298,6 +304,7 @@
 			files = (
 				1C7373132026330100725F6D /* TagInfo.swift in Sources */,
 				565A1BA920268B24007C56F5 /* ManageNodesViewController.swift in Sources */,
+				B43EACAE20389978000E11B5 /* NewEventViewController.swift in Sources */,
 				56FEE4CC202683EE0075CA75 /* NodePositionViewController.swift in Sources */,
 				569FA3892026D8EC00910CCE /* UIViewExtensions.swift in Sources */,
 				B4319490202D564700A2C284 /* Searching.swift in Sources */,
@@ -314,6 +321,7 @@
 				56FEE4CA20266BE30075CA75 /* UpsertTagViewController.swift in Sources */,
 				1C73730B202553D200725F6D /* Building.swift in Sources */,
 				1C73731B20276DF900725F6D /* Tag.swift in Sources */,
+				B43EACB020389C25000E11B5 /* Event.swift in Sources */,
 				B40E810D2036895E006C2278 /* NewBuildingViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

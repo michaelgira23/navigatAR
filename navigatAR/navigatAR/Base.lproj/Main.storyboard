@@ -177,6 +177,21 @@
             </objects>
             <point key="canvasLocation" x="1449" y="310"/>
         </scene>
+        <!--New Event View Controller-->
+        <scene sceneID="bjs-j0-tw5">
+            <objects>
+                <viewController id="qAw-L2-oG2" customClass="NewEventViewController" customModule="navigatAR" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="aio-bB-AgW">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <viewLayoutGuide key="safeArea" id="aWQ-uE-qq1"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="baK-da-Im2" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2475" y="328"/>
+        </scene>
         <!--Admin Panel-->
         <scene sceneID="foH-qn-ob4">
             <objects>
@@ -207,6 +222,14 @@
                                 <state key="normal" title="New Building"/>
                                 <connections>
                                     <segue destination="cBy-YM-oQa" kind="show" identifier="" id="ghT-qr-OVC"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5GP-ce-kLa">
+                                <rect key="frame" x="144" y="235" width="88" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="New Event"/>
+                                <connections>
+                                    <segue destination="qAw-L2-oG2" kind="show" id="tg3-XG-zqg"/>
                                 </connections>
                             </button>
                         </subviews>

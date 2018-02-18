@@ -12,14 +12,14 @@ import CodableFirebase
 struct Event: Codable {
 	let eventName: String
 	let eventDescription: String
-	let nodeId: String
+	let locations: FirebaseArray<FirebasePushKey>
 	let start: String
 	let end: String
 	
-	init(name theName: String, description theDescription: String, nodeId id: String, start eventStart: String, end eventEnd: String) {
+	init(name theName: String, description theDescription: String, locations locations: [String], start eventStart: String, end eventEnd: String) {
 		self.eventName = theName
 		self.eventDescription = theDescription
-		self.nodeId = id
+		self.locations = FirebaseArray(values: locations)
 		self.start = eventStart
 		self.end = eventEnd
 	}

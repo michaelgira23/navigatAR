@@ -33,6 +33,11 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 
 	var arNodes: [FirebasePushKey: SCNNode] = [:]
 
+	// Where user should walk to next
+	var walkPathTarget: SCNVector3? = nil
+	// Possible path directing user how to get to next node
+	var walkPath: SCNNode? = nil
+
 	// If nil, just show surrounding points. We aren't navigating anywhere
 	var navigateTo: FirebasePushKey? = "-L5W6wlziHejka5f8utU"
 	// Closest node to the user upon initial navigation. This is where we consider the path "starts"
@@ -40,10 +45,6 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 
 	var data: [String] = [" , "]
 	var filteredData: [String] = [" , "]
-
-	@IBAction func debugPress() {
-		_ = addArrow(z: -1, eulerX: 45, eulerY: 20);
-	}
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -129,13 +130,11 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 			guard let value = snapshot.value else { return }
 
 			do {
-				let nodes = Array(try FirebaseDecoder().decode([FirebasePushKey: Node].self, from: value))
-//				let loc = Array(nodes.values)
-//				let locPushKeys = Array((try FirebaseDecoder().decode([FirebasePushKey: Node].self, from: value)).keys)
+				let firebaseNodes = Array(try FirebaseDecoder().decode([FirebasePushKey: Node].self, from: value))
 				self.data = [] // clear the data out so appending can work properly
 				self.filteredData = []
 
-				for node in nodes {
+				for node in firebaseNodes {
 					self.data.append(node.key + "," + node.value.name + "," + String(describing: node.value.type) + "," + String(describing: node.value.building))
 					self.filteredData.append(node.key + "," + node.value.name + "," + String(describing: node.value.type) + "," + String(describing: node.value.building))
 				}
@@ -217,7 +216,6 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 		guard let pointOfView = sceneView.pointOfView else { return }
 		let transform = pointOfView.transform
 		cameraPosition = SCNVector3(transform.m41, transform.m42, transform.m43)
-//		print("Camera postiion", cameraPosition)
 	}
 
 	func session(_ session: ARSession, didFailWithError error: Error) {
@@ -257,12 +255,17 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 			// Do something if there's no pathway to available point
 		}
 
+		var firstNode: FirebasePushKey? = nil
 		var lastNode: FirebasePushKey? = nil
 		for pathNode in path {
 			let pushKey = nodes.key(forValue: pathNode as! GKNodeWrapper)!
 
+			if (firstNode == nil) {
+				firstNode = pushKey
+			}
+
 			if (lastNode != nil) {
-				_ = addLine(from: arNodes[lastNode!]!, to: arNodes[pushKey]!)
+				_ = addLine(from: arNodes[lastNode!]!.position, to: arNodes[pushKey]!.position)
 				arNodes[lastNode!]!.look(at: arNodes[pushKey]!.position)
 			}
 
@@ -270,6 +273,11 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 		}
 
 		arNodes[lastNode!] = addDestination(node: arNodes[lastNode!]!)
+
+		if (firstNode != nil) {
+			walkPathTarget = arNodes[firstNode!]!.position
+			addWalkPath(target: walkPathTarget!)
+		}
 	}
 
 	func closestNode(from: Location? = nil) -> FirebasePushKey? {
@@ -310,6 +318,9 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 		if (navigateTo != nil) {
 			navigate(from: navigateFrom, to: navigateTo)
 		}
+		if (walkPathTarget != nil) {
+			addWalkPath(target: walkPathTarget!)
+		}
 	}
 
 	func addArrow(x: Double = 0, y: Double = 0, z: Double = 0, eulerX: Double = 0, eulerY: Double = 0) -> SCNNode? {
@@ -331,7 +342,7 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 		return arrowNode
 	}
 
-	func addLine(from: SCNNode, to: SCNNode) -> SCNNode? {
+	func addLine(from: SCNVector3, to: SCNVector3) -> SCNNode? {
 		guard let lineScene = SCNScene(named: "art.scnassets/Line.scn") else { return nil }
 
 		let lineNode = SCNNode()
@@ -341,10 +352,10 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 			lineNode.addChildNode(childNode)
 		}
 
-		let distance = from.position.distance(vector: to.position)
-		lineNode.position = from.position
+		let distance = from.distance(vector: to)
+		lineNode.position = from
 		lineNode.scale = SCNVector3(1, 1, distance)
-		lineNode.look(at: to.position)
+		lineNode.look(at: to)
 
 		sceneView.scene.rootNode.addChildNode(lineNode)
 		return lineNode
@@ -366,6 +377,18 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 
 		node.removeFromParentNode()
 		return destinationNode
+	}
+
+	func addWalkPath(target: SCNVector3) {
+		clearWalkPath()
+		var currentPosition = cameraPosition
+		currentPosition.y -= 1
+		walkPath = addLine(from: currentPosition, to: target)
+	}
+
+	func clearWalkPath() {
+		walkPath?.removeFromParentNode()
+		walkPath = nil
 	}
 
 	func clearNodes() {

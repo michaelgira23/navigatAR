@@ -33,11 +33,8 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 
 	var arNodes: [FirebasePushKey: SCNNode] = [:]
 
-	// Where user should walk to next
-	var walkPathTarget: SCNVector3? = nil
-	// Possible path directing user how to get to next node
-	var walkPath: SCNNode? = nil
-
+	// Camera position when they first press "navigate"
+	var navStartPosition: SCNVector3? = nil
 	// If nil, just show surrounding points. We aren't navigating anywhere
 	var navigateTo: FirebasePushKey? = "-L5W6wlziHejka5f8utU"
 	// Closest node to the user upon initial navigation. This is where we consider the path "starts"
@@ -75,6 +72,8 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 			// Check if we're navigating anywhere
 			if (self.navigateTo != nil) {
 				self.navigateFrom = self.closestNode()
+				self.navStartPosition = self.cameraPosition
+				self.navStartPosition!.y -= 1
 			}
 			self.redraw()
 
@@ -274,9 +273,8 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 
 		arNodes[lastNode!] = addDestination(node: arNodes[lastNode!]!)
 
-		if (firstNode != nil) {
-			walkPathTarget = arNodes[firstNode!]!.position
-			addWalkPath(target: walkPathTarget!)
+		if (navStartPosition != nil && firstNode != nil) {
+			_ = addLine(from: navStartPosition!, to: arNodes[firstNode!]!.position)
 		}
 	}
 
@@ -317,9 +315,6 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 		}
 		if (navigateTo != nil) {
 			navigate(from: navigateFrom, to: navigateTo)
-		}
-		if (walkPathTarget != nil) {
-			addWalkPath(target: walkPathTarget!)
 		}
 	}
 
@@ -377,18 +372,6 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 
 		node.removeFromParentNode()
 		return destinationNode
-	}
-
-	func addWalkPath(target: SCNVector3) {
-		clearWalkPath()
-		var currentPosition = cameraPosition
-		currentPosition.y -= 1
-		walkPath = addLine(from: currentPosition, to: target)
-	}
-
-	func clearWalkPath() {
-		walkPath?.removeFromParentNode()
-		walkPath = nil
 	}
 
 	func clearNodes() {

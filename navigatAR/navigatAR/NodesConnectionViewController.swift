@@ -172,7 +172,7 @@ class NodesConnectionViewController: UIViewController, IALocationManagerDelegate
 			if selectedCircle == nodeCircle.MKAnnotation {
 				if connectionFrom != nil {
 					print("yuh")
-					connectionFrom?.makeConnection(to: nodeCircle)
+					connectionFrom?.makeConnection(to: nodeCircle, visualOnly: false)
 					connectionFrom = nodeCircle
 				} else {
 					connectionFrom = nodeCircle
@@ -541,15 +541,18 @@ class NodeCircle {
 		var nodeCircles: [NodeCircle] = []
 		ref.child("nodes").queryOrdered(byChild: "building").queryEqual(toValue: "-L4w0mZgmdxmreRZe9No").observeSingleEvent(of: .value, with: { snapshot in
 			let nodes = try! FirebaseDecoder().decode([FirebasePushKey: Node].self, from: snapshot.value!)
+			var connections: [String: String] = [:]
 			for node in nodes {
 				let newNodeCircle = NodeCircle(db: ref, mapView: map, nodeInfo: node)
 				nodeCircles.append(newNodeCircle)
-				if newNodeCircle.nodeInfo.1.connectedTo != nil {
-					for pushKey in newNodeCircle.nodeInfo.1.connectedTo! {
-						for nodeCircle in nodeCircles {
-							if pushKey == nodeCircle.nodeInfo.0 {
-								print("connection")
-								newNodeCircle.makeConnection(to: nodeCircle)
+			}
+			for fromNodeCircle in nodeCircles {
+				for toNodeCircle in nodeCircles {
+					if fromNodeCircle.nodeInfo.1.connectedTo != nil {
+						for pushKey in fromNodeCircle.nodeInfo.1.connectedTo! {
+							if pushKey == toNodeCircle.nodeInfo.0 {
+								print("connection", pushKey, toNodeCircle.nodeInfo.0)
+								fromNodeCircle.makeConnection(to: toNodeCircle, visualOnly: true)
 							}
 						}
 					}
@@ -560,7 +563,7 @@ class NodeCircle {
 		})
 	}
 
-	func makeConnection(to nodeCircle: NodeCircle) {
+	func makeConnection(to nodeCircle: NodeCircle, visualOnly: Bool) {
 		if nodeCircle.MKAnnotation != self.MKAnnotation {
 			if nodeCircle.nodeInfo.1.connectedTo == nil {
 				nodeCircle.nodeInfo.1.connectedTo = []
@@ -576,11 +579,13 @@ class NodeCircle {
 				}
 			}
 			if !alreadyConnected {
-				self.nodeInfo.1.connectedTo?.values.append(nodeCircle.nodeInfo.0)
-				print(self.nodeInfo.1.connectedTo)
-				let connectionDictionary = Dictionary(uniqueKeysWithValues: nodeInfo.1.connectedTo!.values.map({ ($0, true) }))
-//				try! ref.child("nodes").child(nodeInfo.0).setValue(FirebaseEncoder().encode(nodeInfo.1))
-				try! ref.updateChildValues(["/nodes/\(self.nodeInfo.0)/connectedTo": connectionDictionary])
+				if !visualOnly {
+					self.nodeInfo.1.connectedTo?.values.append(nodeCircle.nodeInfo.0)
+					print(self.nodeInfo.1.connectedTo)
+					let connectionDictionary = Dictionary(uniqueKeysWithValues: nodeInfo.1.connectedTo!.values.map({ ($0, true) }))
+					//				try! ref.child("nodes").child(nodeInfo.0).setValue(FirebaseEncoder().encode(nodeInfo.1))
+					try! ref.updateChildValues(["/nodes/\(self.nodeInfo.0)/connectedTo": connectionDictionary])
+				}
 				let points = [nodeCircle.nodeInfo.1.position.toCLLocationCoordinate2D(), self.nodeInfo.1.position.toCLLocationCoordinate2D()]
 				let line = MKPolyline(coordinates: points, count: points.count)
 				connections.append((line, nodeCircle))

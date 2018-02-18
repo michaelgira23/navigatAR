@@ -57,6 +57,7 @@ class DestinationSelectionController: UIViewController {
 			if let destination = segue.destination as? UITabBarController {
 				for viewController in destination.viewControllers! {
 					if let navController = viewController as? NavViewController {
+						navController.navigating = true
 						navController.navigateTo = nodePushKey
 					}
 				}

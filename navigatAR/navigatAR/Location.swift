@@ -28,18 +28,32 @@ struct Location: Codable {
 	}
 	
 	func distanceDeltas(with other: Location) -> (latitude: Double, longitude: Double, altitude: Double) {
-		// https://en.wikipedia.org/wiki/Geographic_coordinate_system#Expressing_latitude_and_longitude_as_linear_units
-		let latRadians = degreesToRadians(latitude)
-		// Swift compiler is having difficulty parsing these all inlined for whatever reason
-		let val1 = 559.82 * cos(2 * latRadians)
-		let val2 = 1.175 * cos(4 * latRadians)
-		let val3 = 0.0023 * cos(6 * latRadians)
-		let metersPerLatitude = 111132.92 - val1 + val2 - val3
-		
-		let longRadians = degreesToRadians(longitude)
-		let metersPerLongitude = (111412.84 * cos(longRadians)) - (93.5 * cos(3 * longRadians)) + (0.118 * cos(5 * longRadians))
-		
-		return (latitude: fabs(latitude - other.latitude) * metersPerLatitude, longitude: fabs(longitude - other.longitude) * metersPerLongitude, altitude: fabs(altitude - other.altitude))
+//		// https://en.wikipedia.org/wiki/Geographic_coordinate_system#Expressing_latitude_and_longitude_as_linear_units
+//		let latRadians = degreesToRadians(latitude)
+//		// Swift compiler is having difficulty parsing these all inlined for whatever reason
+//		let val1 = 559.82 * cos(2 * latRadians)
+//		let val2 = 1.175 * cos(4 * latRadians)
+//		let val3 = 0.0023 * cos(6 * latRadians)
+//		let metersPerLatitude = 111132.92 - val1 + val2 - val3
+//		
+//		let longRadians = degreesToRadians(longitude)
+//		let metersPerLongitude = (111412.84 * cos(longRadians)) - (93.5 * cos(3 * longRadians)) + (0.118 * cos(5 * longRadians))
+//		
+//		return (latitude: (other.latitude - latitude) * metersPerLatitude, longitude: (other.longitude - longitude) * metersPerLongitude, altitude: (other.altitude - altitude))
+
+		let latDiff = other.latitude - latitude
+		let longDiff = other.longitude - longitude
+		let altDiff = other.altitude - altitude
+
+		// Calculate offset (in meters)
+		// https://gis.stackexchange.com/a/2964
+		let averageLat = (latitude + other.latitude) / 2
+
+		let longOffset = longDiff * 111111
+		let latOffset = latDiff * 111111 * cos(degreesToRadians(averageLat))
+
+		return (latitude: latOffset, longitude: longOffset, altitude: altDiff)
+
 	}
 	
 	func distanceTo(_ other: Location) -> Double {

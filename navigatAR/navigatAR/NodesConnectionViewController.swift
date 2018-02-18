@@ -29,24 +29,18 @@ class BlueDotAnnotation: MKPointAnnotation {
 	}
 }
 
-//class nodeConnectionOverlay: NSObject, MKPolyline {
-//	var fromCoordinate: CLLocationCoordinate2D
-//	var toCoordinate: CLLocationCoordinate2D
-//	var coordinate: CLLocationCoordinate2D
-//	var boundingMapRect: MKMapRect
+//class nodeConnectionOverlay: MKPolyline {
+//	var color: UIColor
 //
-//	required init(from: CLLocationCoordinate2D, to: CLLocationCoordinate2D) {
-//		self.fromCoordinate = from
-//		self.toCoordinate = to
-//		self.coordinate = CLLocationCoordinate2D.init(latitude: (from.latitude + to.latitude) / 2, longitude: (from.longitude + to.longitude) / 2)
-//		self.boundingMapRect = MKMapRectMake(from.latitude, from.longitude, abs(to.latitude - from.latitude), abs(from.longitude - to.longitude))
-//		super.init()
+//	init(color: UIColor, coordinates: UnsafePointer<CLLocationCoordinate2D>, count: Int) {
+//		self.color = color
+//		super.init(coordinates: coordinates, count: count)
 //	}
 //}
-//
-//class nodeConnectionAnnotationView: MKAnnotationView {
-//
-//}
+
+class nodeConnectionAnnotationView: MKAnnotationView {
+
+}
 
 // Class for map overlay object
 class MapOverlay: NSObject, MKOverlay {
@@ -110,6 +104,7 @@ class NodesConnectionViewController: UIViewController, IALocationManagerDelegate
 	var currentCircle: BlueDotAnnotation? = nil
 	var nodeCircles: [NodeCircle] = []
 	var updateCamera = true
+	var polyToDelete: MKPolyline?
 	
 	var floorPlan = IAFloorPlan()
 	var locationManager = IALocationManager.sharedInstance()
@@ -223,9 +218,23 @@ class NodesConnectionViewController: UIViewController, IALocationManagerDelegate
 				print("Touched poly: \(String(describing: nearestPoly)) distance: \(nearestDistance)")
 				for fromCircle in nodeCircles {
 					for (line, toCircle) in fromCircle.connections {
-						if line == nearestPoly {
-							fromCircle.removeConnection(to: toCircle)
-							connectionFrom = nil
+						if line == nearestPoly! {
+							if polyToDelete == nil {
+								map!.remove(nearestPoly!)
+								polyToDelete = nearestPoly
+								map!.add(nearestPoly!)
+							} else if nearestPoly! != polyToDelete {
+								let oldPolyToDelete: MKPolyline
+								map!.remove(nearestPoly!)
+								map!.remove(polyToDelete!)
+								oldPolyToDelete = polyToDelete!
+								polyToDelete = nearestPoly
+								map!.add(nearestPoly!)
+								map!.add(oldPolyToDelete)
+							} else {
+								fromCircle.removeConnection(to: toCircle)
+								connectionFrom = nil
+							}
 						}
 					}
 				}
@@ -302,7 +311,11 @@ class NodesConnectionViewController: UIViewController, IALocationManagerDelegate
 		} else if let overlay = overlay as? MKPolyline {
 			polyLineRenderer = MKPolylineRenderer(polyline: overlay)
 			polyLineRenderer.lineWidth = 5
-			polyLineRenderer.strokeColor = UIColor.blue
+			if (overlay == polyToDelete) {
+				polyLineRenderer.strokeColor = UIColor.red
+			} else {
+				polyLineRenderer.strokeColor = UIColor.blue
+			}
 			return polyLineRenderer
 		} else {
 			circleRenderer = MKCircleRenderer(overlay: overlay)
@@ -503,7 +516,6 @@ class NodeCircle {
 		MKAnnotation = MKPointAnnotation()
 		MKAnnotation.coordinate = CLLocationCoordinate2D(latitude: node.1.position.latitude, longitude: node.1.position.longitude)
 		map.addAnnotation(MKAnnotation)
-		print(map.annotations)
 		ref = db
 	}
 
@@ -534,6 +546,7 @@ class NodeCircle {
 					for pushKey in newNodeCircle.nodeInfo.1.connectedTo! {
 						for nodeCircle in nodeCircles {
 							if pushKey == nodeCircle.nodeInfo.0 {
+								print("connection")
 								newNodeCircle.makeConnection(to: nodeCircle)
 							}
 						}
@@ -554,9 +567,10 @@ class NodeCircle {
 				self.nodeInfo.1.connectedTo = []
 			}
 			var alreadyConnected = false
-			for pushKey in self.nodeInfo.1.connectedTo! {
-				if pushKey == nodeCircle.nodeInfo.0 {
+			for connectedCircle in self.connections {
+				if connectedCircle.1.MKAnnotation == nodeCircle.MKAnnotation {
 					alreadyConnected = true
+					break
 				}
 			}
 			if !alreadyConnected {

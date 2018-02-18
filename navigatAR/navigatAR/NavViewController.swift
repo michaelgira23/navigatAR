@@ -26,7 +26,6 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 
 	var currentLocation: Location? = nil
 	var cameraPosition = SCNVector3(0, 0, 0)
-	var targets: [String] = [];
 
 	var dbSnapshot: DataSnapshot? = nil
 	var nodes: [FirebasePushKey: GKNodeWrapper] = [:]
@@ -35,7 +34,9 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 	var arNodes: [FirebasePushKey: SCNNode] = [:]
 
 	// If nil, just show surrounding points. We aren't navigating anywhere
-	var navigateTo: FirebasePushKey? = nil
+	var navigateTo: FirebasePushKey? = "-L5W6wlziHejka5f8utU"
+	// Closest node to the user upon initial navigation. This is where we consider the path "starts"
+	var navigateFrom: FirebasePushKey? = nil
 
 	var data: [String] = [" , "]
 	var filteredData: [String] = [" , "]
@@ -64,19 +65,17 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 
 		/* Navigation */
 
-		print("Navigate to", navigateTo)
-
 		Database.database().reference().observe(DataEventType.value, with: { snapshot in
 			guard let (nodes, graph) = populateGraph(rootSnapshot: snapshot) else { print("unable to get graph"); return }
 			self.dbSnapshot = snapshot
 			self.nodes = nodes
 			self.nodesGraph = graph
 
-			self.targets = [
-				"-L5VwfdJwyl85ftvhGuR",
-				"-L5W6_wCzliQ5q-VdWvi",
-				"-L5W6wlziHejka5f8utU"
-			]
+			// Check if we're navigating anywhere
+			if (self.navigateTo != nil) {
+				self.navigateFrom = self.closestNode()
+			}
+			self.redraw()
 
 		})
 
@@ -203,14 +202,8 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 
 	func indoorLocationManager(_ manager: IALocationManager, didUpdateLocations locations: [Any]) {
 		print("pos update")
-		clearNodes()
 		currentLocation = Location(fromIALocation: locations.last as! IALocation)
-		for target in targets {
-			let (lat, long, alt) = currentLocation!.distanceDeltas(with: nodes[target]!.wrappedNode.position)
-			arNodes[target] = addArrow(x: long, y: alt, z: -lat)
-		}
-//		navigate(from: "-L5W6_wCzliQ5q-VdWvi", to: "-L5W6wlziHejka5f8utU")
-		navigate(to: "-L5W6wlziHejka5f8utU")
+		redraw()
 	}
 
 	func indoorLocationManager(_ manager: IALocationManager, statusChanged status: IAStatus) {
@@ -241,8 +234,9 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 
 	/* Navigation */
 
-	func navigate(from inputtedFrom: FirebasePushKey? = nil, to: FirebasePushKey) {
-		if (arNodes.count == 0) { return }
+	// Draw lines in AR according to pathfinding path
+	func navigate(from inputtedFrom: FirebasePushKey? = nil, to: FirebasePushKey?) {
+		if (arNodes.count == 0 || nodesGraph == nil || to == nil) { return }
 		var from: FirebasePushKey? = nil
 		if (inputtedFrom == nil) {
 			from = closestNode()
@@ -252,9 +246,27 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 		if (from == nil) {
 			return
 		}
-		let fromArNode: SCNNode = arNodes[from!]!
-		let toArNode: SCNNode = arNodes[to]!
-		_ = addLine(from: fromArNode, to: toArNode)
+
+		let fromGraphNode: GKGraphNode = nodes[from!]!
+		let toGraphNode: GKGraphNode = nodes[to!]!
+
+		// Actual pathfinding algorithm
+		let path = nodesGraph!.findPath(from: fromGraphNode, to: toGraphNode)
+		print("dei way", path)
+
+		var lastNode: FirebasePushKey? = nil
+		for pathNode in path {
+//			print("node", pathNode.wrappedNode)
+			let pushKey = nodes.key(forValue: pathNode as! GKNodeWrapper)!
+
+			if (lastNode != nil) {
+				_ = addLine(from: arNodes[lastNode!]!, to: arNodes[pushKey]!)
+			}
+
+			lastNode = pushKey
+		}
+
+		// @TODO Add special destination marker
 	}
 
 	func closestNode(from: Location? = nil) -> FirebasePushKey? {
@@ -282,6 +294,21 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 
 	/* Augmented Reality */
 
+	// Redraw all of the nodes and shiz that should be shown.
+	// This is called upon initial startup and location update
+	func redraw() {
+		// We can't draw anything if we don't know location
+		if (currentLocation == nil) { return }
+		clearNodes()
+		for node in nodes {
+			let (lat, long, alt) = currentLocation!.distanceDeltas(with: node.value.wrappedNode.position)
+			arNodes[node.key] = addArrow(x: long, y: alt, z: -lat)
+		}
+		if (navigateTo != nil) {
+			navigate(from: navigateFrom, to: navigateTo)
+		}
+	}
+
 	func addArrow(x: Double = 0, y: Double = 0, z: Double = 0, eulerX: Double = 0, eulerY: Double = 0) -> SCNNode? {
 
 //		print("Add arrow", x, y, z, eulerX, eulerY);
@@ -302,7 +329,7 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 	}
 
 	func addLine(from: SCNNode, to: SCNNode) -> SCNNode? {
-		guard let lineScene = SCNScene(named: "art.scnassets/arrow/Line.scn") else { return nil }
+		guard let lineScene = SCNScene(named: "art.scnassets/Line.scn") else { return nil }
 
 		let lineNode = SCNNode()
 		let lineSceneChildNodes = lineScene.rootNode.childNodes
@@ -318,13 +345,6 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 
 		sceneView.scene.rootNode.addChildNode(lineNode)
 		return lineNode
-	}
-
-	func lineFrom(fromVector: SCNVector3, toVector: SCNVector3) -> SCNGeometry {
-		let indices: [Int32] = [0, 1]
-		let source = SCNGeometrySource(vertices: [fromVector, toVector])
-		let element = SCNGeometryElement(indices: indices, primitiveType: .line)
-		return SCNGeometry(sources: [source], elements: [element])
 	}
 
 	func clearNodes() {

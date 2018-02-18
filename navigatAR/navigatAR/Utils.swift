@@ -13,3 +13,9 @@ public typealias FirebasePushKey = String
 func degreesToRadians(_ degrees: Double) -> Double {
 	return degrees * (.pi / 180)
 }
+
+extension Dictionary where Value: Equatable {
+	func key(forValue value: Value) -> Key? {
+		return first { $0.1 == value }?.0
+	}
+}

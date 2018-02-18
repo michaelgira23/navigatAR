@@ -34,6 +34,9 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 
 	var arNodes: [FirebasePushKey: SCNNode] = [:]
 
+	// If nil, just show surrounding points. We aren't navigating anywhere
+	var navigateTo: FirebasePushKey? = nil
+
 	var data: [String] = [" , "]
 	var filteredData: [String] = [" , "]
 
@@ -202,7 +205,8 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 			let (lat, long, alt) = currentLocation!.distanceDeltas(with: nodes[target]!.wrappedNode.position)
 			arNodes[target] = addArrow(x: long, y: alt, z: -lat)
 		}
-		navigate(from: "-L5W6_wCzliQ5q-VdWvi", to: "-L5W6wlziHejka5f8utU")
+//		navigate(from: "-L5W6_wCzliQ5q-VdWvi", to: "-L5W6wlziHejka5f8utU")
+		navigate(to: "-L5W6wlziHejka5f8utU")
 	}
 
 	func indoorLocationManager(_ manager: IALocationManager, statusChanged status: IAStatus) {
@@ -233,18 +237,44 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 
 	/* Navigation */
 
-	func navigate(from: String, to: String) {
+	func navigate(from inputtedFrom: FirebasePushKey? = nil, to: FirebasePushKey) {
 		if (arNodes.count == 0) { return }
-		let fromArNode: SCNNode = arNodes[from]!
+		var from: FirebasePushKey? = nil
+		if (inputtedFrom == nil) {
+			from = closestNode()
+		} else {
+			from = inputtedFrom
+		}
+		if (from == nil) {
+			return
+		}
+		let fromArNode: SCNNode = arNodes[from!]!
 		let toArNode: SCNNode = arNodes[to]!
 		_ = addLine(from: fromArNode, to: toArNode)
 	}
 
-//	func closestNode() -> Node {
-//		for node of nodes {
-//
-//		}
-//	}
+	func closestNode(from: Location? = nil) -> FirebasePushKey? {
+		var measureFrom: Location? = from
+		if from == nil {
+			if currentLocation == nil {
+				return nil
+			} else {
+				measureFrom = currentLocation
+			}
+		}
+		var closestDistance: Double? = nil
+		var closestNode: FirebasePushKey? = nil
+
+		for node in nodes {
+			let distance = measureFrom!.distanceTo(node.value.wrappedNode.position)
+			if (closestDistance == nil || distance < closestDistance!) {
+				closestDistance = distance
+				closestNode = node.key
+			}
+		}
+
+		return closestNode
+	}
 
 	/* Augmented Reality */
 

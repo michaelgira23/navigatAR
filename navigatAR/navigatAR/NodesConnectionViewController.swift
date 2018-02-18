@@ -13,6 +13,15 @@ import SVProgressHUD
 import Firebase
 import CodableFirebase
 
+let nodeTypeToEmoji: [NodeType : String] = [
+	.pointOfInterest : "🧐",
+	.pathway : "🛣",
+	.printer : "🖨",
+	.fountain : "⛲️",
+	.room : "🏡",
+	.sportsVenue : "🎾"
+]
+
 // Blue dot annotation class
 class BlueDotAnnotation: MKPointAnnotation {
 	var radius: Double
@@ -29,6 +38,16 @@ class BlueDotAnnotation: MKPointAnnotation {
 	}
 }
 
+class NodeAnnotation: MKPointAnnotation {
+	var glyphText: String
+	var reuseIdentifier: String = "NodeAnnotation"
+	
+	init(glyphText: String) {
+		self.glyphText = glyphText
+		super.init()
+	}
+}
+
 //class nodeConnectionOverlay: MKPolyline {
 //	var color: UIColor
 //
@@ -38,9 +57,9 @@ class BlueDotAnnotation: MKPointAnnotation {
 //	}
 //}
 
-class nodeConnectionAnnotationView: MKAnnotationView {
-
-}
+//class nodeConnectionAnnotationView: MKAnnotationView {
+//
+//}
 
 // Class for map overlay object
 class MapOverlay: NSObject, MKOverlay {
@@ -498,6 +517,14 @@ class NodesConnectionViewController: UIViewController, IALocationManagerDelegate
 
 			return annotationView
 			
+		} else if let annotation = annotation as? NodeAnnotation {
+			if let view = mapView.dequeueReusableAnnotationView(withIdentifier: annotation.reuseIdentifier){
+				return view
+			} else {
+				let annotationView = MKMarkerAnnotationView.init(annotation: annotation, reuseIdentifier: annotation.reuseIdentifier)
+				annotationView.glyphText = annotation.glyphText
+				return annotationView
+			}
 		}
 
 		return nil
@@ -515,8 +542,9 @@ class NodeCircle {
 	init(db: DatabaseReference, mapView map: MKMapView, nodeInfo node: (FirebasePushKey, Node)) {
 		self.map = map
 		nodeInfo = node
-		MKAnnotation = MKPointAnnotation()
+		MKAnnotation = NodeAnnotation(glyphText: nodeTypeToEmoji[node.1.type]!)
 		MKAnnotation.coordinate = CLLocationCoordinate2D(latitude: node.1.position.latitude, longitude: node.1.position.longitude)
+		MKAnnotation.title = nodeInfo.1.name
 		map.addAnnotation(MKAnnotation)
 		ref = db
 	}
@@ -584,7 +612,7 @@ class NodeCircle {
 					print(self.nodeInfo.1.connectedTo)
 					let connectionDictionary = Dictionary(uniqueKeysWithValues: nodeInfo.1.connectedTo!.values.map({ ($0, true) }))
 					//				try! ref.child("nodes").child(nodeInfo.0).setValue(FirebaseEncoder().encode(nodeInfo.1))
-					try! ref.updateChildValues(["/nodes/\(self.nodeInfo.0)/connectedTo": connectionDictionary])
+					ref.updateChildValues(["/nodes/\(self.nodeInfo.0)/connectedTo": connectionDictionary])
 				}
 				let points = [nodeCircle.nodeInfo.1.position.toCLLocationCoordinate2D(), self.nodeInfo.1.position.toCLLocationCoordinate2D()]
 				let line = MKPolyline(coordinates: points, count: points.count)
@@ -613,7 +641,7 @@ class NodeCircle {
 		print(nodeInfo.1.connectedTo)
 		let connectionDictionary = Dictionary(uniqueKeysWithValues: nodeInfo.1.connectedTo!.values.map({ ($0, true) }))
 //		try! ref.child("nodes").child(nodeInfo.0).setValue(FirebaseEncoder().encode(nodeInfo.1))
-		try! ref.updateChildValues(["/nodes/\(self.nodeInfo.0)/connectedTo": connectionDictionary])
+		ref.updateChildValues(["/nodes/\(self.nodeInfo.0)/connectedTo": connectionDictionary])
 	}
 
 //	func updateDBConnection() {

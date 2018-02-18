@@ -144,7 +144,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Navigate"/>
                                 <connections>
-                                    <segue destination="49e-Tb-3d3" kind="show" id="VS9-3Y-FSS"/>
+                                    <action selector="navigate:" destination="BL3-1u-ans" eventType="touchUpInside" id="ksI-S3-A39"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -155,6 +155,7 @@
                         <outlet property="building" destination="Tel-MJ-wE8" id="zn7-Mm-wj9"/>
                         <outlet property="name" destination="fHE-LR-xxY" id="9KP-zi-Sf9"/>
                         <outlet property="type" destination="hUq-2A-pH3" id="TWJ-qy-Ay1"/>
+                        <segue destination="49e-Tb-3d3" kind="show" identifier="navigateToPoint" id="sQL-se-JQG"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0Ny-wW-qT8" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -435,6 +436,6 @@
         <image name="second" width="30" height="30"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="eOQ-gb-1UD"/>
+        <segue reference="sQL-se-JQG"/>
     </inferredMetricsTieBreakers>
 </document>

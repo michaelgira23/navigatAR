@@ -64,6 +64,8 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 
 		/* Navigation */
 
+		print("Navigate to", navigateTo)
+
 		Database.database().reference().observe(DataEventType.value, with: { snapshot in
 			guard let (nodes, graph) = populateGraph(rootSnapshot: snapshot) else { print("unable to get graph"); return }
 			self.dbSnapshot = snapshot
@@ -128,13 +130,15 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 			guard let value = snapshot.value else { return }
 
 			do {
-				let loc = Array((try FirebaseDecoder().decode([FirebasePushKey: Node].self, from: value)).values)
+				let nodes = Array(try FirebaseDecoder().decode([FirebasePushKey: Node].self, from: value))
+//				let loc = Array(nodes.values)
+//				let locPushKeys = Array((try FirebaseDecoder().decode([FirebasePushKey: Node].self, from: value)).keys)
 				self.data = [] // clear the data out so appending can work properly
 				self.filteredData = []
 
-				for node in loc {
-					self.data.append(node.name + "," + String(describing: node.type) + "," + String(describing: node.building))
-					self.filteredData.append(node.name + "," + String(describing: node.type) + "," + String(describing: node.building))
+				for node in nodes {
+					self.data.append(node.key + "," + node.value.name + "," + String(describing: node.value.type) + "," + String(describing: node.value.building))
+					self.filteredData.append(node.key + "," + node.value.name + "," + String(describing: node.value.type) + "," + String(describing: node.value.building))
 				}
 			}
 			catch let error {
@@ -149,8 +153,8 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 
 		var parsed = self.filteredData[indexPath.row].split(separator: ",")
 
-		cell.textLabel?.text = String(describing: parsed[0])
-		cell.detailTextLabel?.text = String(describing: parsed[1])
+		cell.textLabel?.text = String(describing: parsed[1])
+		cell.detailTextLabel?.text = String(describing: parsed[2])
 		return cell
 	}
 

@@ -11,6 +11,7 @@ target 'navigatAR' do
   pod 'Firebase/Core'
   pod 'Firebase/Database'
   pod 'IndoorAtlas'
+  pod 'SVProgressHUD', :git => 'https://github.com/SVProgressHUD/SVProgressHUD.git'
   pod 'FuzzyMatchingSwift'
 
 end

@@ -36,7 +36,8 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 	// Camera position when they first press "navigate"
 	var navStartPosition: SCNVector3? = nil
 	// If nil, just show surrounding points. We aren't navigating anywhere
-	var navigateTo: FirebasePushKey? = "-L5W6wlziHejka5f8utU"
+	var navigateTo: FirebasePushKey? = nil
+//	var navigateTo: FirebasePushKey? = "-L5W6wlziHejka5f8utU" // Debug only!
 	// Closest node to the user upon initial navigation. This is where we consider the path "starts"
 	var navigateFrom: FirebasePushKey? = nil
 

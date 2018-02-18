@@ -20,6 +20,11 @@ class AdminViewController: UIViewController {
 		// Delegate methods to our custom location handler
 		
 		Database.database().reference().observeSingleEvent(of: .value, with: { snapshot in
+			if let building = Building.current(root: snapshot) {
+				print(building)
+			} else {
+				print("whoopsie")
+			}
 			guard let (nodes, graph) = populateGraph(rootSnapshot: snapshot) else { print("unable to get graph"); return }
 
 			let myHouse = nodes["-L5VHbFv1Fwx3bHFvX_I"]!

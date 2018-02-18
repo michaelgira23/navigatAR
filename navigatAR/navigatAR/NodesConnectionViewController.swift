@@ -223,15 +223,17 @@ class NodesConnectionViewController: UIViewController, IALocationManagerDelegate
 								map!.remove(nearestPoly!)
 								polyToDelete = nearestPoly
 								map!.add(nearestPoly!)
-							} else if nearestPoly! != polyToDelete {
-								let oldPolyToDelete: MKPolyline
+							} else if nearestPoly != polyToDelete {
+								print("switch", nearestPoly, polyToDelete)
+								let oldPolyToDelete = polyToDelete!
 								map!.remove(nearestPoly!)
 								map!.remove(polyToDelete!)
-								oldPolyToDelete = polyToDelete!
-								polyToDelete = nearestPoly
+								polyToDelete = nearestPoly!
 								map!.add(nearestPoly!)
 								map!.add(oldPolyToDelete)
 							} else {
+								print("boutta remove")
+								polyToDelete = nil
 								fromCircle.removeConnection(to: toCircle)
 								connectionFrom = nil
 							}
@@ -575,8 +577,10 @@ class NodeCircle {
 			}
 			if !alreadyConnected {
 				self.nodeInfo.1.connectedTo?.values.append(nodeCircle.nodeInfo.0)
-				print(self.nodeInfo.1.connectedTo?.values)
-				try! ref.child("nodes").child(nodeInfo.0).setValue(FirebaseEncoder().encode(nodeInfo.1))
+				print(self.nodeInfo.1.connectedTo)
+				let connectionDictionary = Dictionary(uniqueKeysWithValues: nodeInfo.1.connectedTo!.values.map({ ($0, true) }))
+//				try! ref.child("nodes").child(nodeInfo.0).setValue(FirebaseEncoder().encode(nodeInfo.1))
+				try! ref.updateChildValues(["/nodes/\(self.nodeInfo.0)/connectedTo": connectionDictionary])
 				let points = [nodeCircle.nodeInfo.1.position.toCLLocationCoordinate2D(), self.nodeInfo.1.position.toCLLocationCoordinate2D()]
 				let line = MKPolyline(coordinates: points, count: points.count)
 				connections.append((line, nodeCircle))
@@ -598,14 +602,15 @@ class NodeCircle {
 						break
 					}
 				}
-//				ref.updateChildValues(["/nodes/\(self.nodeInfo.0)/connectedTo": FirebaseArray(values: self.nodeInfo.1.connectedTo!.values)])
-				try! ref.child("nodes").child(nodeInfo.0).setValue(FirebaseEncoder().encode(nodeInfo.1))
-
 			}
 			index += 1
 		})
+		print(nodeInfo.1.connectedTo)
+		let connectionDictionary = Dictionary(uniqueKeysWithValues: nodeInfo.1.connectedTo!.values.map({ ($0, true) }))
+//		try! ref.child("nodes").child(nodeInfo.0).setValue(FirebaseEncoder().encode(nodeInfo.1))
+		try! ref.updateChildValues(["/nodes/\(self.nodeInfo.0)/connectedTo": connectionDictionary])
 	}
-	
+
 //	func updateDBConnection() {
 //
 //	}

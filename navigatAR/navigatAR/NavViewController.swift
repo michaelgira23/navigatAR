@@ -252,21 +252,24 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 
 		// Actual pathfinding algorithm
 		let path = nodesGraph!.findPath(from: fromGraphNode, to: toGraphNode)
-		print("dei way", path)
+
+		if (path.count == 0) {
+			// Do something if there's no pathway to available point
+		}
 
 		var lastNode: FirebasePushKey? = nil
 		for pathNode in path {
-//			print("node", pathNode.wrappedNode)
 			let pushKey = nodes.key(forValue: pathNode as! GKNodeWrapper)!
 
 			if (lastNode != nil) {
 				_ = addLine(from: arNodes[lastNode!]!, to: arNodes[pushKey]!)
+				arNodes[lastNode!]!.look(at: arNodes[pushKey]!.position)
 			}
 
 			lastNode = pushKey
 		}
 
-		// @TODO Add special destination marker
+		arNodes[lastNode!] = addDestination(node: arNodes[lastNode!]!)
 	}
 
 	func closestNode(from: Location? = nil) -> FirebasePushKey? {
@@ -345,6 +348,24 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 
 		sceneView.scene.rootNode.addChildNode(lineNode)
 		return lineNode
+	}
+
+	func addDestination(node: SCNNode) -> SCNNode? {
+		guard let destinationScene = SCNScene(named: "art.scnassets/Destination.scn") else { return nil }
+
+		let destinationNode = SCNNode()
+		let destinationSceneChildNodes = destinationScene.rootNode.childNodes
+
+		for childNode in destinationSceneChildNodes {
+			destinationNode.addChildNode(childNode)
+		}
+
+		destinationNode.position = node.position
+		destinationNode.look(at: cameraPosition)
+		sceneView.scene.rootNode.addChildNode(destinationNode)
+
+		node.removeFromParentNode()
+		return destinationNode
 	}
 
 	func clearNodes() {

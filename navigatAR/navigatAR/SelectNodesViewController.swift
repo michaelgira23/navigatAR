@@ -35,6 +35,10 @@ class SelectNodesViewController: UIViewController, UITableViewDataSource, UITabl
 		return self.availableNodes.count
 	}
 	
+	func tableView(_ tableView: UITableView, didSelectRowAt indexPath :IndexPath) {
+		self.selectedNodes.append(self.availableNodes[indexPath.row])
+	}
+	
 	func getNodes() {
 		let ref = Database.database().reference()
 		ref.child("nodes").observe(.value, with: { (snapshot) in

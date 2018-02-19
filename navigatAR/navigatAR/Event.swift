@@ -7,20 +7,11 @@
 //
 
 import Foundation
-import CodableFirebase
 
 struct Event: Codable {
-	let eventName: String
-	let eventDescription: String
+	let name: String
+	let description: String
 	let locations: FirebaseArray<FirebasePushKey>
-	let start: String
-	let end: String
-	
-	init(name theName: String, description theDescription: String, locations locations: [String], start eventStart: String, end eventEnd: String) {
-		self.eventName = theName
-		self.eventDescription = theDescription
-		self.locations = FirebaseArray(values: locations)
-		self.start = eventStart
-		self.end = eventEnd
-	}
+	let start: Date
+	let end: Date
 }

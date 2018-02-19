@@ -69,7 +69,7 @@ class UserInfoViewController: UIViewControllerWithBuilding, UITableViewDataSourc
 
 	override func viewWillDisappear(_ animated: Bool) {
 		Auth.auth().removeStateDidChangeListener(authListenerHandle!)
-		ref.removeObserver(withHandle: userHandle!)
+		ref.removeAllObservers()
 		buildings = []
 	}
 

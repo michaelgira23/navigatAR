@@ -26,6 +26,7 @@
 		26BD9C4D2033DEC6007B9F5F /* UIViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26BD9C4A2033DEC5007B9F5F /* UIViewExtensions.swift */; };
 		26BD9C4E2033DEC6007B9F5F /* NodesConnectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26BD9C4B2033DEC5007B9F5F /* NodesConnectionViewController.swift */; };
 		26BD9C50203A2E92007B9F5F /* SelectNodesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26BD9C4F203A2E92007B9F5F /* SelectNodesViewController.swift */; };
+		26BD9C52203AA0BF007B9F5F /* UserInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26BD9C51203AA0BF007B9F5F /* UserInfoViewController.swift */; };
 		565A1BA920268B24007C56F5 /* ManageNodesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565A1BA820268B24007C56F5 /* ManageNodesViewController.swift */; };
 		5690CC252022ECA400F298EE /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 5690CC242022ECA400F298EE /* art.scnassets */; };
 		56AB1B632038E99E00517971 /* SCNVector3Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56AB1B622038E99E00517971 /* SCNVector3Extensions.swift */; };
@@ -65,6 +66,7 @@
 		26BD9C4A2033DEC5007B9F5F /* UIViewExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewExtensions.swift; sourceTree = "<group>"; };
 		26BD9C4B2033DEC5007B9F5F /* NodesConnectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NodesConnectionViewController.swift; sourceTree = "<group>"; };
 		26BD9C4F203A2E92007B9F5F /* SelectNodesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectNodesViewController.swift; sourceTree = "<group>"; };
+		26BD9C51203AA0BF007B9F5F /* UserInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoViewController.swift; sourceTree = "<group>"; };
 		3670E310BCDA21FEDDE0F541 /* Pods_navigatAR.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_navigatAR.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		565A1BA820268B24007C56F5 /* ManageNodesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageNodesViewController.swift; sourceTree = "<group>"; };
 		5690CC242022ECA400F298EE /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
@@ -165,6 +167,7 @@
 				1CEDABB42037D49B004B58F7 /* LoginViewController.swift */,
 				1CEDABB82037DB5C004B58F7 /* User.swift */,
 				1CEDABB62037D4EB004B58F7 /* RegisterViewController.swift */,
+				26BD9C51203AA0BF007B9F5F /* UserInfoViewController.swift */,
 			);
 			path = navigatAR;
 			sourceTree = "<group>";
@@ -341,6 +344,7 @@
 				1C73730D20255A1700725F6D /* Node.swift in Sources */,
 				26BD9C50203A2E92007B9F5F /* SelectNodesViewController.swift in Sources */,
 				1C73731720267CFC00725F6D /* Location.swift in Sources */,
+				26BD9C52203AA0BF007B9F5F /* UserInfoViewController.swift in Sources */,
 				56FEE4C8202639970075CA75 /* UpsertNodeViewController.swift in Sources */,
 				56F25B8B2022E79800B246D3 /* AppDelegate.swift in Sources */,
 				26BD9C4D2033DEC6007B9F5F /* UIViewExtensions.swift in Sources */,

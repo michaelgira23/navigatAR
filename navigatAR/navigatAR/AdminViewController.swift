@@ -13,15 +13,12 @@ import IndoorAtlas
 class AdminViewController: UIViewController {
 
 	let locationManager = IALocationManager.sharedInstance()
-	var authListenerHandle: AuthStateDidChangeListenerHandle?
-
-	@IBOutlet weak var emailLabel: UILabel!
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		// Do any additional setup after loading the view.
 		// Delegate methods to our custom location handler
-		
+
 		Database.database().reference().observeSingleEvent(of: .value, with: { snapshot in
 			if let building = Building.current(root: snapshot) {
 				print(building)
@@ -40,18 +37,6 @@ class AdminViewController: UIViewController {
 	override func didReceiveMemoryWarning() {
 		super.didReceiveMemoryWarning()
 		// Dispose of any resources that can be recreated.
-	}
-	
-	override func viewWillAppear(_ animated: Bool) {
-		authListenerHandle = Auth.auth().addStateDidChangeListener { (auth, user) in
-			if let _ = user {
-				self.emailLabel.text = "Email: " + user!.email!
-			}
-		}
-	}
-	
-	override func viewWillDisappear(_ animated: Bool) {
-		Auth.auth().removeStateDidChangeListener(authListenerHandle!)
 	}
 
 	/*

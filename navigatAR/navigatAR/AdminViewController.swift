@@ -10,7 +10,7 @@ import Firebase
 import UIKit
 import IndoorAtlas
 
-class AdminViewController: UIViewController {
+class AdminViewController: UIViewControllerWithBuilding {
 
 	let locationManager = IALocationManager.sharedInstance()
 
@@ -32,21 +32,13 @@ class AdminViewController: UIViewController {
 			
 			print(graph.findPath(from: myHouse, to: stem252))
 		})
+		
+		navigationItem.prompt = forBuilding.1.name
 	}
 
 	override func didReceiveMemoryWarning() {
 		super.didReceiveMemoryWarning()
 		// Dispose of any resources that can be recreated.
 	}
-
-	/*
-	// MARK: - Navigation
-
-	// In a storyboard-based application, you will often want to do a little preparation before navigation
-	override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-	// Get the new view controller using segue.destinationViewController.
-	// Pass the selected object to the new view controller.
-	}
-	*/
 
 }

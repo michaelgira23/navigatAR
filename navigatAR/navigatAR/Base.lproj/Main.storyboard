@@ -171,23 +171,6 @@
             </objects>
             <point key="canvasLocation" x="-545" y="590"/>
         </scene>
-        <!--Admin Panel-->
-        <scene sceneID="Rms-kx-SzT">
-            <objects>
-                <navigationController id="BMV-PT-P6H" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Admin Panel" image="second" id="s8w-Va-ild"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="Thd-zG-GcI">
-                        <rect key="frame" x="0.0" y="44" width="375" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <connections>
-                        <segue destination="luA-II-VYj" kind="relationship" relationship="rootViewController" id="r8P-3O-vEM"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="yET-kz-V8c" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="294" y="1030"/>
-        </scene>
         <!--New Building-->
         <scene sceneID="6KK-4d-XRG">
             <objects>
@@ -301,6 +284,9 @@
                         <viewLayoutGuide key="safeArea" id="aqp-5P-wIW"/>
                     </view>
                     <navigationItem key="navigationItem" title="Admin Panel" id="qXL-fp-vGH"/>
+                    <connections>
+                        <outlet property="navigationItem" destination="qXL-fp-vGH" id="kiu-7V-5wd"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Kid-gE-L8r" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -468,27 +454,37 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="buildingCell" id="sGE-f7-GE8" customClass="BuildingTableViewCell" customModule="navigatAR" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="28" width="343" height="44"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="buildingCell" textLabel="lcV-tm-shj" detailTextLabel="lm0-Ya-YrW" rowHeight="67" style="IBUITableViewCellStyleValue1" id="sGE-f7-GE8" customClass="BuildingTableViewCell" customModule="navigatAR" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="28" width="343" height="67"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="sGE-f7-GE8" id="Xao-SC-9To">
-                                            <rect key="frame" x="0.0" y="0.0" width="310" height="43.666666666666664"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="310" height="66.666666666666671"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Building Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ApO-jH-PGn">
-                                                    <rect key="frame" x="15" y="11" width="120" height="21"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="lcV-tm-shj">
+                                                    <rect key="frame" x="15" y="24" width="33.333333333333336" height="20.333333333333332"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Subtitle" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="lm0-Ya-YrW">
+                                                    <rect key="frame" x="249.33333333333334" y="24" width="58.666666666666664" height="20.333333333333332"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="luA-II-VYj" kind="show" id="raf-bc-Gbs"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eUN-jB-nD8">
-                                <rect key="frame" x="136" y="657" width="102" height="30"/>
+                                <rect key="frame" x="257" y="243" width="102" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="New Building"/>
                                 <connections>
@@ -508,7 +504,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zDF-1d-Oqa" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1106.4000000000001" y="1019.704433497537"/>
+            <point key="canvasLocation" x="87" y="1029"/>
         </scene>
         <!--Login-->
         <scene sceneID="ViE-ph-YJE">
@@ -593,7 +589,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="w4u-fJ-98Z" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2452" y="337.6847290640394"/>
+            <point key="canvasLocation" x="2588" y="-314"/>
         </scene>
         <!--Manage Nodes-->
         <scene sceneID="iEs-lM-Ctv">
@@ -656,7 +652,6 @@
     </scenes>
     <resources>
         <image name="first" width="30" height="30"/>
-        <image name="second" width="30" height="30"/>
         <image name="user" width="50" height="50"/>
     </resources>
     <inferredMetricsTieBreakers>

@@ -10,15 +10,17 @@ import CodableFirebase
 import Firebase
 import UIKit
 
-class UserInfoViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class UserInfoViewController: UIViewControllerWithBuilding, UITableViewDataSource, UITableViewDelegate {
 
 	@IBOutlet weak var buildingTable: UITableView!
 	@IBOutlet weak var emailLabel: UILabel!
 	var authListenerHandle: AuthStateDidChangeListenerHandle?
 	
 	var ref: DatabaseReference!
+	var userHandle: DatabaseHandle?
+	var buildingHandle: DatabaseHandle?
 	
-	var buildings: [Building] = []
+	var buildings: [(FirebasePushKey, Building)] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,7 +28,7 @@ class UserInfoViewController: UIViewController, UITableViewDataSource, UITableVi
         // Do any additional setup after loading the view.
 		buildingTable.dataSource = self
 		buildingTable.delegate = self
-		buildingTable.register(BuildingTableViewCell.self, forCellReuseIdentifier: "buildingCell")
+//		buildingTable.register(BuildingTableViewCell.self, forCellReuseIdentifier: "buildingCell")
     }
 
     override func didReceiveMemoryWarning() {
@@ -39,7 +41,7 @@ class UserInfoViewController: UIViewController, UITableViewDataSource, UITableVi
 		authListenerHandle = Auth.auth().addStateDidChangeListener { (auth, user) in
 			if let _ = user {
 				self.emailLabel.text = "Email: " + user!.email!
-				self.ref.child("users/\(user!.uid)").observe(.value, with: { snapshot in
+				self.userHandle = self.ref.child("users/\(user!.uid)").observe(.value, with: { snapshot in
 					guard !(snapshot.value! is NSNull) else { return }
 
 					let user = try! FirebaseDecoder().decode(User.self, from: snapshot.value!)
@@ -52,7 +54,7 @@ class UserInfoViewController: UIViewController, UITableViewDataSource, UITableVi
 							
 							let building = try! FirebaseDecoder().decode(Building.self, from: snapshot.value!)
 							buildingsQueued += 1
-							self.buildings.append(building)
+							self.buildings.append((key, building))
 							if (buildingsQueued == buildingKeys.count) {
 								print(self.buildings)
 								self.buildingTable.reloadData()
@@ -66,6 +68,8 @@ class UserInfoViewController: UIViewController, UITableViewDataSource, UITableVi
 
 	override func viewWillDisappear(_ animated: Bool) {
 		Auth.auth().removeStateDidChangeListener(authListenerHandle!)
+		ref.removeObserver(withHandle: userHandle!)
+		buildings = []
 	}
 
 	func numberOfSections(in tableView: UITableView) -> Int {
@@ -78,20 +82,31 @@ class UserInfoViewController: UIViewController, UITableViewDataSource, UITableVi
 	}
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-		let buildingCell = tableView.dequeueReusableCell(withIdentifier: "buildingCell", for: indexPath) as UITableViewCell
-		buildingCell.textLabel!.text = buildings[indexPath.row].name
+		guard let buildingCell = tableView.dequeueReusableCell(withIdentifier: "buildingCell", for: indexPath) as? BuildingTableViewCell else { return UITableViewCell() }
+		buildingCell.textLabel!.text = buildings[indexPath.row].1.name
+		buildingCell.detailTextLabel!.text =  "Floors: " + String(buildings[indexPath.row].1.indoorAtlasFloors.count)
+		buildingCell.accessoryType = .disclosureIndicator
 		return buildingCell
 	}
 	
 
-    /*
-    // MARK: - Navigation
+	func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
+		forBuilding = buildings[indexPath.row]
+		return indexPath
+	}
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
+}
 
+class UIViewControllerWithBuilding: UIViewController {
+	var forBuilding: (FirebasePushKey, Building)!
+
+	// MARK: - Navigation
+	
+	// In a storyboard-based application, you will often want to do a little preparation before navigation
+	override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+		// Get the new view controller using segue.destinationViewController.
+		// Pass the selected object to the new view controller.
+		guard let view = segue.destination as? UIViewControllerWithBuilding else { return }
+		view.forBuilding = forBuilding
+	}
 }

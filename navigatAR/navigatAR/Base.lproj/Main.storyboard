@@ -256,7 +256,6 @@
                                     <segue destination="rkc-8c-c3O" kind="show" identifier="ManageNodesSegue" id="jNb-BP-YyS"/>
                                 </connections>
                             </button>
-
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eUN-jB-nD8">
                                 <rect key="frame" x="137" y="197" width="102" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -271,31 +270,30 @@
                                 <state key="normal" title="New Event"/>
                                 <connections>
                                     <segue destination="qAw-L2-oG2" kind="show" id="tg3-XG-zqg"/>
-
-
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EGY-cb-El8">
-                                <rect key="frame" x="164" y="225" width="46" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Login"/>
-                                <connections>
-                                    <segue destination="MgC-vX-XtT" kind="show" id="BAO-zz-KIT"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="63K-Dq-b6S">
-                                <rect key="frame" x="156" y="272" width="62" height="31"/>
+                                <rect key="frame" x="156" y="273" width="62" height="31"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Register"/>
                                 <connections>
                                     <segue destination="aGY-8C-g8G" kind="show" id="kyV-Bg-3nE"/>
-
+                                </connections>
+                            </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UUd-K8-VDy">
-                                <rect key="frame" x="44" y="197" width="287" height="30"/>
+                                <rect key="frame" x="44" y="444" width="287" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Manage Nodes graphic interface"/>
                                 <connections>
                                     <segue destination="Ld1-Bd-biO" kind="show" id="N05-A8-hp4"/>
-
-
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EGY-cb-El8">
+                                <rect key="frame" x="164" y="336" width="46" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Login"/>
+                                <connections>
+                                    <segue destination="MgC-vX-XtT" kind="show" id="BAO-zz-KIT"/>
                                 </connections>
                             </button>
                         </subviews>

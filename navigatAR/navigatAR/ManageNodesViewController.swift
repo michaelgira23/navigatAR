@@ -47,18 +47,18 @@ class ManageNodesViewController: UIViewController, UITableViewDataSource {
 	}
 
 	// MARK: TableView functions
-	
+
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 		return nodes.count
 	}
-	
+
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		let cell = nodeTable.dequeueReusableCell(withIdentifier: "NodeCell", for: indexPath) as UITableViewCell
 		let node = nodes[indexPath.row]
 
 		cell.textLabel?.text = node.name
 		cell.detailTextLabel?.text = String(describing: node.type)
-		
+
 		return cell
 	}
 }

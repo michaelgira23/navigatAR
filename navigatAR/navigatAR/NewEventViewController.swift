@@ -63,9 +63,9 @@ class NewEventViewController: FormViewController {
 					let endDate: String = String(describing: self.form.values()["eventenddata"])
 					let endTime: String = String(describing: self.form.values()["eventenddata"])
 					
-					let nodeId: String = "dummy id" // TODO: put in the id
+					let nodeIds: [String] = ["dummy id"] // TODO: put in the id
 					
-					let newEvent: Event = Event(name: name, description: description, nodeId: nodeId, start: "\(startDate)@\(startTime)", end: "\(endDate)@\(endTime)")
+					let newEvent: Event = Event(name: name, description: description, locations: nodeIds, start: "\(startDate)@\(startTime)", end: "\(endDate)@\(endTime)")
 					
 					let ref = Database.database().reference()
 					ref.child("events").childByAutoId().setValue(try! FirebaseEncoder().encode(newEvent))

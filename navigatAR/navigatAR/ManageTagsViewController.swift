@@ -10,7 +10,7 @@ import CodableFirebase
 import Firebase
 import UIKit
 
-class ManageTagsViewController: UIViewController, UITableViewDataSource {
+class ManageTagsViewController: UIViewControllerWithBuilding, UITableViewDataSource {
 	@IBOutlet weak var tagsTable: UITableView!
 	@IBAction func unwindToManageNodes(unwindSegue: UIStoryboardSegue) { }
 	

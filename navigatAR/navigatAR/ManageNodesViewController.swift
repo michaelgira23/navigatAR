@@ -10,7 +10,7 @@ import CodableFirebase
 import Firebase
 import UIKit
 
-class ManageNodesViewController: UIViewController, UITableViewDataSource {
+class ManageNodesViewController: UIViewControllerWithBuilding, UITableViewDataSource {
 
 	@IBOutlet weak var nodeTable: UITableView!
 	@IBAction func unwindToManageNodes(unwindSegue: UIStoryboardSegue) { }

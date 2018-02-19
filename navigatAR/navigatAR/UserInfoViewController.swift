@@ -8,6 +8,7 @@
 
 import CodableFirebase
 import Firebase
+import Eureka
 import UIKit
 
 class UserInfoViewController: UIViewControllerWithBuilding, UITableViewDataSource, UITableViewDelegate {
@@ -100,6 +101,20 @@ class UserInfoViewController: UIViewControllerWithBuilding, UITableViewDataSourc
 class UIViewControllerWithBuilding: UIViewController {
 	var forBuilding: (FirebasePushKey, Building)!
 
+	// MARK: - Navigation
+	
+	// In a storyboard-based application, you will often want to do a little preparation before navigation
+	override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+		// Get the new view controller using segue.destinationViewController.
+		// Pass the selected object to the new view controller.
+		guard let view = segue.destination as? UIViewControllerWithBuilding else { return }
+		view.forBuilding = forBuilding
+	}
+}
+
+class FormViewControllerWithBuilding: FormViewController {
+	var forBuilding: (FirebasePushKey, Building)!
+	
 	// MARK: - Navigation
 	
 	// In a storyboard-based application, you will often want to do a little preparation before navigation

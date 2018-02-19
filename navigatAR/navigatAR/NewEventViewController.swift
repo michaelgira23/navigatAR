@@ -11,7 +11,7 @@ import Eureka
 import FirebaseDatabase
 import CodableFirebase
 
-class NewEventViewController: FormViewController {
+class NewEventViewController: FormViewControllerWithBuilding {
 	
 	var availableNodes: [String] = []
 	
@@ -107,3 +107,4 @@ class NewEventViewController: FormViewController {
 		self.availableNodes = []
 	}
 }
+

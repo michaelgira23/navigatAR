@@ -6,14 +6,14 @@
 //  Copyright © 2018 MICDS Programming. All rights reserved.
 //
 
-import Foundation
 import Eureka
-import FirebaseDatabase
+import Firebase
 import CodableFirebase
 
 class NewEventViewController: FormViewController {
 	
 	var availableNodes: [String] = []
+	var selectedNodes: FirebaseArray<FirebasePushKey> = []
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -21,68 +21,55 @@ class NewEventViewController: FormViewController {
 		
 		form +++ Section("Event Information")
 			<<< TextRow("eventname") { row in
-				row.title = "Event Name"
-				row.placeholder = "Enter Name here"
+				row.title = "Name"
+//				row.placeholder = "Name"
 			}
 			
 			<<< TextRow("eventdescription") { row in
-				row.title = "Enter Description"
-				row.placeholder = "Enter Description Here"
+				row.title = "Description"
+//				row.placeholder = "Description"
 			}
 			
-			+++ Section("Event Start Date")
-			<<< DateRow("eventstartdate") { row in
-				row.title = "Start Date"
-				row.dateFormatter?.dateStyle = DateFormatter.Style.full
-			}
-			
-			<<< TimeRow("eventstarttime") { row in
+			+++ Section("Event Time")
+			<<< DateTimeRow("eventstarttime") { row in
 				row.title = "Start Time"
-			}
-			
-			+++ Section("Event End Date")
-			<<< DateRow("eventenddate") { row in
-				row.title = "End Date"
 				row.dateFormatter?.dateStyle = DateFormatter.Style.full
 			}
-			<<< TimeRow("eventendtime") { row in
+			<<< DateTimeRow("eventendtime") { row in
 				row.title = "End Time"
+				row.dateFormatter?.dateStyle = DateFormatter.Style.full
 			}
 			
 			+++ ButtonRow() { row in
 				row.title = "Select Nodes"
 				row.onCellSelection { row, cell in
 					self.performSegue(withIdentifier: "showSelectNodesForEvent", sender: nil)
-					
-					// now we create the event
-					/*let name: String = String(describing: self.form.values()["eventname"])
-					let description: String = String(describing: self.form.values()["eventdescription"])
-					
-					let startDate: String = String(describing: self.form.values()["eventstartdata"])
-					let startTime: String = String(describing: self.form.values()["eventstarttime"])
-					
-					let endDate: String = String(describing: self.form.values()["eventenddata"])
-					let endTime: String = String(describing: self.form.values()["eventenddata"])
-					
-					let nodeIds: [String] = ["dummy id"] // TODO: put in the id
-					
-					let newEvent: Event = Event(name: name, description: description, locations: nodeIds, start: "\(startDate)@\(startTime)", end: "\(endDate)@\(endTime)")
-					
-					let ref = Database.database().reference()
-					ref.child("events").childByAutoId().setValue(try! FirebaseEncoder().encode(newEvent))*/
+					// TODO: store data in selectedNodes
 				}
 			}
 		
 			+++ ButtonRow() { row in
 				row.title = "Create Event"
 				row.onCellSelection { row, cell in
-					// create the event in the database
+					let formValues = self.form.values()
+					
+					let newEvent = Event(
+						name: formValues["eventname"] as! String,
+						description: formValues["eventdescription"] as! String,
+						locations: self.selectedNodes,
+						start: formValues["eventstarttime"] as! Date,
+						end: formValues["eventendtime"] as! Date
+					)
+					
+					print("Creating event: \(newEvent)")
+					
+					let ref = Database.database().reference()
+					ref.child("events").childByAutoId().setValue(try! FirebaseEncoder().encode(newEvent))
 				}
 		}
 	}
 	
 	@IBAction func unwindBackFromSelectionsSegue(_ sender: UIStoryboardSegue) {
-		
 		print("Unwinding back to create event")
 		
 		guard let selections = sender.source as? SelectNodesViewController else { return }
@@ -97,16 +84,12 @@ class NewEventViewController: FormViewController {
 		let ref = Database.database().reference()
 		print("Loading available nodes for db")
 		ref.child("nodes").observe(.value, with: { snapshot in
-			guard let value = snapshot.value else { return }
+			guard snapshot.exists() else { return }
+			let value = snapshot.value!
 			
 			do {
 				let loc = Array((try FirebaseDecoder().decode([FirebasePushKey: Node].self, from: value)).values)
-				
-				for node in loc {
-					self.availableNodes.append(String(describing: node.name))
-				}
-				
-				self.availableNodes = []
+				self.availableNodes = loc.map { node in node.name }
 			}
 			catch let error {
 				print(error)

@@ -8,9 +8,11 @@ target 'navigatAR' do
   # Pods for navigatAR
   pod 'CodableFirebase'
   pod 'Eureka'
+  pod 'Firebase/Auth'
   pod 'Firebase/Core'
   pod 'Firebase/Database'
   pod 'IndoorAtlas'
+  pod 'SVProgressHUD', :git => 'https://github.com/SVProgressHUD/SVProgressHUD.git'
   pod 'FuzzyMatchingSwift'
 
 end

@@ -6,6 +6,7 @@
 //  Copyright © 2018 MICDS Programming. All rights reserved.
 //
 
+import CodableFirebase
 import Firebase
 import UIKit
 
@@ -16,11 +17,16 @@ class UserInfoViewController: UIViewController, UITableViewDataSource, UITableVi
 	var authListenerHandle: AuthStateDidChangeListenerHandle?
 	
 	var ref: DatabaseReference!
+	
+	var buildings: [Building] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+		buildingTable.dataSource = self
+		buildingTable.delegate = self
+		buildingTable.register(BuildingTableViewCell.self, forCellReuseIdentifier: "buildingCell")
     }
 
     override func didReceiveMemoryWarning() {
@@ -33,8 +39,26 @@ class UserInfoViewController: UIViewController, UITableViewDataSource, UITableVi
 		authListenerHandle = Auth.auth().addStateDidChangeListener { (auth, user) in
 			if let _ = user {
 				self.emailLabel.text = "Email: " + user!.email!
-				self.ref.child("user").child(user!.uid).observe(.value, with: { snapshot in
-					
+				self.ref.child("users/\(user!.uid)").observe(.value, with: { snapshot in
+					guard !(snapshot.value! is NSNull) else { return }
+
+					let user = try! FirebaseDecoder().decode(User.self, from: snapshot.value!)
+					guard let buildingKeys = user.admin else { return }
+
+					var buildingsQueued = 0
+					buildingKeys.forEach() { key in
+						self.ref.child("buildings/\(key)").observeSingleEvent(of: .value, with: { snapshot in
+							guard !(snapshot.value! is NSNull) else { return }
+							
+							let building = try! FirebaseDecoder().decode(Building.self, from: snapshot.value!)
+							buildingsQueued += 1
+							self.buildings.append(building)
+							if (buildingsQueued == buildingKeys.count) {
+								print(self.buildings)
+								self.buildingTable.reloadData()
+							}
+						})
+					}
 				})
 			}
 		}
@@ -49,11 +73,14 @@ class UserInfoViewController: UIViewController, UITableViewDataSource, UITableVi
 	}
 	
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		return 1
+		return buildings.count
+		
 	}
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-		return UITableViewCell()
+		let buildingCell = tableView.dequeueReusableCell(withIdentifier: "buildingCell", for: indexPath) as UITableViewCell
+		buildingCell.textLabel!.text = buildings[indexPath.row].name
+		return buildingCell
 	}
 	
 

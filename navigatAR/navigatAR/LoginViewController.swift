@@ -39,7 +39,7 @@ class LoginViewController: FormViewController {
 				print("sign in failed I guess") // TODO: handle error properly
 				return
 			}
-			
+
 			_ = self.navigationController?.popViewController(animated: true)
 		}
 	}

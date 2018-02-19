@@ -10,48 +10,28 @@ import CodableFirebase
 import Firebase
 import UIKit
 
-class SelectNodesViewController: UITableViewController {
-
-	@IBOutlet var nodesTable: UITableView!
+class SelectNodesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 	
-	var nodes: [String] = ["hello", "world", "this", "is", "a", "test"]
+	@IBOutlet weak var nodesTable: UITableView!
+	
+	var availableNodes: [String] = ["dummyData"]
 
 	override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
-
-		nodesTable.dataSource = self
-		
-		let ref = Database.database().reference()
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
-	override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		return nodes.count
+		self.nodesTable.dataSource = self
+		self.nodesTable.delegate = self
+		self.nodesTable.reloadData()
 	}
 	
-	override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-		let cell = nodesTable.dequeueReusableCell(withIdentifier: "NodeCell", for: indexPath) as UITableViewCell
-		let node = nodes[indexPath.row]
+	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+		let cell = self.nodesTable.dequeueReusableCell(withIdentifier: "availableNodes", for: indexPath) as UITableViewCell
 		
-		cell.textLabel?.text = node
-		cell.detailTextLabel?.text = String(describing: node)
+		cell.textLabel?.text = self.availableNodes[indexPath.row]
 		
 		return cell
 	}
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
+	
+	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+		return self.availableNodes.count
+	}
 }

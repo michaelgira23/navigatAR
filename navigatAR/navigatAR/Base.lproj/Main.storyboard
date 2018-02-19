@@ -154,11 +154,11 @@
             </objects>
             <point key="canvasLocation" x="1842.4000000000001" y="-323.64532019704433"/>
         </scene>
-        <!--Item-->
+        <!--User-->
         <scene sceneID="kcW-cQ-AdI">
             <objects>
                 <navigationController id="6yd-Rs-rGj" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item" id="RtV-R2-rQ6"/>
+                    <tabBarItem key="tabBarItem" title="User" image="user" id="RtV-R2-rQ6"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="JsM-Ir-bvn">
                         <rect key="frame" x="0.0" y="44" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -663,6 +663,7 @@
         <image name="first" width="30" height="30"/>
         <image name="forward-chevron.png" width="13" height="21"/>
         <image name="second" width="30" height="30"/>
+        <image name="user" width="50" height="50"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="sQL-se-JQG"/>

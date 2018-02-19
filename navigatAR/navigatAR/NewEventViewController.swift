@@ -14,7 +14,6 @@ import CodableFirebase
 class NewEventViewController: FormViewController {
 	
 	var availableNodes: [String] = []
-	var nodeCells: SelectableSection<ListCheckRow<String>>!
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -53,8 +52,10 @@ class NewEventViewController: FormViewController {
 			+++ ButtonRow() { row in
 				row.title = "Create"
 				row.onCellSelection { row, cell in
+					self.performSegue(withIdentifier: "showSelectNodesForEvent", sender: nil)
+					
 					// now we create the event
-					let name: String = String(describing: self.form.values()["eventname"])
+					/*let name: String = String(describing: self.form.values()["eventname"])
 					let description: String = String(describing: self.form.values()["eventdescription"])
 					
 					let startDate: String = String(describing: self.form.values()["eventstartdata"])
@@ -68,17 +69,11 @@ class NewEventViewController: FormViewController {
 					let newEvent: Event = Event(name: name, description: description, locations: nodeIds, start: "\(startDate)@\(startTime)", end: "\(endDate)@\(endTime)")
 					
 					let ref = Database.database().reference()
-					ref.child("events").childByAutoId().setValue(try! FirebaseEncoder().encode(newEvent))
+					ref.child("events").childByAutoId().setValue(try! FirebaseEncoder().encode(newEvent))*/
 				}
 			}
-			
-			+++ Section("Pick a location")
 		
-		self.nodeCells = SelectableSection<ListCheckRow<String>>("Pick a location", selectionType: .singleSelection(enableDeselection: true))
-		
-		self.nodeCells.onSelectSelectableRow = { (cell, cellRow) in
-			print("A thing has been clicked")
-		}
+			//+++ SelectableSection<ListCheckRow<String>>("Pick a location", selectionType: .singleSelection(enableDeselection: true))
 	}
 	
 	func updateDBData() {
@@ -96,17 +91,17 @@ class NewEventViewController: FormViewController {
 				}
 				
 				// print out the array before loading
-				print("Available nodes array")
+				//print("Available nodes array")
 				
 				// TODO: figure out how to reload the section so that our data actually is visible
-				for option in self.availableNodes {
+				/*for option in self.availableNodes {
 					self.form.last! <<< ListCheckRow<String>(option){ listRow in
 						listRow.title = option
 						listRow.selectableValue = option
 						listRow.value = nil
 						listRow.deselect()
 					}
-				}
+				}*/
 				
 				self.availableNodes = []
 			}

@@ -14,7 +14,7 @@ class SelectNodesViewController: UITableViewController {
 
 	@IBOutlet var nodesTable: UITableView!
 	
-	var nodes: [Node]?
+	var nodes: [String] = ["hello", "world", "this", "is", "a", "test"]
 
 	override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,20 +24,6 @@ class SelectNodesViewController: UITableViewController {
 		nodesTable.dataSource = self
 		
 		let ref = Database.database().reference()
-		
-		// Continuously update `nodes` from database
-		ref.child("nodes").queryOrdered(byChild: "building").observe(.value, with: { snapshot in
-			guard let value = snapshot.value else { return }
-			
-			do {
-				//guard let currentBuilding = Building.current(root: snapshot) else { print(""); return }
-				
-				self.nodes = Array((try FirebaseDecoder().decode([FirebasePushKey: Node].self, from: value)).values)//.filter({ $0.building == currentBuilding.id })
-				self.nodesTable.reloadData()
-			} catch let error {
-				print(error) // TODO: properly handle error
-			}
-		})
     }
 
     override func didReceiveMemoryWarning() {
@@ -46,15 +32,15 @@ class SelectNodesViewController: UITableViewController {
     }
     
 	override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		return nodes!.count
+		return nodes.count
 	}
 	
 	override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		let cell = nodesTable.dequeueReusableCell(withIdentifier: "NodeCell", for: indexPath) as UITableViewCell
-		let node = nodes![indexPath.row]
+		let node = nodes[indexPath.row]
 		
-		cell.textLabel?.text = node.name
-		cell.detailTextLabel?.text = String(describing: node.type)
+		cell.textLabel?.text = node
+		cell.detailTextLabel?.text = String(describing: node)
 		
 		return cell
 	}

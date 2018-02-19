@@ -196,41 +196,41 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <viewLayoutGuide key="safeArea" id="aWQ-uE-qq1"/>
                     </view>
+                    <connections>
+                        <segue destination="oTF-bw-oYR" kind="show" identifier="showSelectNodesForEvent" id="9h7-U3-V6p"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="baK-da-Im2" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2475" y="328"/>
         </scene>
-        <!--Select Nodes View Controller-->
-        <scene sceneID="2b4-Ax-3BD">
+        <!--Table View Controller-->
+        <scene sceneID="pEd-AS-xLW">
             <objects>
-                <tableViewController id="jDU-wm-aPp" customClass="SelectNodesViewController" customModule="navigatAR" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="Ig3-50-kJN">
+                <tableViewController id="oTF-bw-oYR" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsMultipleSelection="YES" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="zfU-ex-ALw">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="Vak-ID-EnW">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="xDm-4A-kNB">
                                 <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Vak-ID-EnW" id="cqW-Qf-mqL">
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="xDm-4A-kNB" id="rrV-nH-ucs">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="43.666666666666664"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>
                         </prototypes>
                         <connections>
-                            <outlet property="dataSource" destination="jDU-wm-aPp" id="5gf-DI-HdM"/>
-                            <outlet property="delegate" destination="jDU-wm-aPp" id="651-rb-peH"/>
+                            <outlet property="dataSource" destination="oTF-bw-oYR" id="REN-oC-azd"/>
+                            <outlet property="delegate" destination="oTF-bw-oYR" id="w7M-o2-myZ"/>
                         </connections>
                     </tableView>
-                    <connections>
-                        <outlet property="nodesTable" destination="Ig3-50-kJN" id="fa0-ZZ-cAb"/>
-                    </connections>
                 </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="AIs-L7-5sk" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="2tu-bi-6ea" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3722" y="-27"/>
+            <point key="canvasLocation" x="3629" y="-165"/>
         </scene>
         <!--Admin Panel-->
         <scene sceneID="foH-qn-ob4">

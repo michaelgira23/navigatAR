@@ -82,9 +82,14 @@ class NewEventViewController: FormViewController {
 	}
 	
 	@IBAction func unwindBackFromSelectionsSegue(_ sender: UIStoryboardSegue) {
-		print("Unwinding...")
+		
+		print("Unwinding back to create event")
 		
 		guard let selections = sender.source as? SelectNodesViewController else { return }
+		
+		for node in selections.selectedNodes {
+			print(node.name)
+		}
 	}
 	
 	func updateDBData() {

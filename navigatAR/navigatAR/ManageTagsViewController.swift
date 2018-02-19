@@ -26,8 +26,8 @@ class ManageTagsViewController: UIViewControllerWithBuilding, UITableViewDataSou
 		let ref = Database.database().reference()
 		
 		// Continuously update `tags` from database
-		ref.observe(.value, with: { snapshot in
-			guard let value = snapshot.childSnapshot(forPath: "tags").value else { return }
+		ref.child("tags").queryOrdered(byChild: "building").queryEqual(toValue: forBuilding.0).observe(.value, with: { snapshot in
+			guard snapshot.exists(), let value = snapshot.value else { return }
 			
 			do {
 				//guard let currentBuilding = Building.current(root: snapshot) else { print(""); return }

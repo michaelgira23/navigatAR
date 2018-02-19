@@ -66,8 +66,8 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
                 self.filteredData = []
                 
                 for node in loc {
-                    self.data.append(node.name + "," + String(describing: node.type) + "," + String(describing: node.building))
-                    self.filteredData.append(node.name + "," + String(describing: node.type) + "," + String(describing: node.building))
+                    self.data.append(node.name + "," + String(describing: node.type) + "," + String(describing: node.building) + "," + String(describing: node.tags))
+                    self.filteredData.append(node.name + "," + String(describing: node.type) + "," + String(describing: node.building) + "," + String(describing: node.tags))
                 }
             }
             catch let error {

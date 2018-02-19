@@ -27,11 +27,16 @@ class NodePositionViewController: UIViewController {
 		super.viewDidLoad()
 		// Delegate methods to our custom location handler
 		locationManager.delegate = self
-		locationManager.distanceFilter = 0.1
+		locationManager.startUpdatingLocation()
 		setQualityText(calibrationQuality: locationManager.calibration)
 		if let l = locationManager.location {
 			setLocation(location: l)
 		}
+	}
+
+	override func viewWillDisappear(_ animated: Bool) {
+		// Stop getting location
+		locationManager.stopUpdatingLocation()
 	}
 
 	override func didReceiveMemoryWarning() {
@@ -40,9 +45,7 @@ class NodePositionViewController: UIViewController {
 	}
 
 	func gotPosition() {
-
 		print("Got gotted");
-
 		performSegue(withIdentifier: "unwindToUpsertNodesWithUnwindSegue", sender: self)
 	}
 

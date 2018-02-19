@@ -90,6 +90,9 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
 
+		// Start getting location
+		locationManager.startUpdatingLocation()
+
 		// Create a session configuration
 		let configuration = ARWorldTrackingConfiguration()
 		configuration.worldAlignment = .gravityAndHeading
@@ -107,6 +110,9 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 
 		// Pause the view's session
 		sceneView.session.pause()
+
+		// Stop getting position
+		locationManager.stopUpdatingLocation()
 	}
 
 	override func didReceiveMemoryWarning() {

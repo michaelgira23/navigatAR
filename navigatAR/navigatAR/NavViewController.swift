@@ -21,6 +21,12 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 	@IBOutlet weak var searchBar: UISearchBar!
 	@IBOutlet weak var tableView: UITableView!
 	@IBOutlet var sceneView: ARSCNView!
+	@IBOutlet weak var stopNavBtn: UIButton!
+
+	@IBAction func stopNav(_ sender: Any) {
+		navigating = false
+		redraw()
+	}
 
 	let locationManager = IALocationManager.sharedInstance()
 
@@ -63,6 +69,7 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 
 		/* Navigation */
 
+		ensureNavigationVariables()
 		Database.database().reference().observe(DataEventType.value, with: { snapshot in
 			guard let (nodes, graph) = populateGraph(rootSnapshot: snapshot) else { print("unable to get graph"); return }
 			self.dbSnapshot = snapshot
@@ -266,10 +273,11 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 			lastNode = pushKey
 		}
 
-
-		let lastArNode = arNodes[lastNode!]!
-		lastArNode.removeFromParentNode()
-		arNodes[lastNode!] = addDestination(position: lastArNode.position)
+		if (lastNode != nil) {
+			let lastArNode = arNodes[lastNode!]!
+			lastArNode.removeFromParentNode()
+			arNodes[lastNode!] = addDestination(position: lastArNode.position)
+		}
 
 		if (navStartPosition != nil && firstNode != nil) {
 			_ = addLine(from: navStartPosition!, to: arNodes[firstNode!]!.position)
@@ -309,6 +317,11 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 				navStartPosition!.y -= 1
 			}
 		}
+		if (navigating) {
+			stopNavBtn.fadeIn()
+		} else {
+			stopNavBtn.fadeOut()
+		}
 	}
 
 	/* Augmented Reality */
@@ -330,9 +343,6 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 	}
 
 	func addArrow(position: SCNVector3, eulerX: Double = 0, eulerY: Double = 0) -> SCNNode? {
-
-//		print("Add arrow", x, y, z, eulerX, eulerY);
-
 		guard let arrowScene = SCNScene(named: "art.scnassets/arrow/Arrow.scn") else { return nil }
 		let arrowNode = SCNNode()
 		let arrowSceneChildNodes = arrowScene.rootNode.childNodes

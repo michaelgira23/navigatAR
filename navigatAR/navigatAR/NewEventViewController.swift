@@ -81,6 +81,12 @@ class NewEventViewController: FormViewController {
 		}
 	}
 	
+	@IBAction func unwindBackFromSelectionsSegue(_ sender: UIStoryboardSegue) {
+		print("Unwinding...")
+		
+		guard let selections = sender.source as? SelectNodesViewController else { return }
+	}
+	
 	func updateDBData() {
 		// Get nodes from db and load into the array
 		let ref = Database.database().reference()

@@ -50,7 +50,7 @@ class NewEventViewController: FormViewController {
 			}
 			
 			+++ ButtonRow() { row in
-				row.title = "Create"
+				row.title = "Select Nodes"
 				row.onCellSelection { row, cell in
 					self.performSegue(withIdentifier: "showSelectNodesForEvent", sender: nil)
 					
@@ -73,7 +73,12 @@ class NewEventViewController: FormViewController {
 				}
 			}
 		
-			//+++ SelectableSection<ListCheckRow<String>>("Pick a location", selectionType: .singleSelection(enableDeselection: true))
+			+++ ButtonRow() { row in
+				row.title = "Create Event"
+				row.onCellSelection { row, cell in
+					// create the event in the database
+				}
+		}
 	}
 	
 	func updateDBData() {
@@ -89,19 +94,6 @@ class NewEventViewController: FormViewController {
 				for node in loc {
 					self.availableNodes.append(String(describing: node.name))
 				}
-				
-				// print out the array before loading
-				//print("Available nodes array")
-				
-				// TODO: figure out how to reload the section so that our data actually is visible
-				/*for option in self.availableNodes {
-					self.form.last! <<< ListCheckRow<String>(option){ listRow in
-						listRow.title = option
-						listRow.selectableValue = option
-						listRow.value = nil
-						listRow.deselect()
-					}
-				}*/
 				
 				self.availableNodes = []
 			}

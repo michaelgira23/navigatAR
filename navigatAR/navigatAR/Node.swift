@@ -28,5 +28,5 @@ struct Node: Codable {
 	let position: Location
 	// there's no way to provide a default value for this when decoding without a custom implementation, so has to be optional
 	let tags: [String: Tag]?
-	let connectedTo: FirebaseArray<FirebasePushKey>?
+	var connectedTo: FirebaseArray<FirebasePushKey>?
 }

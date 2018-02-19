@@ -201,6 +201,37 @@
             </objects>
             <point key="canvasLocation" x="2475" y="328"/>
         </scene>
+        <!--Select Nodes View Controller-->
+        <scene sceneID="2b4-Ax-3BD">
+            <objects>
+                <tableViewController id="jDU-wm-aPp" customClass="SelectNodesViewController" customModule="navigatAR" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="Ig3-50-kJN">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="Vak-ID-EnW">
+                                <rect key="frame" x="0.0" y="28" width="375" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Vak-ID-EnW" id="cqW-Qf-mqL">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.666666666666664"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="jDU-wm-aPp" id="5gf-DI-HdM"/>
+                            <outlet property="delegate" destination="jDU-wm-aPp" id="651-rb-peH"/>
+                        </connections>
+                    </tableView>
+                    <connections>
+                        <outlet property="nodesTable" destination="Ig3-50-kJN" id="fa0-ZZ-cAb"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="AIs-L7-5sk" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3722" y="-27"/>
+        </scene>
         <!--Admin Panel-->
         <scene sceneID="foH-qn-ob4">
             <objects>

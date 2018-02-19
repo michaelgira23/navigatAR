@@ -19,6 +19,7 @@
 		26AE44CF2025753800F8C75D /* AdminViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26AE44CE2025753800F8C75D /* AdminViewController.swift */; };
 		26AE44D52025934800F8C75D /* config.example.plist in Resources */ = {isa = PBXBuildFile; fileRef = 26AE44D42025934800F8C75D /* config.example.plist */; };
 		26AE44D72025936700F8C75D /* config.plist in Resources */ = {isa = PBXBuildFile; fileRef = 26AE44D62025936700F8C75D /* config.plist */; };
+		26BD9C50203A2E92007B9F5F /* SelectNodesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26BD9C4F203A2E92007B9F5F /* SelectNodesViewController.swift */; };
 		565A1BA920268B24007C56F5 /* ManageNodesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565A1BA820268B24007C56F5 /* ManageNodesViewController.swift */; };
 		5690CC252022ECA400F298EE /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 5690CC242022ECA400F298EE /* art.scnassets */; };
 		569FA3892026D8EC00910CCE /* UIViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 569FA3882026D8EC00910CCE /* UIViewExtensions.swift */; };
@@ -53,6 +54,7 @@
 		26AE44CE2025753800F8C75D /* AdminViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminViewController.swift; sourceTree = "<group>"; };
 		26AE44D42025934800F8C75D /* config.example.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = config.example.plist; sourceTree = "<group>"; };
 		26AE44D62025936700F8C75D /* config.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = config.plist; sourceTree = "<group>"; };
+		26BD9C4F203A2E92007B9F5F /* SelectNodesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectNodesViewController.swift; sourceTree = "<group>"; };
 		3670E310BCDA21FEDDE0F541 /* Pods_navigatAR.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_navigatAR.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		565A1BA820268B24007C56F5 /* ManageNodesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageNodesViewController.swift; sourceTree = "<group>"; };
 		5690CC242022ECA400F298EE /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
@@ -150,6 +152,7 @@
 				1C5365AC20353392003198EB /* FirebaseArray.swift */,
 				B43EACAD20389978000E11B5 /* NewEventViewController.swift */,
 				B43EACAF20389C25000E11B5 /* Event.swift */,
+				26BD9C4F203A2E92007B9F5F /* SelectNodesViewController.swift */,
 			);
 			path = navigatAR;
 			sourceTree = "<group>";
@@ -318,6 +321,7 @@
 				1C5365AD20353392003198EB /* FirebaseArray.swift in Sources */,
 				1CB71F49202FE864000666BC /* ManageTagsViewController.swift in Sources */,
 				1C73730D20255A1700725F6D /* Node.swift in Sources */,
+				26BD9C50203A2E92007B9F5F /* SelectNodesViewController.swift in Sources */,
 				1C73731720267CFC00725F6D /* Location.swift in Sources */,
 				56FEE4C8202639970075CA75 /* UpsertNodeViewController.swift in Sources */,
 				56F25B8B2022E79800B246D3 /* AppDelegate.swift in Sources */,
@@ -469,11 +473,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 9739DHZ5QZ;
+				DEVELOPMENT_TEAM = BRYZEZMV44;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = navigatAR/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = club.micdsprogramming.navigatAR;
+				PRODUCT_BUNDLE_IDENTIFIER = club.micdsprogramming.navigatAR.jackcai2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -486,11 +490,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 9739DHZ5QZ;
+				DEVELOPMENT_TEAM = BRYZEZMV44;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = navigatAR/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = club.micdsprogramming.navigatAR;
+				PRODUCT_BUNDLE_IDENTIFIER = club.micdsprogramming.navigatAR.jackcai2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

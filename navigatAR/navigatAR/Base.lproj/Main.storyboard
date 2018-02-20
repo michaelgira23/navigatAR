@@ -277,7 +277,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="New Event"/>
                                 <connections>
-                                    <segue destination="qAw-L2-oG2" kind="show" id="tg3-XG-zqg"/>
+                                    <segue destination="qAw-L2-oG2" kind="show" id="fSa-al-SEk"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UUd-K8-VDy">

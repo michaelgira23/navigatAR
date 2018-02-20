@@ -67,6 +67,7 @@ class NewEventViewController: FormViewControllerWithBuilding {
 					ref.child("events").childByAutoId().setValue(try! FirebaseEncoder().encode(newEvent))
 				}
 		}
+		print("building: ", forBuilding)
 	}
 	
 	@IBAction func unwindBackFromSelectionsSegue(_ sender: UIStoryboardSegue) {

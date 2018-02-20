@@ -21,6 +21,8 @@ class ManageTagsViewController: UIViewControllerWithBuilding, UITableViewDataSou
 		
 		// Do any additional setup after loading the view, typically from a nib.
 		
+		navigationItem.prompt = forBuilding.1.name
+		
 		tagsTable.dataSource = self
 		
 		let ref = Database.database().reference()

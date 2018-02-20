@@ -98,7 +98,7 @@ class UserInfoViewController: UIViewControllerWithBuilding, UITableViewDataSourc
 
 }
 
-class UIViewControllerWithBuilding: UIViewController {
+class UIViewControllerWithBuilding: UIViewController, ViewControllerWithBuilding {
 	var forBuilding: (FirebasePushKey, Building)!
 
 	// MARK: - Navigation
@@ -107,12 +107,12 @@ class UIViewControllerWithBuilding: UIViewController {
 	override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 		// Get the new view controller using segue.destinationViewController.
 		// Pass the selected object to the new view controller.
-		guard let view = segue.destination as? UIViewControllerWithBuilding else { return }
+		guard var view = segue.destination as? ViewControllerWithBuilding else { return }
 		view.forBuilding = forBuilding
 	}
 }
 
-class FormViewControllerWithBuilding: FormViewController {
+class FormViewControllerWithBuilding: FormViewController, ViewControllerWithBuilding {
 	var forBuilding: (FirebasePushKey, Building)!
 	
 	// MARK: - Navigation
@@ -121,7 +121,11 @@ class FormViewControllerWithBuilding: FormViewController {
 	override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 		// Get the new view controller using segue.destinationViewController.
 		// Pass the selected object to the new view controller.
-		guard let view = segue.destination as? UIViewControllerWithBuilding else { return }
+		guard var view = segue.destination as? ViewControllerWithBuilding else { return }
 		view.forBuilding = forBuilding
 	}
+}
+
+protocol ViewControllerWithBuilding {
+	var forBuilding: (FirebasePushKey, Building)! { get set }
 }

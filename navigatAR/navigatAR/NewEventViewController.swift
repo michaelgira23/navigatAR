@@ -53,18 +53,23 @@ class NewEventViewController: FormViewControllerWithBuilding {
 				row.onCellSelection { row, cell in
 					let formValues = self.form.values()
 					
-					let newEvent = Event(
-						name: formValues["eventname"] as! String,
-						description: formValues["eventdescription"] as! String,
-						locations: self.selectedNodes,
-						start: formValues["eventstarttime"] as! Date,
-						end: formValues["eventendtime"] as! Date
-					)
-					
-					print("Creating event: \(newEvent)")
-					
-					let ref = Database.database().reference()
-					ref.child("events").childByAutoId().setValue(try! FirebaseEncoder().encode(newEvent))
+					if formValues["eventname"] == nil || formValues["eventdescription"] == nil || self.selectedNodes.count == 0 {
+						return
+					}
+					else {
+						let newEvent = Event(
+							name: formValues["eventname"] as! String,
+							description: formValues["eventdescription"] as! String,
+							locations: self.selectedNodes,
+							start: formValues["eventstarttime"] as! Date,
+							end: formValues["eventendtime"] as! Date
+						)
+						
+						print("Creating event: \(newEvent)")
+						
+						let ref = Database.database().reference()
+						ref.child("events").childByAutoId().setValue(try! FirebaseEncoder().encode(newEvent))
+					}
 				}
 		}
 		print("building: ", forBuilding)

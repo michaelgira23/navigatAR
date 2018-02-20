@@ -74,10 +74,11 @@ class NewEventViewController: FormViewControllerWithBuilding {
 		print("Unwinding back to create event")
 		
 		guard let selections = sender.source as? SelectNodesViewController else { return }
-		
-		for node in selections.selectedNodes {
-			print(node.name)
-		}
+	
+		let keyArray = FirebaseArray(values: selections.selectedNodes.map({ (key, node) in
+			return key
+		}))
+		selectedNodes = keyArray
 	}
 	
 	func updateDBData() {

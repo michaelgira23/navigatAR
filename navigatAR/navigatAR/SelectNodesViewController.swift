@@ -14,8 +14,8 @@ class SelectNodesViewController: UIViewControllerWithBuilding, UITableViewDataSo
 	
 	@IBOutlet weak var nodesTable: UITableView!
 	
-	var availableNodes: [Node] = []
-	var selectedNodes: [Node] = []
+	var availableNodes: [(FirebasePushKey, Node)] = []
+	var selectedNodes: [(FirebasePushKey, Node)] = []
 
 	override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,7 +26,7 @@ class SelectNodesViewController: UIViewControllerWithBuilding, UITableViewDataSo
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		let cell = self.nodesTable.dequeueReusableCell(withIdentifier: "availableNodes", for: indexPath) as UITableViewCell
 		
-		cell.textLabel?.text = self.availableNodes[indexPath.row].name
+		cell.textLabel?.text = self.availableNodes[indexPath.row].1.name
 		
 		return cell
 	}
@@ -48,7 +48,7 @@ class SelectNodesViewController: UIViewControllerWithBuilding, UITableViewDataSo
 				let firebaseNodes = Array(try FirebaseDecoder().decode([FirebasePushKey: Node].self, from: value))
 				
 				for node in firebaseNodes {
-					self.availableNodes.append(node.value)
+					self.availableNodes.append((node.key, node.value))
 				}
 			}
 			catch let error {

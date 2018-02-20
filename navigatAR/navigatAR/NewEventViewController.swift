@@ -10,7 +10,7 @@ import Eureka
 import Firebase
 import CodableFirebase
 
-class NewEventViewController: FormViewController {
+class NewEventViewController: FormViewControllerWithBuilding {
 	
 	var availableNodes: [String] = []
 	var selectedNodes: FirebaseArray<FirebasePushKey> = []
@@ -67,6 +67,7 @@ class NewEventViewController: FormViewController {
 					ref.child("events").childByAutoId().setValue(try! FirebaseEncoder().encode(newEvent))
 				}
 		}
+		print("building: ", forBuilding)
 	}
 	
 	@IBAction func unwindBackFromSelectionsSegue(_ sender: UIStoryboardSegue) {
@@ -101,3 +102,4 @@ class NewEventViewController: FormViewController {
 		self.availableNodes = []
 	}
 }
+

@@ -10,18 +10,15 @@ import Firebase
 import UIKit
 import IndoorAtlas
 
-class AdminViewController: UIViewController {
+class AdminViewController: UIViewControllerWithBuilding {
 
 	let locationManager = IALocationManager.sharedInstance()
-	var authListenerHandle: AuthStateDidChangeListenerHandle?
-
-	@IBOutlet weak var emailLabel: UILabel!
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		// Do any additional setup after loading the view.
 		// Delegate methods to our custom location handler
-		
+
 		Database.database().reference().observeSingleEvent(of: .value, with: { snapshot in
 			if let building = Building.current(root: snapshot) {
 				print(building)
@@ -35,33 +32,13 @@ class AdminViewController: UIViewController {
 			
 			print(graph.findPath(from: myHouse, to: stem252))
 		})
+		
+		navigationItem.prompt = forBuilding.1.name
 	}
 
 	override func didReceiveMemoryWarning() {
 		super.didReceiveMemoryWarning()
 		// Dispose of any resources that can be recreated.
 	}
-	
-	override func viewWillAppear(_ animated: Bool) {
-		authListenerHandle = Auth.auth().addStateDidChangeListener { (auth, user) in
-			if let _ = user {
-				self.emailLabel.text = "Email: " + user!.email!
-			}
-		}
-	}
-	
-	override func viewWillDisappear(_ animated: Bool) {
-		Auth.auth().removeStateDidChangeListener(authListenerHandle!)
-	}
-
-	/*
-	// MARK: - Navigation
-
-	// In a storyboard-based application, you will often want to do a little preparation before navigation
-	override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-	// Get the new view controller using segue.destinationViewController.
-	// Pass the selected object to the new view controller.
-	}
-	*/
 
 }

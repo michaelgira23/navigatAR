@@ -10,7 +10,7 @@ import CodableFirebase
 import Firebase
 import UIKit
 
-class SelectNodesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class SelectNodesViewController: UIViewControllerWithBuilding, UITableViewDataSource, UITableViewDelegate {
 	
 	@IBOutlet weak var nodesTable: UITableView!
 	
@@ -41,8 +41,8 @@ class SelectNodesViewController: UIViewController, UITableViewDataSource, UITabl
 	
 	func getNodes() {
 		let ref = Database.database().reference()
-		ref.child("nodes").observe(.value, with: { (snapshot) in
-			guard let value = snapshot.value else { return }
+		ref.child("nodes").queryOrdered(byChild: "building").queryEqual(toValue: forBuilding.0).observe(.value, with: { (snapshot) in
+			guard snapshot.exists(), let value = snapshot.value else { return }
 			
 			do {
 				let firebaseNodes = Array(try FirebaseDecoder().decode([FirebasePushKey: Node].self, from: value))

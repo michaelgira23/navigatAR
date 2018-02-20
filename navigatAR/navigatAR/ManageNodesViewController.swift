@@ -10,7 +10,7 @@ import CodableFirebase
 import Firebase
 import UIKit
 
-class ManageNodesViewController: UIViewController, UITableViewDataSource {
+class ManageNodesViewController: UIViewControllerWithBuilding, UITableViewDataSource {
 
 	@IBOutlet weak var nodeTable: UITableView!
 	@IBAction func unwindToManageNodes(unwindSegue: UIStoryboardSegue) { }
@@ -22,13 +22,15 @@ class ManageNodesViewController: UIViewController, UITableViewDataSource {
 		
 		// Do any additional setup after loading the view, typically from a nib.
 		
+		navigationItem.prompt = forBuilding.1.name
+		
 		nodeTable.dataSource = self
 		
 		let ref = Database.database().reference()
 		
 		// Continuously update `nodes` from database
-		ref.observe(.value, with: { snapshot in
-			guard let value = snapshot.childSnapshot(forPath: "nodes").value else { return }
+		ref.child("nodes").queryOrdered(byChild: "building").queryEqual(toValue: forBuilding.0).observe(.value, with: { snapshot in
+			guard snapshot.exists(), let value = snapshot.value else { return }
 			
 			do {
 				//guard let currentBuilding = Building.current(root: snapshot) else { print(""); return }

@@ -10,7 +10,7 @@ import CodableFirebase
 import Firebase
 import UIKit
 
-class ManageTagsViewController: UIViewController, UITableViewDataSource {
+class ManageTagsViewController: UIViewControllerWithBuilding, UITableViewDataSource {
 	@IBOutlet weak var tagsTable: UITableView!
 	@IBAction func unwindToManageNodes(unwindSegue: UIStoryboardSegue) { }
 	
@@ -21,13 +21,15 @@ class ManageTagsViewController: UIViewController, UITableViewDataSource {
 		
 		// Do any additional setup after loading the view, typically from a nib.
 		
+		navigationItem.prompt = forBuilding.1.name
+		
 		tagsTable.dataSource = self
 		
 		let ref = Database.database().reference()
 		
 		// Continuously update `tags` from database
-		ref.observe(.value, with: { snapshot in
-			guard let value = snapshot.childSnapshot(forPath: "tags").value else { return }
+		ref.child("tags").queryOrdered(byChild: "building").queryEqual(toValue: forBuilding.0).observe(.value, with: { snapshot in
+			guard snapshot.exists(), let value = snapshot.value else { return }
 			
 			do {
 				//guard let currentBuilding = Building.current(root: snapshot) else { print(""); return }

@@ -19,8 +19,9 @@ class SelectNodesViewController: UIViewControllerWithBuilding, UITableViewDataSo
 
 	override func viewDidLoad() {
         super.viewDidLoad()
+		self.nodesTable.dataSource = self
+		self.nodesTable.delegate = self
 		self.getNodes()
-		self.nodesTable.reloadData()
 	}
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -50,13 +51,12 @@ class SelectNodesViewController: UIViewControllerWithBuilding, UITableViewDataSo
 				for node in firebaseNodes {
 					self.availableNodes.append((node.key, node.value))
 				}
+
+				self.nodesTable.reloadData()
 			}
 			catch let error {
 				print(error)
 			}
-			
-			self.nodesTable.dataSource = self
-			self.nodesTable.delegate = self
 		})
 	}
 }

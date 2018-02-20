@@ -40,8 +40,8 @@ class NewEventViewController: FormViewControllerWithBuilding {
 				row.dateFormatter?.dateStyle = DateFormatter.Style.full
 			}
 			
-			+++ ButtonRow() { row in
-				row.title = "Select Nodes"
+			+++ ButtonRow("selectLocation") { row in
+				row.title = "Select Locations (" + String(selectedNodes.count) + ")"
 				row.onCellSelection { row, cell in
 					self.performSegue(withIdentifier: "showSelectNodesForEvent", sender: nil)
 					// TODO: store data in selectedNodes
@@ -67,7 +67,6 @@ class NewEventViewController: FormViewControllerWithBuilding {
 					ref.child("events").childByAutoId().setValue(try! FirebaseEncoder().encode(newEvent))
 				}
 		}
-		print("building: ", forBuilding)
 	}
 	
 	@IBAction func unwindBackFromSelectionsSegue(_ sender: UIStoryboardSegue) {
@@ -79,6 +78,9 @@ class NewEventViewController: FormViewControllerWithBuilding {
 			return key
 		}))
 		selectedNodes = keyArray
+		let selectLocationCell = form.rowBy(tag: "selectLocation")!
+		selectLocationCell.title = "Select Locations (" + String(selectedNodes.count) + ")"
+		selectLocationCell.reload()
 	}
 	
 	func updateDBData() {

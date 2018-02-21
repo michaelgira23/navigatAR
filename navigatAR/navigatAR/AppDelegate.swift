@@ -6,6 +6,7 @@
 //  Copyright © 2018 MICDS Programming. All rights reserved.
 //
 
+import CodableFirebase
 import UIKit
 import Firebase
 import IndoorAtlas
@@ -77,7 +78,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	
 	// Custom URL handler
 	func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
-		print(url)
+		let storyboard = UIStoryboard(name: "Main", bundle: nil)
+		
+		switch url.host {
+		case .some("node"):
+			let arController = storyboard.instantiateViewController(withIdentifier: "arController") as! NavViewController
+			
+			// Navigate to NavViewController, perform segue upon completion
+			window?.rootViewController!.present(arController, animated: true) {
+				Database.database().reference(withPath: "nodes/\(url.lastPathComponent)").observeSingleEvent(of: .value, with: { snapshot in
+					guard snapshot.exists(), let value = snapshot.value else { return }
+					let node = try! FirebaseDecoder().decode(Node.self, from: value)
+					arController.performSegue(withIdentifier: "showDestinationDetail", sender: "\(url.lastPathComponent),\(node.name),\(node.type),\(node.building)")
+				})
+			}
+			return true
+		default:
+			return false
+		}
 	}
 
 }

@@ -13,7 +13,5 @@ target 'navigatAR' do
   pod 'Firebase/Database'
   pod 'IndoorAtlas'
   pod 'FuzzyMatchingSwift'
-  pod 'GoogleMaps'
-  pod 'GooglePlaces'
 
 end

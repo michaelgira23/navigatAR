@@ -9,7 +9,6 @@
 import UIKit
 import Firebase
 import IndoorAtlas
-import GoogleMaps
 
 func getConfigItem(name: String) -> String? {
 	let filePath = Bundle.main.path(forResource: "config", ofType: "plist")
@@ -49,8 +48,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		FirebaseApp.configure()
 		authenticateAndRequestLocation()
 		
-		let GMSAPIKey = getConfigItem(name: "GMSAPIKey")
-		GMSServices.provideAPIKey(GMSAPIKey!)
+//		let GMSAPIKey = getConfigItem(name: "GMSAPIKey")
+//		GMSServices.provideAPIKey(GMSAPIKey!)
 		return true
 	}
 

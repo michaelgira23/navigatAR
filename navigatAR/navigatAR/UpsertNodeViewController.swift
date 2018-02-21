@@ -214,7 +214,8 @@ class UpsertNodeViewController: FormViewController {
 				type: selectedNodeType!,
 				position: Location(fromIALocation: self.locationData!),
 				tags: tags,
-				connectedTo: []
+				connectedTo: [],
+				highPriority: false
 			))
 			
 			self.ref.child("nodes").childByAutoId().setValue(data)

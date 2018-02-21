@@ -9,7 +9,6 @@
 import UIKit
 import MapKit
 import IndoorAtlas
-import SVProgressHUD
 import Firebase
 import CodableFirebase
 
@@ -142,8 +141,6 @@ class NodesConnectionViewController: UIViewControllerWithBuilding, IALocationMan
 		ref = Database.database().reference()
 
 		NodeCircle.getNodeCircles(from: ref, map: map!, buildingId: forBuilding.0, callback: { self.nodeCircles = $0 })
-
-		SVProgressHUD.show(withStatus: NSLocalizedString("Waiting for location data", comment: ""))
 	}
 	
 //	// functions to handle drags and touches
@@ -354,8 +351,6 @@ class NodesConnectionViewController: UIViewControllerWithBuilding, IALocationMan
 		// Check that the location is not nil
 		if let newLocation = l.location?.coordinate {
 			
-			SVProgressHUD.dismiss()
-			
 			// The accuracy of coordinate position depends on the placement of floor plan image.
 			let point = floorPlan.coordinate(toPoint: (l.location?.coordinate)!)
 			
@@ -477,8 +472,9 @@ class NodesConnectionViewController: UIViewControllerWithBuilding, IALocationMan
 //			let newCam = self.map!.camera.copy() as! MKMapCamera
 //			newCam.heading = direction
 //			self.map!.setCamera(newCam, animated: true)
-			let viewRegion = MKCoordinateRegionMakeWithDistance(floorPlan!.center, Double(floorPlan!.widthMeters), Double(floorPlan!.heightMeters))
+			let viewRegion = MKCoordinateRegionMakeWithDistance(floorPlan!.center, Double(floorPlan!.widthMeters)/5, Double(floorPlan!.heightMeters)/5)
 			self.map!.setRegion(viewRegion, animated: true)
+			
 		})
 	}
 	
@@ -505,8 +501,6 @@ class NodesConnectionViewController: UIViewControllerWithBuilding, IALocationMan
 		self.map!.removeFromSuperview()
 		self.map = nil
 		label.removeFromSuperview()
-		
-		SVProgressHUD.dismiss()
 		
 		ref.removeAllObservers()
 	}

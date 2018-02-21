@@ -277,7 +277,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Manage Nodes graphic interface"/>
                                 <connections>
-                                    <segue destination="Ld1-Bd-biO" kind="show" id="N05-A8-hp4"/>
+                                    <segue destination="QgU-mb-NuJ" kind="show" id="d19-mW-nzi"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5GP-ce-kLa">
@@ -368,6 +368,21 @@
                 <exit id="07B-Fa-Et9" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="4552.8000000000002" y="1003.448275862069"/>
+        </scene>
+        <!--Manage Connections View Controller-->
+        <scene sceneID="dER-oY-GxG">
+            <objects>
+                <viewController id="QgU-mb-NuJ" customClass="ManageConnectionsViewController" customModule="navigatAR" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="cqX-9n-SP1">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="UKL-SY-KZI"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Sy1-9f-jUV" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3494" y="-347"/>
         </scene>
         <!--Manage Tags-->
         <scene sceneID="F3r-9x-ifC">

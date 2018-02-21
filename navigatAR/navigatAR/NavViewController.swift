@@ -14,6 +14,8 @@ import CodableFirebase
 import IndoorAtlas
 import FuzzyMatchingSwift
 import GameplayKit
+import HCKalmanFilter
+import CoreLocation
 
 class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSource, UISearchBarDelegate, UITableViewDelegate, IALocationManagerDelegate, CLLocationManagerDelegate {
 
@@ -37,6 +39,9 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 	}(CLLocationManager())
 
 	var currentLocation: Location? = nil
+	var kalmanLocation: CLLocation? = nil
+	var resetKalmanFilter: Bool = false
+	var hcKalmanFilter: HCKalmanAlgorithm? = nil
 	var cameraPosition = SCNVector3(0, 0, 0)
 
 	var dbSnapshot: DataSnapshot? = nil
@@ -273,6 +278,29 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 	func indoorLocationManager(_ manager: IALocationManager, didUpdateLocations locations: [Any]) {
 		print("pos update")
 		currentLocation = Location(fromIALocation: locations.last as! IALocation)
+		let currentCLLocation = CLLocation(
+			coordinate: CLLocationCoordinate2DMake(currentLocation!.latitude, currentLocation!.altitude),
+			altitude: currentLocation!.altitude,
+			horizontalAccuracy: currentLocation!.horizontalAccuracy,
+			verticalAccuracy: currentLocation!.verticalAccuracy,
+			timestamp: Date()
+		)
+		if hcKalmanFilter == nil {
+			self.hcKalmanFilter = HCKalmanAlgorithm(initialLocation: currentCLLocation)
+		}
+		else {
+			if let hcKalmanFilter = self.hcKalmanFilter {
+				if resetKalmanFilter == true {
+					hcKalmanFilter.resetKalman(newStartLocation: currentCLLocation)
+					resetKalmanFilter = false
+				}
+				else {
+					kalmanLocation = hcKalmanFilter.processState(currentLocation: currentCLLocation)
+//					print(kalmanLocation.coordinate)
+
+				}
+			}
+		}
 		redraw()
 	}
 

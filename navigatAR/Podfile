@@ -14,5 +14,6 @@ target 'navigatAR' do
   pod 'IndoorAtlas'
   pod 'SVProgressHUD', :git => 'https://github.com/SVProgressHUD/SVProgressHUD.git'
   pod 'FuzzyMatchingSwift'
+  pod 'HCKalmanFilter'
 
 end

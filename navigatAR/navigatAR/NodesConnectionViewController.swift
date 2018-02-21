@@ -19,7 +19,8 @@ let nodeTypeToEmoji: [NodeType : String] = [
 	.printer : "🖨",
 	.fountain : "⛲️",
 	.room : "🏡",
-	.sportsVenue : "🎾"
+	.sportsVenue : "🎾",
+	.bathroom : "🚻"
 ]
 
 // Blue dot annotation class
@@ -107,7 +108,7 @@ class MapOverlayRenderer: MKOverlayRenderer {
 	}
 }
 
-class NodesConnectionViewController: UIViewController, IALocationManagerDelegate, MKMapViewDelegate {
+class NodesConnectionViewController: UIViewControllerWithBuilding, IALocationManagerDelegate, MKMapViewDelegate {
 	
 	var ref: DatabaseReference!
 	var refHandle: UInt!
@@ -122,7 +123,7 @@ class NodesConnectionViewController: UIViewController, IALocationManagerDelegate
 	var circle = MKCircle()
 	var currentCircle: BlueDotAnnotation? = nil
 	var nodeCircles: [NodeCircle] = []
-	var updateCamera = true
+	var updateCamera = false
 	var polyToDelete: MKPolyline?
 	
 	var floorPlan = IAFloorPlan()
@@ -140,7 +141,7 @@ class NodesConnectionViewController: UIViewController, IALocationManagerDelegate
 		
 		ref = Database.database().reference()
 
-		NodeCircle.getNodeCircles(from: ref, map: map!, callback: { self.nodeCircles = $0 })
+		NodeCircle.getNodeCircles(from: ref, map: map!, buildingId: forBuilding.0, callback: { self.nodeCircles = $0 })
 
 		SVProgressHUD.show(withStatus: NSLocalizedString("Waiting for location data", comment: ""))
 	}
@@ -408,7 +409,7 @@ class NodesConnectionViewController: UIViewController, IALocationManagerDelegate
 		
 		guard region.type == ia_region_type.iaRegionTypeFloorPlan else { return }
 		
-		updateCamera = true
+		updateCamera = false
 		
 		if (floorPlanFetch != nil) {
 			floorPlanFetch.cancel()
@@ -440,7 +441,7 @@ class NodesConnectionViewController: UIViewController, IALocationManagerDelegate
 	// Called when view will appear and sets up the map view and its bounds and delegate. Also requests location
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(true)
-		updateCamera = true
+		updateCamera = false
 		
 		map?.frame = view.bounds
 		map?.delegate = self
@@ -461,6 +462,24 @@ class NodesConnectionViewController: UIViewController, IALocationManagerDelegate
 		view.addSubview(label)
 		
 		requestLocation()
+		
+		if (floorPlanFetch != nil) {
+			floorPlanFetch.cancel()
+			floorPlanFetch = nil
+		}
+
+		self.resourceManager.fetchFloorPlan(withId: forBuilding.1.indoorAtlasFloors.first?.key, andCompletion: { (floorPlan, error) in
+			guard error == nil, floorPlan != nil else { print("There was an error during floorplan fetch: ", error as Any); return }
+
+			self.floorPlan = floorPlan!
+			self.fetchImage(floorPlan!)
+//			let direction = CLLocationDirection(floorPlan!.bearing)
+//			let newCam = self.map!.camera.copy() as! MKMapCamera
+//			newCam.heading = direction
+//			self.map!.setCamera(newCam, animated: true)
+			let viewRegion = MKCoordinateRegionMakeWithDistance(floorPlan!.center, Double(floorPlan!.widthMeters), Double(floorPlan!.heightMeters))
+			self.map!.setRegion(viewRegion, animated: true)
+		})
 	}
 	
 	// Called when view will disappear and will remove the map from the view and sets its delegate to nil
@@ -523,6 +542,7 @@ class NodesConnectionViewController: UIViewController, IALocationManagerDelegate
 			} else {
 				let annotationView = MKMarkerAnnotationView.init(annotation: annotation, reuseIdentifier: annotation.reuseIdentifier)
 				annotationView.glyphText = annotation.glyphText
+				annotationView.displayPriority = .required
 				return annotationView
 			}
 		}
@@ -542,6 +562,7 @@ class NodeCircle {
 	init(db: DatabaseReference, mapView map: MKMapView, nodeInfo node: (FirebasePushKey, Node)) {
 		self.map = map
 		nodeInfo = node
+		print(node.1.type)
 		MKAnnotation = NodeAnnotation(glyphText: nodeTypeToEmoji[node.1.type]!)
 		MKAnnotation.coordinate = CLLocationCoordinate2D(latitude: node.1.position.latitude, longitude: node.1.position.longitude)
 		MKAnnotation.title = nodeInfo.1.name
@@ -564,10 +585,10 @@ class NodeCircle {
 //		}
 //	}
 	
-	static func getNodeCircles(from ref: DatabaseReference, map: MKMapView, callback: @escaping (_ nodes: [NodeCircle]) -> Void) -> Void {
+	static func getNodeCircles(from ref: DatabaseReference, map: MKMapView, buildingId: String, callback: @escaping (_ nodes: [NodeCircle]) -> Void) -> Void {
 		// Only query WWT nodes
 		var nodeCircles: [NodeCircle] = []
-		ref.child("nodes").queryOrdered(byChild: "building").queryEqual(toValue: "-L4w0mZgmdxmreRZe9No").observeSingleEvent(of: .value, with: { snapshot in
+		ref.child("nodes").queryOrdered(byChild: "building").queryEqual(toValue: buildingId).observeSingleEvent(of: .value, with: { snapshot in
 			let nodes = try! FirebaseDecoder().decode([FirebasePushKey: Node].self, from: snapshot.value!)
 			var connections: [String: String] = [:]
 			for node in nodes {

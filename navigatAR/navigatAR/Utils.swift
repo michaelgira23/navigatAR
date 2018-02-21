@@ -19,3 +19,19 @@ extension Dictionary where Value: Equatable {
 		return first { $0.1 == value }?.0
 	}
 }
+
+func tagPairToString(_ tagPair: (String, Tag)) -> String {
+	switch tagPair.1 {
+	case Tag.string(let str):
+		return str
+	case Tag.number(let int):
+		return String(describing: int)
+	case Tag.boolean(let bool):
+		return bool ? tagPair.0 : ""
+	case Tag.multipleStrings(let strs):
+		return strs.joined(separator: ",")
+	case Tag.multipleNumbers(let ints):
+		return ints.map { String(describing: $0) }.joined(separator: ",")
+	}
+}
+

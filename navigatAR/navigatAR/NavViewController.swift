@@ -242,7 +242,7 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 		self.searchBar.showsCancelButton = true
 		self.searchBlur.fadeIn()
 		self.tableView.fadeIn()
-		self.direction.fadeIn()
+		self.direction.fadeOut()
 		self.tableView.reloadData()
 	}
 
@@ -251,7 +251,7 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 		searchBar.resignFirstResponder()
 		self.tableView.fadeOut()
 		self.searchBlur.fadeOut()
-		self.direction.fadeOut()
+		self.direction.fadeIn()
 	}
 
 	override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

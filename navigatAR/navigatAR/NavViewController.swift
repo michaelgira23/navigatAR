@@ -100,6 +100,9 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 		self.tableView.reloadData()
 		
 		self.directionManager.delegate = self
+		
+		// position the direction label under the search y min
+		self.direction.frame.origin.y = self.searchBar.frame.minY + 50;
 	}
 
 	override func viewWillAppear(_ animated: Bool) {

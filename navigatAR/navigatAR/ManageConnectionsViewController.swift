@@ -39,6 +39,7 @@ class ManageConnectionsViewController: UIViewControllerWithBuilding {
 				self.floorplan = floorplan
 				let camera = GMSCameraPosition.camera(withTarget: floorplan!.center, zoom: 20)
 				self.mapView = GMSMapView.map(withFrame: .zero, camera: camera)
+				self.mapView!.mapType = .hybrid
 				self.view = self.mapView!
 
 				self.resourceManager.fetchFloorPlanImage(with: floorplan!.imageUrl!, andCompletion: { (data, err) in
@@ -46,13 +47,34 @@ class ManageConnectionsViewController: UIViewControllerWithBuilding {
 					print("got image")
 					
 					self.floorplanImage = UIImage(data: data!)
-					
-					let southWest = floorplan?.bottomLeft
-					let northEast = floorplan?.topRight
-					let overlayBounds = GMSCoordinateBounds(coordinate: southWest!, coordinate: northEast!)
-					self.overlay = GMSGroundOverlay(bounds: overlayBounds, icon: self.floorplanImage)
 
+					let path = GMSMutablePath()
+					let midPoint = floorplan!.center
+					let rotation = degreesToRadians(floorplan!.bearing)
+					path.add(floorplan!.topRight)
+					path.add(floorplan!.topLeft)
+					path.add(floorplan!.bottomLeft)
+					let latDelta = midPoint.latitude - floorplan!.topLeft.latitude
+					let longDelta = midPoint.longitude - floorplan!.topLeft.longitude
+					let bottomRight = CLLocationCoordinate2DMake(floorplan!.topLeft.latitude + 2 * latDelta, floorplan!.topLeft.longitude + 2 * longDelta)
+					path.add(bottomRight)
+//					path.add(self.rotatePt(floorplan!.topRight, around: midPoint, rotateRad: degreesToRadians(floorplan!.bearing)))
+					let rectangle = GMSPolygon(path: path)
+					rectangle.map = self.mapView
+					
+					let southWest = floorplan!.bottomLeft
+					let latDistance = self.distance(southWest, floorplan!.topLeft)
+					let longDistance = self.distance(floorplan!.topLeft, floorplan!.topRight)
+					let northEast = CLLocationCoordinate2DMake(southWest.latitude + latDistance, southWest.longitude + longDistance)
+					let overlayBounds = GMSCoordinateBounds(coordinate: southWest, coordinate: northEast)
+//					let overlayBounds = GMSCoordinateBounds(path: path)
+					
+					self.overlay = GMSGroundOverlay(bounds: overlayBounds, icon: self.floorplanImage)
+//					self.overlay = GMSGroundOverlay(position: floorplan!.center, icon: self.floorplanImage!, zoomLevel: 19.5)
+					self.overlay!.opacity = 0.5
 					self.overlay!.bearing = floorplan!.bearing
+					self.overlay!.position = floorplan!.center
+
 					self.overlay!.map = self.mapView
 				})
 				
@@ -65,6 +87,21 @@ class ManageConnectionsViewController: UIViewControllerWithBuilding {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+	
+	func rotatePt (_ point: CLLocationCoordinate2D, around: CLLocationCoordinate2D, rotateRad rotate: Double) -> CLLocationCoordinate2D {
+		let long1 = point.longitude - around.longitude
+		let lat1 = point.latitude - around.latitude
+		
+		let lat2 = lat1 * cos(rotate) - long1 * sin(rotate)
+		let long2 = long1 * sin(rotate) + lat1 * cos(rotate)
+		
+		return CLLocationCoordinate2DMake(lat2 + around.latitude, long2 + around.longitude)
+	}
+	func distance(_ a: CLLocationCoordinate2D, _ b: CLLocationCoordinate2D) -> Double {
+		let xDist = a.latitude - b.latitude
+		let yDist = a.longitude - b.longitude
+		return Double(sqrt((xDist * xDist) + (yDist * yDist)))
+	}
 
     /*
     // MARK: - Navigation

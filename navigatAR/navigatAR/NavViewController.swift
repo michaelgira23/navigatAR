@@ -195,10 +195,12 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 				self.data = [] // clear the data out so appending can work properly
 				self.filteredData = []
 
-				for node in firebaseNodes {
-					self.data.append(node.key + "," + node.value.name + "," + String(describing: node.value.type) + "," + String(describing: node.value.building))
-					self.filteredData.append(node.key + "," + node.value.name + "," + String(describing: node.value.type) + "," + String(describing: node.value.building))
-				}
+                for node in firebaseNodes {
+                    let str = "\(node.key),\(node.value.name),\(node.value.type),\(node.value.building),\(node.value.tags?.map(tagPairToString).joined(separator: ",") ?? "")"
+                    self.data.append(str)
+                    self.filteredData.append(str)
+                }
+                
 			}
 			catch let error {
 				print(error)

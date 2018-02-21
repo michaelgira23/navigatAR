@@ -200,6 +200,7 @@
 				56F25B852022E79800B246D3 /* Resources */,
 				2A164B029CFC05E26BDBD971 /* [CP] Embed Pods Frameworks */,
 				38B3ED8BF8A0217EFB3C5C2C /* [CP] Copy Pods Resources */,
+				5696E299203E2BD300798381 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -313,6 +314,19 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-navigatAR/Pods-navigatAR-resources.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		5696E299203E2BD300798381 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Fabric/run\"";
 		};
 		D50BF358366A5ED7D740719F /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;

@@ -1,6 +1,9 @@
 PODS:
   - CodableFirebase (0.0.7)
+  - Crashlytics (3.10.0):
+    - Fabric (~> 1.7.3)
   - Eureka (4.0.1)
+  - Fabric (1.7.3)
   - Firebase/Auth (4.9.0):
     - Firebase/Core
     - FirebaseAuth (= 4.4.3)
@@ -56,7 +59,9 @@ PODS:
 
 DEPENDENCIES:
   - CodableFirebase
+  - Crashlytics
   - Eureka
+  - Fabric
   - Firebase/Auth
   - Firebase/Core
   - Firebase/Database
@@ -67,7 +72,9 @@ DEPENDENCIES:
 
 SPEC CHECKSUMS:
   CodableFirebase: 090c5b4c9ad67c9f4fddc3b00d168ec38cad3b14
+  Crashlytics: a989ef242b66605577a425733797f810bd2725eb
   Eureka: c8bd5cc07143b6f66268c208d28a246c99b41955
+  Fabric: bb495bb9a7a7677c6d03a1f8b83d95bc49b47e41
   Firebase: 632216af3ed7f31e3be34776947fdc7546cfb572
   FirebaseAnalytics: 388b630c15713f5dbf364071f5f3d6077fb52f4e
   FirebaseAuth: aaaf68d5064a6c8fec435758f83a43b8db26ccaa
@@ -83,6 +90,6 @@ SPEC CHECKSUMS:
   leveldb-library: 08cba283675b7ed2d99629a4bc5fd052cd2bb6a5
   nanopb: 5601e6bca2dbf1ed831b519092ec110f66982ca3
 
-PODFILE CHECKSUM: 3cbe649ddb6b080cfd64cf48be5d47a1995ae4c8
+PODFILE CHECKSUM: 56fbaf7c8d6d8b9cbed650bf1e9bc050f15c1381
 
 COCOAPODS: 1.4.0

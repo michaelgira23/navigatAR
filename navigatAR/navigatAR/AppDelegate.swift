@@ -42,9 +42,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		let IAAPIKeyId = getConfigItem(name: "IAAPIKeyId")!
 		let IAAPIKeySecret = getConfigItem(name: "IAAPIKeySecret")!
 		locationManager!.setApiKey(IAAPIKeyId, andSecret: IAAPIKeySecret)
-		
-		// Request location updates
-		locationManager!.startUpdatingLocation()
 	}
 
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {

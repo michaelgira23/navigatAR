@@ -22,6 +22,12 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 	@IBOutlet weak var tableView: UITableView!
 	@IBOutlet weak var direction: UILabel!
 	@IBOutlet var sceneView: ARSCNView!
+	@IBOutlet weak var stopNavBtn: UIButton!
+
+	@IBAction func stopNav(_ sender: Any) {
+		navigating = false
+		redraw()
+	}
 
 	let locationManager = IALocationManager.sharedInstance()
 	let directionManager: CLLocationManager = {
@@ -39,12 +45,11 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 
 	var arNodes: [FirebasePushKey: SCNNode] = [:]
 
-	// Camera position when they first press "navigate"
+	// Whether or not currently navigating
+	var navigating = false
+	// Camera position when user first presses "navigate"
 	var navStartPosition: SCNVector3? = nil
-	// If nil, just show surrounding points. We aren't navigating anywhere
 	var navigateTo: FirebasePushKey? = nil
-//	var navigateTo: FirebasePushKey? = "-L5W6wlziHejka5f8utU" // Debug only!
-	// Closest node to the user upon initial navigation. This is where we consider the path "starts"
 	var navigateFrom: FirebasePushKey? = nil
 
 	var data: [String] = [" , "]
@@ -70,18 +75,13 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 
 		/* Navigation */
 
+		ensureNavigationVariables()
 		Database.database().reference().observe(DataEventType.value, with: { snapshot in
 			guard let (nodes, graph) = populateGraph(rootSnapshot: snapshot) else { print("unable to get graph"); return }
 			self.dbSnapshot = snapshot
 			self.nodes = nodes
 			self.nodesGraph = graph
 
-			// Check if we're navigating anywhere
-			if (self.navigateTo != nil) {
-				self.navigateFrom = self.closestNode()
-				self.navStartPosition = self.cameraPosition
-				self.navStartPosition!.y -= 1
-			}
 			self.redraw()
 
 		})
@@ -105,6 +105,9 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
 
+		// Start getting location
+		locationManager.startUpdatingLocation()
+
 		// Create a session configuration
 		let configuration = ARWorldTrackingConfiguration()
 		configuration.worldAlignment = .gravityAndHeading
@@ -122,6 +125,9 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 
 		// Pause the view's session
 		sceneView.session.pause()
+
+		// Stop getting position
+		locationManager.stopUpdatingLocation()
 	}
 
 	override func didReceiveMemoryWarning() {
@@ -298,20 +304,11 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 	/* Navigation */
 
 	// Draw lines in AR according to pathfinding path
-	func navigate(from inputtedFrom: FirebasePushKey? = nil, to: FirebasePushKey?) {
-		if (arNodes.count == 0 || nodesGraph == nil || to == nil) { return }
-		var from: FirebasePushKey? = nil
-		if (inputtedFrom == nil) {
-			from = closestNode()
-		} else {
-			from = inputtedFrom
-		}
-		if (from == nil) {
-			return
-		}
+	func navigate(from: FirebasePushKey, to: FirebasePushKey) {
+		if (!navigating || arNodes.count == 0 || nodesGraph == nil) { return }
 
-		let fromGraphNode: GKGraphNode = nodes[from!]!
-		let toGraphNode: GKGraphNode = nodes[to!]!
+		let fromGraphNode: GKGraphNode = nodes[from]!
+		let toGraphNode: GKGraphNode = nodes[to]!
 
 		// Actual pathfinding algorithm
 		let path = nodesGraph!.findPath(from: fromGraphNode, to: toGraphNode)
@@ -329,6 +326,10 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 				firstNode = pushKey
 			}
 
+			let currentArNode = arNodes[pushKey]!
+			currentArNode.removeFromParentNode()
+			arNodes[pushKey] = addArrow(position: currentArNode.position)
+
 			if (lastNode != nil) {
 				_ = addLine(from: arNodes[lastNode!]!.position, to: arNodes[pushKey]!.position)
 				arNodes[lastNode!]!.look(at: arNodes[pushKey]!.position)
@@ -337,7 +338,11 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 			lastNode = pushKey
 		}
 
-		arNodes[lastNode!] = addDestination(node: arNodes[lastNode!]!)
+		if (lastNode != nil) {
+			let lastArNode = arNodes[lastNode!]!
+			lastArNode.removeFromParentNode()
+			arNodes[lastNode!] = addDestination(position: lastArNode.position)
+		}
 
 		if (navStartPosition != nil && firstNode != nil) {
 			_ = addLine(from: navStartPosition!, to: arNodes[firstNode!]!.position)
@@ -367,6 +372,23 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 		return closestNode
 	}
 
+	func ensureNavigationVariables() {
+		if (navigating) {
+			if (navigateTo == nil) {
+				navigating = false
+			} else if (navigateFrom == nil) {
+				navigateFrom = closestNode()
+				navStartPosition = cameraPosition
+				navStartPosition!.y -= 1
+			}
+		}
+		if (navigating) {
+			stopNavBtn.fadeIn()
+		} else {
+			stopNavBtn.fadeOut()
+		}
+	}
+
 	/* Augmented Reality */
 
 	// Redraw all of the nodes and shiz that should be shown.
@@ -374,20 +396,18 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 	func redraw() {
 		// We can't draw anything if we don't know location
 		if (currentLocation == nil) { return }
+		ensureNavigationVariables()
 		clearNodes()
 		for node in nodes {
 			let (lat, long, alt) = currentLocation!.distanceDeltas(with: node.value.wrappedNode.position)
-			arNodes[node.key] = addArrow(x: long, y: alt, z: -lat)
+			arNodes[node.key] = addNode(position: SCNVector3(x: Float(long), y: Float(alt), z: Float(-lat)), node: node.value.wrappedNode)
 		}
-		if (navigateTo != nil) {
-			navigate(from: navigateFrom, to: navigateTo)
+		if (navigating && navigateFrom != nil && navigateTo != nil) {
+			navigate(from: navigateFrom!, to: navigateTo!)
 		}
 	}
 
-	func addArrow(x: Double = 0, y: Double = 0, z: Double = 0, eulerX: Double = 0, eulerY: Double = 0) -> SCNNode? {
-
-//		print("Add arrow", x, y, z, eulerX, eulerY);
-
+	func addArrow(position: SCNVector3, eulerX: Double = 0, eulerY: Double = 0) -> SCNNode? {
 		guard let arrowScene = SCNScene(named: "art.scnassets/arrow/Arrow.scn") else { return nil }
 		let arrowNode = SCNNode()
 		let arrowSceneChildNodes = arrowScene.rootNode.childNodes
@@ -396,7 +416,7 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 			arrowNode.addChildNode(childNode)
 		}
 
-		arrowNode.position = SCNVector3(x + Double(cameraPosition.x), y + Double(cameraPosition.y), z + Double(cameraPosition.z))
+		arrowNode.position = SCNVector3(position.x + cameraPosition.x, position.y + cameraPosition.y, position.z + cameraPosition.z)
 		arrowNode.eulerAngles = SCNVector3(degreesToRadians(eulerX), degreesToRadians(eulerY), 0)
 		arrowNode.scale = SCNVector3(0.5, 0.5, 0.5)
 		sceneView.scene.rootNode.addChildNode(arrowNode)
@@ -422,7 +442,7 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 		return lineNode
 	}
 
-	func addDestination(node: SCNNode) -> SCNNode? {
+	func addDestination(position: SCNVector3) -> SCNNode? {
 		guard let destinationScene = SCNScene(named: "art.scnassets/Destination.scn") else { return nil }
 
 		let destinationNode = SCNNode()
@@ -432,12 +452,39 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 			destinationNode.addChildNode(childNode)
 		}
 
-		destinationNode.position = node.position
-		destinationNode.look(at: cameraPosition)
-		sceneView.scene.rootNode.addChildNode(destinationNode)
+		let constraint = SCNLookAtConstraint(target: sceneView.pointOfView)
+		constraint.isGimbalLockEnabled = true
+		destinationNode.position = position
+		destinationNode.constraints = [constraint]
 
-		node.removeFromParentNode()
+		sceneView.scene.rootNode.addChildNode(destinationNode)
 		return destinationNode
+	}
+
+	func addNode(position: SCNVector3, node: Node) -> SCNNode? {
+		guard let nodeScene = SCNScene(named: "art.scnassets/Node.scn") else { return nil }
+
+		let nodeNode = SCNNode()
+		let nodeSceneChildNodes = nodeScene.rootNode.childNodes
+
+		for childNode in nodeSceneChildNodes {
+			nodeNode.addChildNode(childNode)
+		}
+
+		let constraint = SCNLookAtConstraint(target: sceneView.pointOfView)
+		constraint.isGimbalLockEnabled = true
+		nodeNode.position = position
+		nodeNode.constraints = [constraint]
+
+		// Add text
+		let textNode = nodeNode.childNode(withName: "text", recursively: false)
+		let textGeometry = textNode!.geometry as! SCNText
+		textGeometry.string = node.name
+		let textWidth = textGeometry.boundingBox.max.x - textGeometry.boundingBox.min.x
+		textNode!.position.x = textWidth / 2
+
+		sceneView.scene.rootNode.addChildNode(nodeNode)
+		return nodeNode
 	}
 
 	func clearNodes() {

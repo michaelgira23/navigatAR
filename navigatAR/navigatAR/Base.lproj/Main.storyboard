@@ -37,10 +37,28 @@
                                 <color key="tintColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                 <textInputTraits key="textInputTraits"/>
                             </searchBar>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UZU-Me-GKZ">
+                                <rect key="frame" x="0.0" y="689" width="375" height="30"/>
+                                <state key="normal" title="Stop Navigating">
+                                    <color key="titleColor" red="0.81390783629999996" green="0.022852962800000001" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="stopNav:" destination="9pv-A4-QxB" eventType="touchUpInside" id="eYP-am-e3k"/>
+                                </connections>
+                            </button>
                             <tableView clipsSubviews="YES" alpha="0.0" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" sectionIndexMinimumDisplayRowCount="1" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="FQP-Iy-yKU">
                                 <rect key="frame" x="0.0" y="100" width="375" height="712"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <visualEffectView key="tableFooterView" opaque="NO" contentMode="scaleToFill" id="Lit-75-D9n">
+                                    <rect key="frame" x="0.0" y="72" width="375" height="44"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="SIq-rZ-52k">
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    </view>
+                                    <blurEffect style="light"/>
+                                </visualEffectView>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="TableCell" textLabel="k1H-0b-UBa" detailTextLabel="zjn-6c-AXT" style="IBUITableViewCellStyleSubtitle" id="WFB-Lv-Oj5">
                                         <rect key="frame" x="0.0" y="28" width="375" height="44"/>
@@ -78,6 +96,11 @@
                             </label>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="UZU-Me-GKZ" firstAttribute="leading" secondItem="PQr-Ze-W5v" secondAttribute="leading" id="Hqc-hH-qRJ"/>
+                            <constraint firstItem="UZU-Me-GKZ" firstAttribute="trailing" secondItem="PQr-Ze-W5v" secondAttribute="trailing" id="MWk-n8-43i"/>
+                            <constraint firstItem="PQr-Ze-W5v" firstAttribute="bottom" secondItem="UZU-Me-GKZ" secondAttribute="bottom" constant="10" id="wbA-7y-DTA"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="PQr-Ze-W5v"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="Navigate" image="first" selectedImage="first" id="WIH-oR-4oo"/>
@@ -87,6 +110,7 @@
                         <outlet property="sceneView" destination="oa8-xz-7VX" id="DCP-Nm-WJc"/>
                         <outlet property="searchBar" destination="ONB-vc-NFq" id="3X7-bd-RyR"/>
                         <outlet property="searchBlur" destination="aNc-gS-R5b" id="bn3-zA-LcG"/>
+                        <outlet property="stopNavBtn" destination="UZU-Me-GKZ" id="nq5-4d-erP"/>
                         <outlet property="tableView" destination="FQP-Iy-yKU" id="axT-VE-ilQ"/>
                         <segue destination="BL3-1u-ans" kind="show" identifier="showDestinationDetail" id="tfo-8K-Z5Z"/>
                     </connections>
@@ -124,13 +148,6 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Building" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tel-MJ-wE8">
-                                <rect key="frame" x="16" y="287" width="343" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Uj5-gj-qdi">
                                 <rect key="frame" x="0.0" y="481" width="375" height="45"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -147,6 +164,13 @@
                                     <action selector="navigate:" destination="BL3-1u-ans" eventType="touchUpInside" id="ksI-S3-A39"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Building" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tel-MJ-wE8">
+                                <rect key="frame" x="16" y="259" width="343" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <viewLayoutGuide key="safeArea" id="FDW-8u-1by"/>
@@ -166,7 +190,7 @@
         <scene sceneID="kcW-cQ-AdI">
             <objects>
                 <navigationController id="6yd-Rs-rGj" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="User" image="user" id="RtV-R2-rQ6"/>
+                    <tabBarItem key="tabBarItem" title="User" image="second" id="RtV-R2-rQ6"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="JsM-Ir-bvn">
                         <rect key="frame" x="0.0" y="44" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -684,7 +708,7 @@
     </scenes>
     <resources>
         <image name="first" width="30" height="30"/>
-        <image name="user" width="50" height="50"/>
+        <image name="second" width="30" height="30"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="sQL-se-JQG"/>

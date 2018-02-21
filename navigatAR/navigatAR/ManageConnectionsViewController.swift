@@ -10,6 +10,7 @@ import UIKit
 import GoogleMaps
 import IndoorAtlas
 import Firebase
+import CodableFirebase
 
 class ManageConnectionsViewController: UIViewControllerWithBuilding {
 	
@@ -24,6 +25,9 @@ class ManageConnectionsViewController: UIViewControllerWithBuilding {
 	var floorplanImage: UIImage?
 	var overlay: GMSGroundOverlay?
 	
+	var nodes: [FirebasePushKey : Node] = [:]
+	var nodeMarkers: [GMSMarker] = []
+	
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -37,9 +41,9 @@ class ManageConnectionsViewController: UIViewControllerWithBuilding {
 				print("got floor plan")
 				
 				self.floorplan = floorplan
-				let camera = GMSCameraPosition.camera(withTarget: floorplan!.center, zoom: 20)
+				let camera = GMSCameraPosition.camera(withTarget: floorplan!.center, zoom: 30)
 				self.mapView = GMSMapView.map(withFrame: .zero, camera: camera)
-				self.mapView!.mapType = .hybrid
+				self.mapView!.mapType = .normal
 				self.view = self.mapView!
 
 				self.resourceManager.fetchFloorPlanImage(with: floorplan!.imageUrl!, andCompletion: { (data, err) in
@@ -48,19 +52,19 @@ class ManageConnectionsViewController: UIViewControllerWithBuilding {
 					
 					self.floorplanImage = UIImage(data: data!)
 
-					let path = GMSMutablePath()
-					let midPoint = floorplan!.center
-					let rotation = degreesToRadians(floorplan!.bearing)
-					path.add(floorplan!.topRight)
-					path.add(floorplan!.topLeft)
-					path.add(floorplan!.bottomLeft)
-					let latDelta = midPoint.latitude - floorplan!.topLeft.latitude
-					let longDelta = midPoint.longitude - floorplan!.topLeft.longitude
-					let bottomRight = CLLocationCoordinate2DMake(floorplan!.topLeft.latitude + 2 * latDelta, floorplan!.topLeft.longitude + 2 * longDelta)
-					path.add(bottomRight)
+//					let path = GMSMutablePath()
+//					let midPoint = floorplan!.center
+//					let rotation = degreesToRadians(floorplan!.bearing)
+//					path.add(floorplan!.topRight)
+//					path.add(floorplan!.topLeft)
+//					path.add(floorplan!.bottomLeft)
+//					let latDelta = midPoint.latitude - floorplan!.topLeft.latitude
+//					let longDelta = midPoint.longitude - floorplan!.topLeft.longitude
+//					let bottomRight = CLLocationCoordinate2DMake(floorplan!.topLeft.latitude + 2 * latDelta, floorplan!.topLeft.longitude + 2 * longDelta)
+//					path.add(bottomRight)
 //					path.add(self.rotatePt(floorplan!.topRight, around: midPoint, rotateRad: degreesToRadians(floorplan!.bearing)))
-					let rectangle = GMSPolygon(path: path)
-					rectangle.map = self.mapView
+//					let rectangle = GMSPolygon(path: path)
+//					rectangle.map = self.mapView
 					
 					let southWest = floorplan!.bottomLeft
 					let latDistance = self.distance(southWest, floorplan!.topLeft)
@@ -68,10 +72,9 @@ class ManageConnectionsViewController: UIViewControllerWithBuilding {
 					let northEast = CLLocationCoordinate2DMake(southWest.latitude + latDistance, southWest.longitude + longDistance)
 					let overlayBounds = GMSCoordinateBounds(coordinate: southWest, coordinate: northEast)
 //					let overlayBounds = GMSCoordinateBounds(path: path)
-					
+
 					self.overlay = GMSGroundOverlay(bounds: overlayBounds, icon: self.floorplanImage)
 //					self.overlay = GMSGroundOverlay(position: floorplan!.center, icon: self.floorplanImage!, zoomLevel: 19.5)
-					self.overlay!.opacity = 0.5
 					self.overlay!.bearing = floorplan!.bearing
 					self.overlay!.position = floorplan!.center
 
@@ -79,6 +82,19 @@ class ManageConnectionsViewController: UIViewControllerWithBuilding {
 				})
 				
 				self.ref = Database.database().reference()
+				
+				self.ref.child("nodes").queryOrdered(byChild: "building").queryEqual(toValue: self.forBuilding.0).observe(.value, with: { snapshot in
+					guard snapshot.exists() else { return }
+				
+					self.nodes = try! FirebaseDecoder().decode([FirebasePushKey : Node].self, from: snapshot.value!)
+
+					for node in self.nodes {
+						let newMarker = GMSMarker(position: node.1.position.toCLLocationCoordinate2D())
+						newMarker.title = node.1.name
+						newMarker.map = self.mapView
+						self.nodeMarkers.append(newMarker)
+					}
+				})
 			})
 		}
     }

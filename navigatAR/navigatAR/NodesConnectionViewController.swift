@@ -41,9 +41,11 @@ class BlueDotAnnotation: MKPointAnnotation {
 class NodeAnnotation: MKPointAnnotation {
 	var glyphText: String
 	var reuseIdentifier: String = "NodeAnnotation"
+	var highPriority: Bool = false
 	
-	init(glyphText: String) {
+	init(glyphText: String, highPriority: Bool) {
 		self.glyphText = glyphText
+		self.highPriority = highPriority
 		super.init()
 	}
 }
@@ -309,7 +311,7 @@ class NodesConnectionViewController: UIViewControllerWithBuilding, IALocationMan
 		let a = degreesToRadians(self.floorPlan.bearing)
 		rotated = cgRect.applying(CGAffineTransform(rotationAngle: CGFloat(a)));
 		let overlay = MapOverlay(floorPlan: floorPlan, andRotatedRect: rotated)
-		map?.add(overlay)
+		map?.add(overlay, level: .aboveRoads)
 	}
 	
 	// Function for rendering overlay objects
@@ -536,7 +538,13 @@ class NodesConnectionViewController: UIViewControllerWithBuilding, IALocationMan
 			} else {
 				let annotationView = MKMarkerAnnotationView.init(annotation: annotation, reuseIdentifier: annotation.reuseIdentifier)
 				annotationView.glyphText = annotation.glyphText
-				annotationView.displayPriority = .required
+				annotationView.titleVisibility = .visible
+				print(annotation.highPriority)
+				if annotation.highPriority {
+					annotationView.displayPriority = .defaultHigh
+				} else {
+					annotationView.displayPriority = .defaultLow
+				}
 				return annotationView
 			}
 		}
@@ -556,8 +564,11 @@ class NodeCircle {
 	init(db: DatabaseReference, mapView map: MKMapView, nodeInfo node: (FirebasePushKey, Node)) {
 		self.map = map
 		nodeInfo = node
-		print(node.1.type)
-		MKAnnotation = NodeAnnotation(glyphText: nodeTypeToEmoji[node.1.type]!)
+		if let _ = nodeInfo.1.highPriority {
+			MKAnnotation = NodeAnnotation(glyphText: nodeTypeToEmoji[node.1.type]!, highPriority: nodeInfo.1.highPriority!)
+		} else {
+			MKAnnotation = NodeAnnotation(glyphText: nodeTypeToEmoji[node.1.type]!, highPriority: false)
+		}
 		MKAnnotation.coordinate = CLLocationCoordinate2D(latitude: node.1.position.latitude, longitude: node.1.position.longitude)
 		MKAnnotation.title = nodeInfo.1.name
 		map.addAnnotation(MKAnnotation)

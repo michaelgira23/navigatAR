@@ -277,7 +277,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Manage Nodes graphic interface"/>
                                 <connections>
-                                    <segue destination="QgU-mb-NuJ" kind="show" id="d19-mW-nzi"/>
+                                    <segue destination="Ld1-Bd-biO" kind="show" id="Z4y-NQ-XHX"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5GP-ce-kLa">

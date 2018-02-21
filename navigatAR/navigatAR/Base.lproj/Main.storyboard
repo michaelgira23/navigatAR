@@ -69,6 +69,13 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="NW" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rfJ-78-8mP">
+                                <rect key="frame" x="317" y="112" width="55" height="42"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="33"/>
+                                <color key="textColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <viewLayoutGuide key="safeArea" id="PQr-Ze-W5v"/>
@@ -76,6 +83,7 @@
                     <tabBarItem key="tabBarItem" title="Navigate" image="first" selectedImage="first" id="WIH-oR-4oo"/>
                     <navigationItem key="navigationItem" id="fsA-LB-6k7"/>
                     <connections>
+                        <outlet property="direction" destination="rfJ-78-8mP" id="FhO-fY-fVY"/>
                         <outlet property="sceneView" destination="oa8-xz-7VX" id="DCP-Nm-WJc"/>
                         <outlet property="searchBar" destination="ONB-vc-NFq" id="3X7-bd-RyR"/>
                         <outlet property="searchBlur" destination="aNc-gS-R5b" id="bn3-zA-LcG"/>

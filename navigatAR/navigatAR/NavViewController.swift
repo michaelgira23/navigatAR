@@ -15,14 +15,20 @@ import IndoorAtlas
 import FuzzyMatchingSwift
 import GameplayKit
 
-class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSource, UISearchBarDelegate, UITableViewDelegate, IALocationManagerDelegate {
+class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSource, UISearchBarDelegate, UITableViewDelegate, IALocationManagerDelegate, CLLocationManagerDelegate {
 
 	@IBOutlet weak var searchBlur: UIVisualEffectView!
 	@IBOutlet weak var searchBar: UISearchBar!
 	@IBOutlet weak var tableView: UITableView!
+	@IBOutlet weak var direction: UILabel!
 	@IBOutlet var sceneView: ARSCNView!
 
 	let locationManager = IALocationManager.sharedInstance()
+	let directionManager: CLLocationManager = {
+		$0.requestWhenInUseAuthorization()
+		$0.startUpdatingHeading()
+		return $0
+	}(CLLocationManager())
 
 	var currentLocation: Location? = nil
 	var cameraPosition = SCNVector3(0, 0, 0)
@@ -92,6 +98,8 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 		self.data.remove(at: 0)
 		self.filteredData.remove(at: 0)
 		self.tableView.reloadData()
+		
+		self.directionManager.delegate = self
 	}
 
 	override func viewWillAppear(_ animated: Bool) {
@@ -120,6 +128,59 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 		super.didReceiveMemoryWarning()
 		// Release any cached data, images, etc that aren't in use.
 	}
+	
+	/* Compass heading */
+	func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
+		self.direction.text = self.determineCompassDirection(currentHeading: newHeading)
+	}
+	
+	func determineCompassDirection(currentHeading heading: CLHeading) -> String {
+		let angle = heading.magneticHeading
+		
+		// N - E
+		if (angle > 0 && angle < 30) {
+			return "N"
+		}
+		else if (angle > 30 && angle < 60) {
+			return "NE"
+		}
+		else if (angle > 60 && angle < 90) {
+			return "E"
+		}
+		// E - S
+		if (angle > 90 && angle < 120) {
+			return "E"
+		}
+		else if (angle > 120 && angle < 150) {
+			return "SE"
+		}
+		else if (angle > 150 && angle < 180) {
+			return "S"
+		}
+		// S - W
+		if (angle > 180 && angle < 210) {
+			return "S"
+		}
+		else if (angle > 210 && angle < 240) {
+			return "SW"
+		}
+		else if (angle > 240 && angle < 270) {
+			return "W"
+		}
+		// W - N
+		if (angle > 270 && angle < 300) {
+			return "W"
+		}
+		else if (angle > 300 && angle < 330) {
+			return "NW"
+		}
+		else if (angle > 330 && angle < 360) {
+			return "N"
+		}
+		else {
+			return "D"
+		}
+	}
 
 	/* Search Handlers */
 
@@ -134,10 +195,12 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 				self.data = [] // clear the data out so appending can work properly
 				self.filteredData = []
 
-				for node in firebaseNodes {
-					self.data.append(node.key + "," + node.value.name + "," + String(describing: node.value.type) + "," + String(describing: node.value.building))
-					self.filteredData.append(node.key + "," + node.value.name + "," + String(describing: node.value.type) + "," + String(describing: node.value.building))
-				}
+                for node in firebaseNodes {
+                    let str = "\(node.key),\(node.value.name),\(node.value.type),\(node.value.building),\(node.value.tags?.map(tagPairToString).joined(separator: ",") ?? "")"
+                    self.data.append(str)
+                    self.filteredData.append(str)
+                }
+                
 			}
 			catch let error {
 				print(error)
@@ -179,6 +242,7 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 		self.searchBar.showsCancelButton = true
 		self.searchBlur.fadeIn()
 		self.tableView.fadeIn()
+		self.direction.fadeOut()
 		self.tableView.reloadData()
 	}
 
@@ -187,6 +251,7 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 		searchBar.resignFirstResponder()
 		self.tableView.fadeOut()
 		self.searchBlur.fadeOut()
+		self.direction.fadeIn()
 	}
 
 	override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

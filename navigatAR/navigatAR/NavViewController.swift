@@ -214,9 +214,8 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 				guard eventSnapshot.exists(), let eventValue = eventSnapshot.value else { return }
 				let firebaseEvents = Array(try FirebaseDecoder().decode([FirebasePushKey: Event].self, from: eventValue))// .filter { (_, event) in only get events for current nodes }
 				
-				for (pushKey, event) in firebaseEvents {
-					// I would add date stuff as well but buddy, we have 3 days until presentation so frankly I don't care anymore
-					let str = "\(pushKey),\(event.name),\(event.description),\(event.locations.joined(separator: ",")),_event"
+				for (_, event) in firebaseEvents {
+					let str = "_event,\(event.name),\(event.description),\(event.start.timeIntervalSinceReferenceDate),\(event.end.timeIntervalSinceReferenceDate),\(event.locations.joined(separator: ","))"
 					self.data.append(str)
 					self.filteredData.append(str)
 				}
@@ -243,14 +242,15 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 	}
 	
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+		let objData = filteredData[indexPath.row]
 		var segue: String
-		if data.contains("_event") {
+		if objData.contains("_event") {
 			segue = "showEventInfo"
 		} else {
 			segue = "showDestinationDetail"
 		}
 		
-		performSegue(withIdentifier: segue, sender: self.filteredData[indexPath.row])
+		performSegue(withIdentifier: segue, sender: objData)
 	}
 	
 	func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {

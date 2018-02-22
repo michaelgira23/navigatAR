@@ -85,6 +85,7 @@
                         <outlet property="name" destination="KbM-Lh-QqX" id="6EJ-UB-O0g"/>
                         <outlet property="nodesTable" destination="Erq-2P-hym" id="pL8-3z-x3g"/>
                         <outlet property="startTime" destination="Duf-Mb-83J" id="1tS-ev-iYf"/>
+                        <segue destination="BL3-1u-ans" kind="show" identifier="showNodeDetail" id="CiO-NH-fcZ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="B5a-H0-Vlp" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -794,5 +795,6 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="sQL-se-JQG"/>
+        <segue reference="CiO-NH-fcZ"/>
     </inferredMetricsTieBreakers>
 </document>

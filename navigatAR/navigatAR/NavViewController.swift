@@ -240,13 +240,13 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 	}
 	
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-		let data = self.filteredData[indexPath.row]
-		
 		if data.contains("_event") {
-			// TODO
+			let segue = "showEventInfo"
 		} else {
-			performSegue(withIdentifier: "showDestinationDetail", sender: data)
+			let segue = "showDestinationDetail"
 		}
+		
+		performSegue(withIdentifier: "showDestinationDetail", sender: self.filteredData[indexPath.row])
 	}
 	
 	func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {

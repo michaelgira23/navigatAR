@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		1C2BE07620364E960066C89E /* Pathfinding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C2BE07520364E960066C89E /* Pathfinding.swift */; };
+		1C47D879203F09B7006CE670 /* EventInformationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C47D878203F09B7006CE670 /* EventInformationViewController.swift */; };
 		1C5365AD20353392003198EB /* FirebaseArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C5365AC20353392003198EB /* FirebaseArray.swift */; };
 		1C73730B202553D200725F6D /* Building.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C73730A202553D200725F6D /* Building.swift */; };
 		1C73730D20255A1700725F6D /* Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C73730C20255A1700725F6D /* Node.swift */; };
@@ -50,6 +51,7 @@
 
 /* Begin PBXFileReference section */
 		1C2BE07520364E960066C89E /* Pathfinding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pathfinding.swift; sourceTree = "<group>"; };
+		1C47D878203F09B7006CE670 /* EventInformationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventInformationViewController.swift; sourceTree = "<group>"; };
 		1C5365AC20353392003198EB /* FirebaseArray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseArray.swift; sourceTree = "<group>"; };
 		1C73730A202553D200725F6D /* Building.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Building.swift; sourceTree = "<group>"; };
 		1C73730C20255A1700725F6D /* Node.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Node.swift; sourceTree = "<group>"; };
@@ -150,6 +152,7 @@
 				1C73731620267CFC00725F6D /* Location.swift */,
 				1C2BE07520364E960066C89E /* Pathfinding.swift */,
 				56F25B902022E79800B246D3 /* Main.storyboard */,
+				1C47D878203F09B7006CE670 /* EventInformationViewController.swift */,
 				26BD9C4B2033DEC5007B9F5F /* NodesConnectionViewController.swift */,
 				26BD9C492033DEC5007B9F5F /* Searching.swift */,
 				26BD9C4A2033DEC5007B9F5F /* UIViewExtensions.swift */,
@@ -345,6 +348,7 @@
 				56FEE4CC202683EE0075CA75 /* NodePositionViewController.swift in Sources */,
 				26BD9C58203D1F79007B9F5F /* ManageConnectionsViewController.swift in Sources */,
 				26BD9C4C2033DEC6007B9F5F /* Searching.swift in Sources */,
+				1C47D879203F09B7006CE670 /* EventInformationViewController.swift in Sources */,
 				26AE44CF2025753800F8C75D /* AdminViewController.swift in Sources */,
 				1C5365AD20353392003198EB /* FirebaseArray.swift in Sources */,
 				1CB71F49202FE864000666BC /* ManageTagsViewController.swift in Sources */,

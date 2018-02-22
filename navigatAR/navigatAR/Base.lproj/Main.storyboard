@@ -10,6 +10,30 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
+        <!--Event Information-->
+        <scene sceneID="bWC-SJ-een">
+            <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="B5a-H0-Vlp" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <viewController title="Event Information" id="hqV-Bb-lBA" customClass="EventInformationViewController" customModule="navigatAR" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="i85-MX-5FT">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Event Information" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tgL-aV-qgH">
+                                <rect key="frame" x="0.0" y="44" width="375" height="55"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="30"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="QMl-lm-Tbq"/>
+                    </view>
+                </viewController>
+            </objects>
+            <point key="canvasLocation" x="1088.8" y="-978.32512315270935"/>
+        </scene>
         <!--Navigate-->
         <scene sceneID="hNz-n2-bh7">
             <objects>
@@ -113,6 +137,7 @@
                         <outlet property="stopNavBtn" destination="UZU-Me-GKZ" id="nq5-4d-erP"/>
                         <outlet property="tableView" destination="FQP-Iy-yKU" id="axT-VE-ilQ"/>
                         <segue destination="BL3-1u-ans" kind="show" identifier="showDestinationDetail" id="tfo-8K-Z5Z"/>
+                        <segue destination="hqV-Bb-lBA" kind="show" identifier="showEventInfo" id="iqf-Kz-vI9"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="W5J-7L-Pyd" sceneMemberID="firstResponder"/>

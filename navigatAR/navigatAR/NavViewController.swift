@@ -240,13 +240,14 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 	}
 	
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+		var segue: String
 		if data.contains("_event") {
-			let segue = "showEventInfo"
+			segue = "showEventInfo"
 		} else {
-			let segue = "showDestinationDetail"
+			segue = "showDestinationDetail"
 		}
 		
-		performSegue(withIdentifier: "showDestinationDetail", sender: self.filteredData[indexPath.row])
+		performSegue(withIdentifier: segue, sender: self.filteredData[indexPath.row])
 	}
 	
 	func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
@@ -277,9 +278,13 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 	}
 	
 	override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-		if (segue.identifier == "showDestinationDetail") {
+		if segue.identifier == "showDestinationDetail" {
 			if let destination = segue.destination as? DestinationSelectionController {
 				destination.dest = sender as! String
+			}
+		} else if segue.identifier == "showEventInfo" {
+			if let destination = segue.destination as? EventInformationViewController {
+				destination.eventData = sender as! String
 			}
 		}
 	}

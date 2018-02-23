@@ -18,123 +18,126 @@ import HCKalmanFilter
 import CoreLocation
 
 class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSource, UISearchBarDelegate, UITableViewDelegate, IALocationManagerDelegate, CLLocationManagerDelegate {
-
+	
 	@IBOutlet weak var searchBlur: UIVisualEffectView!
 	@IBOutlet weak var searchBar: UISearchBar!
 	@IBOutlet weak var tableView: UITableView!
 	@IBOutlet weak var direction: UILabel!
 	@IBOutlet var sceneView: ARSCNView!
 	@IBOutlet weak var stopNavBtn: UIButton!
-
+	
 	@IBAction func stopNav(_ sender: Any) {
 		navigating = false
 		redraw()
 	}
-
+	
 	let locationManager = IALocationManager.sharedInstance()
 	let directionManager: CLLocationManager = {
 		$0.requestWhenInUseAuthorization()
 		$0.startUpdatingHeading()
 		return $0
 	}(CLLocationManager())
-
+	
 	var currentLocation: Location? = nil
 	var kalmanLocation: CLLocation? = nil
 	var resetKalmanFilter: Bool = false
 	var hcKalmanFilter: HCKalmanAlgorithm? = nil
 	var cameraPosition = SCNVector3(0, 0, 0)
-
+	
 	var dbSnapshot: DataSnapshot? = nil
 	var nodes: [FirebasePushKey: GKNodeWrapper] = [:]
 	var nodesGraph: GKGraph? = nil
-
+	
 	var arNodes: [FirebasePushKey: SCNNode] = [:]
-
+	
 	// Whether or not currently navigating
 	var navigating = false
 	// Camera position when user first presses "navigate"
 	var navStartPosition: SCNVector3? = nil
 	var navigateTo: FirebasePushKey? = nil
 	var navigateFrom: FirebasePushKey? = nil
-
+	
 	var data: [String] = [" , "]
 	var filteredData: [String] = [" , "]
-
+	
 	override func viewDidLoad() {
 		super.viewDidLoad()
-
+		
 		/* Indoor Atlas Setup */
-
+		
 		locationManager.delegate = self
-
+		
 		/* AR Setup */
-
+		
 		// Set the view's delegate
 		sceneView.delegate = self
-
+		
 		// Show statistics such as fps and timing information
 		sceneView.showsStatistics = false
-
+		
 		sceneView.autoenablesDefaultLighting = true
 		sceneView.automaticallyUpdatesLighting = true
-
+		
 		/* Navigation */
-
+		
 		ensureNavigationVariables()
 		Database.database().reference().observe(DataEventType.value, with: { snapshot in
 			guard let (nodes, graph) = populateGraph(rootSnapshot: snapshot) else { print("unable to get graph"); return }
 			self.dbSnapshot = snapshot
 			self.nodes = nodes
 			self.nodesGraph = graph
-
+			
 			self.redraw()
-
+			
 		})
-
+		
 		/* Search Setup */
-
+		
 		tableView.dataSource = self
 		searchBar.delegate = self
 		tableView.delegate = self
-
+		
 		self.updateDBData()
-
+		
 		// Delete the dummy element in the array
 		self.data.remove(at: 0)
 		self.filteredData.remove(at: 0)
 		self.tableView.reloadData()
 		
 		self.directionManager.delegate = self
+		
+		// position the direction label under the search y min
+		self.direction.frame.origin.y = self.searchBar.frame.minY + 50;
 	}
-
+	
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
-
+		
 		// Start getting location
 		locationManager.startUpdatingLocation()
-
+		
 		// Create a session configuration
 		let configuration = ARWorldTrackingConfiguration()
 		configuration.worldAlignment = .gravityAndHeading
-//		configuration.planeDetection = [.horizontal]
-
+		//		configuration.planeDetection = [.horizontal]
+		
 		// Detect
 		print("ARKit supported?", ARWorldTrackingConfiguration.isSupported)
-
+		
 		// Run the view's session
 		sceneView.session.run(configuration)
 	}
-
+	
 	override func viewWillDisappear(_ animated: Bool) {
 		super.viewWillDisappear(animated)
-
+		
 		// Pause the view's session
 		sceneView.session.pause()
-
+		
 		// Stop getting position
 		locationManager.stopUpdatingLocation()
 	}
-
+	
 	override func didReceiveMemoryWarning() {
 		super.didReceiveMemoryWarning()
 		// Release any cached data, images, etc that aren't in use.
@@ -192,26 +195,35 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 			return "D"
 		}
 	}
-
+	
 	/* Search Handlers */
-
+	
 	func updateDBData() {
 		// Get nodes from db and load into the array
 		let ref = Database.database().reference()
-		ref.child("nodes").observe(.value, with: { snapshot in
-			guard let value = snapshot.value else { return }
-
+		ref.observe(.value, with: { snapshot in
 			do {
-				let firebaseNodes = Array(try FirebaseDecoder().decode([FirebasePushKey: Node].self, from: value))
+				let nodeSnapshot = snapshot.childSnapshot(forPath: "nodes")
+				guard nodeSnapshot.exists(), let nodeValue = nodeSnapshot.value else { return }
+				let firebaseNodes = Array(try FirebaseDecoder().decode([FirebasePushKey: Node].self, from: nodeValue))
 				self.data = [] // clear the data out so appending can work properly
 				self.filteredData = []
-
-                for node in firebaseNodes {
-                    let str = "\(node.key),\(node.value.name),\(node.value.type),\(node.value.building),\(node.value.tags?.map(tagPairToString).joined(separator: ",") ?? "")"
-                    self.data.append(str)
-                    self.filteredData.append(str)
-                }
-                
+				
+				for (pushKey, node) in firebaseNodes {
+					let str = "\(pushKey),\(node.name),\(node.type),\(node.building),\(node.tags?.map(tagPairToString).joined(separator: ",") ?? "")"
+					self.data.append(str)
+					self.filteredData.append(str)
+				}
+				
+				let eventSnapshot = snapshot.childSnapshot(forPath: "events")
+				guard eventSnapshot.exists(), let eventValue = eventSnapshot.value else { return }
+				let firebaseEvents = Array(try FirebaseDecoder().decode([FirebasePushKey: Event].self, from: eventValue))// .filter { (_, event) in only get events for current nodes }
+				
+				for (_, event) in firebaseEvents {
+					let str = "_event,\(event.name),\(event.description),\(event.start.timeIntervalSinceReferenceDate),\(event.end.timeIntervalSinceReferenceDate),\(event.locations.joined(separator: ","))"
+					self.data.append(str)
+					self.filteredData.append(str)
+				}
 			}
 			catch let error {
 				print(error)
@@ -219,25 +231,33 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 		})
 		self.tableView.reloadData()
 	}
-
+	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		let cell = tableView.dequeueReusableCell(withIdentifier: "TableCell", for: indexPath) as UITableViewCell
-
+		
 		var parsed = self.filteredData[indexPath.row].split(separator: ",")
-
+		
 		cell.textLabel?.text = String(describing: parsed[1])
 		cell.detailTextLabel?.text = String(describing: parsed[2])
 		return cell
 	}
-
+	
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 		return filteredData.count
 	}
-
+	
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-		performSegue(withIdentifier: "showDestinationDetail", sender: self.filteredData[indexPath.row]);
+		let objData = filteredData[indexPath.row]
+		var segue: String
+		if objData.contains("_event") {
+			segue = "showEventInfo"
+		} else {
+			segue = "showDestinationDetail"
+		}
+		
+		performSegue(withIdentifier: segue, sender: objData)
 	}
-
+	
 	func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
 		if (searchText.isEmpty) {
 			self.filteredData = self.data
@@ -247,7 +267,7 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 		}
 		tableView.reloadData()
 	}
-
+	
 	func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
 		self.updateDBData()
 		self.searchBar.showsCancelButton = true
@@ -256,7 +276,7 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 		self.direction.fadeOut()
 		self.tableView.reloadData()
 	}
-
+	
 	func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
 		searchBar.showsCancelButton = false
 		searchBar.resignFirstResponder()
@@ -264,17 +284,21 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 		self.searchBlur.fadeOut()
 		self.direction.fadeIn()
 	}
-
+	
 	override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-		if (segue.identifier == "showDestinationDetail") {
+		if segue.identifier == "showDestinationDetail" {
 			if let destination = segue.destination as? DestinationSelectionController {
 				destination.dest = sender as! String
 			}
+		} else if segue.identifier == "showEventInfo" {
+			if let destination = segue.destination as? EventInformationViewController {
+				destination.eventData = sender as! String
+			}
 		}
 	}
-
+	
 	// MARK: - IndoorAtlas delegates
-
+	
 	func indoorLocationManager(_ manager: IALocationManager, didUpdateLocations locations: [Any]) {
 		print("pos update")
 		currentLocation = Location(fromIALocation: locations.last as! IALocation)
@@ -303,80 +327,80 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 		}
 		redraw()
 	}
-
+	
 	func indoorLocationManager(_ manager: IALocationManager, statusChanged status: IAStatus) {
 		let statusNum = String(status.type.rawValue)
 		print("Status: " + statusNum)
 	}
-
+	
 	// MARK: - ARSCNViewDelegate
-
+	
 	func renderer(_ renderer: SCNSceneRenderer, willRenderScene scene: SCNScene, atTime time: TimeInterval) {
 		guard let pointOfView = sceneView.pointOfView else { return }
 		let transform = pointOfView.transform
 		cameraPosition = SCNVector3(transform.m41, transform.m42, transform.m43)
 	}
-
+	
 	func session(_ session: ARSession, didFailWithError error: Error) {
 		// Present an error message to the user
 	}
-
+	
 	func sessionWasInterrupted(_ session: ARSession) {
 		// Inform the user that the session has been interrupted, for example, by presenting an overlay
 	}
-
+	
 	func sessionInterruptionEnded(_ session: ARSession) {
 		// Reset tracking and/or remove existing anchors if consistent tracking is required
 	}
-
+	
 	/* Navigation */
-
+	
 	// Draw lines in AR according to pathfinding path
 	func navigate(from: FirebasePushKey, to: FirebasePushKey) {
 		if (!navigating || arNodes.count == 0 || nodesGraph == nil) { return }
-
+		
 		let fromGraphNode: GKGraphNode = nodes[from]!
 		let toGraphNode: GKGraphNode = nodes[to]!
-
+		
 		// Actual pathfinding algorithm
 		let path = nodesGraph!.findPath(from: fromGraphNode, to: toGraphNode)
-
+		
 		if (path.count == 0) {
 			// Do something if there's no pathway to available point
 		}
-
+		
 		var firstNode: FirebasePushKey? = nil
 		var lastNode: FirebasePushKey? = nil
 		for pathNode in path {
 			let pushKey = nodes.key(forValue: pathNode as! GKNodeWrapper)!
-
+			
 			if (firstNode == nil) {
 				firstNode = pushKey
 			}
-
+			
 			let currentArNode = arNodes[pushKey]!
 			currentArNode.removeFromParentNode()
 			arNodes[pushKey] = addArrow(position: currentArNode.position)
-
+			
 			if (lastNode != nil) {
 				_ = addLine(from: arNodes[lastNode!]!.position, to: arNodes[pushKey]!.position)
 				arNodes[lastNode!]!.look(at: arNodes[pushKey]!.position)
 			}
-
+			
 			lastNode = pushKey
 		}
-
+		
 		if (lastNode != nil) {
 			let lastArNode = arNodes[lastNode!]!
 			lastArNode.removeFromParentNode()
 			arNodes[lastNode!] = addDestination(position: lastArNode.position)
 		}
-
+		
 		if (navStartPosition != nil && firstNode != nil) {
 			_ = addLine(from: navStartPosition!, to: arNodes[firstNode!]!.position)
 		}
 	}
-
+	
 	func closestNode(from: Location? = nil) -> FirebasePushKey? {
 		var measureFrom: Location? = from
 		if from == nil {
@@ -388,7 +412,7 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 		}
 		var closestDistance: Double? = nil
 		var closestNode: FirebasePushKey? = nil
-
+		
 		for node in nodes {
 			let distance = measureFrom!.distanceTo(node.value.wrappedNode.position)
 			if (closestDistance == nil || distance < closestDistance!) {
@@ -396,10 +420,10 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 				closestNode = node.key
 			}
 		}
-
+		
 		return closestNode
 	}
-
+	
 	func ensureNavigationVariables() {
 		if (navigating) {
 			if (navigateTo == nil) {
@@ -416,9 +440,9 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 			stopNavBtn.fadeOut()
 		}
 	}
-
+	
 	/* Augmented Reality */
-
+	
 	// Redraw all of the nodes and shiz that should be shown.
 	// This is called upon initial startup and location update
 	func redraw() {
@@ -434,94 +458,94 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 			navigate(from: navigateFrom!, to: navigateTo!)
 		}
 	}
-
+	
 	func addArrow(position: SCNVector3, eulerX: Double = 0, eulerY: Double = 0) -> SCNNode? {
 		guard let arrowScene = SCNScene(named: "art.scnassets/arrow/Arrow.scn") else { return nil }
 		let arrowNode = SCNNode()
 		let arrowSceneChildNodes = arrowScene.rootNode.childNodes
-
+		
 		for childNode in arrowSceneChildNodes {
 			arrowNode.addChildNode(childNode)
 		}
-
+		
 		arrowNode.position = SCNVector3(position.x + cameraPosition.x, position.y + cameraPosition.y, position.z + cameraPosition.z)
 		arrowNode.eulerAngles = SCNVector3(degreesToRadians(eulerX), degreesToRadians(eulerY), 0)
 		arrowNode.scale = SCNVector3(0.5, 0.5, 0.5)
 		sceneView.scene.rootNode.addChildNode(arrowNode)
 		return arrowNode
 	}
-
+	
 	func addLine(from: SCNVector3, to: SCNVector3) -> SCNNode? {
 		guard let lineScene = SCNScene(named: "art.scnassets/Line.scn") else { return nil }
-
+		
 		let lineNode = SCNNode()
 		let lineSceneChildNodes = lineScene.rootNode.childNodes
-
+		
 		for childNode in lineSceneChildNodes {
 			lineNode.addChildNode(childNode)
 		}
-
+		
 		let distance = from.distance(vector: to)
 		lineNode.position = from
 		lineNode.scale = SCNVector3(1, 1, distance)
 		lineNode.look(at: to)
-
+		
 		sceneView.scene.rootNode.addChildNode(lineNode)
 		return lineNode
 	}
-
+	
 	func addDestination(position: SCNVector3) -> SCNNode? {
 		guard let destinationScene = SCNScene(named: "art.scnassets/Destination.scn") else { return nil }
-
+		
 		let destinationNode = SCNNode()
 		let destinationSceneChildNodes = destinationScene.rootNode.childNodes
-
+		
 		for childNode in destinationSceneChildNodes {
 			destinationNode.addChildNode(childNode)
 		}
-
+		
 		let constraint = SCNLookAtConstraint(target: sceneView.pointOfView)
 		constraint.isGimbalLockEnabled = true
 		destinationNode.position = position
 		destinationNode.constraints = [constraint]
-
+		
 		sceneView.scene.rootNode.addChildNode(destinationNode)
 		return destinationNode
 	}
-
+	
 	func addNode(position: SCNVector3, node: Node) -> SCNNode? {
 		guard let nodeScene = SCNScene(named: "art.scnassets/Node.scn") else { return nil }
-
+		
 		let nodeNode = SCNNode()
 		let nodeSceneChildNodes = nodeScene.rootNode.childNodes
-
+		
 		for childNode in nodeSceneChildNodes {
 			nodeNode.addChildNode(childNode)
 		}
-
+		
 		let constraint = SCNLookAtConstraint(target: sceneView.pointOfView)
 		constraint.isGimbalLockEnabled = true
 		nodeNode.position = position
 		nodeNode.constraints = [constraint]
-
+		
 		// Add text
 		let textNode = nodeNode.childNode(withName: "text", recursively: false)
 		let textGeometry = textNode!.geometry as! SCNText
 		textGeometry.string = node.name
 		let textWidth = textGeometry.boundingBox.max.x - textGeometry.boundingBox.min.x
 		textNode!.position.x = textWidth / 2
-
+		
 		sceneView.scene.rootNode.addChildNode(nodeNode)
 		return nodeNode
 	}
-
+	
 	func clearNodes() {
 		let sceneChildNodes = sceneView.scene.rootNode.childNodes
-
+		
 		for childNode in sceneChildNodes {
 			childNode.removeFromParentNode()
 		}
 	}
-
+	
 }
 

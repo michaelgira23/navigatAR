@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		1C2BE07620364E960066C89E /* Pathfinding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C2BE07520364E960066C89E /* Pathfinding.swift */; };
+		1C47D879203F09B7006CE670 /* EventInformationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C47D878203F09B7006CE670 /* EventInformationViewController.swift */; };
 		1C5365AD20353392003198EB /* FirebaseArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C5365AC20353392003198EB /* FirebaseArray.swift */; };
 		1C73730B202553D200725F6D /* Building.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C73730A202553D200725F6D /* Building.swift */; };
 		1C73730D20255A1700725F6D /* Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C73730C20255A1700725F6D /* Node.swift */; };
@@ -28,6 +29,7 @@
 		26BD9C50203A2E92007B9F5F /* SelectNodesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26BD9C4F203A2E92007B9F5F /* SelectNodesViewController.swift */; };
 		26BD9C52203AA0BF007B9F5F /* UserInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26BD9C51203AA0BF007B9F5F /* UserInfoViewController.swift */; };
 		26BD9C54203B56DF007B9F5F /* BuildingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26BD9C53203B56DF007B9F5F /* BuildingTableViewCell.swift */; };
+		26BD9C58203D1F79007B9F5F /* ManageConnectionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26BD9C57203D1F79007B9F5F /* ManageConnectionsViewController.swift */; };
 		565A1BA920268B24007C56F5 /* ManageNodesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565A1BA820268B24007C56F5 /* ManageNodesViewController.swift */; };
 		5690CC252022ECA400F298EE /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 5690CC242022ECA400F298EE /* art.scnassets */; };
 		56AB1B632038E99E00517971 /* SCNVector3Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56AB1B622038E99E00517971 /* SCNVector3Extensions.swift */; };
@@ -49,6 +51,7 @@
 
 /* Begin PBXFileReference section */
 		1C2BE07520364E960066C89E /* Pathfinding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pathfinding.swift; sourceTree = "<group>"; };
+		1C47D878203F09B7006CE670 /* EventInformationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventInformationViewController.swift; sourceTree = "<group>"; };
 		1C5365AC20353392003198EB /* FirebaseArray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseArray.swift; sourceTree = "<group>"; };
 		1C73730A202553D200725F6D /* Building.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Building.swift; sourceTree = "<group>"; };
 		1C73730C20255A1700725F6D /* Node.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Node.swift; sourceTree = "<group>"; };
@@ -69,6 +72,7 @@
 		26BD9C4F203A2E92007B9F5F /* SelectNodesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectNodesViewController.swift; sourceTree = "<group>"; };
 		26BD9C51203AA0BF007B9F5F /* UserInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoViewController.swift; sourceTree = "<group>"; };
 		26BD9C53203B56DF007B9F5F /* BuildingTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuildingTableViewCell.swift; sourceTree = "<group>"; };
+		26BD9C57203D1F79007B9F5F /* ManageConnectionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageConnectionsViewController.swift; sourceTree = "<group>"; };
 		3670E310BCDA21FEDDE0F541 /* Pods_navigatAR.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_navigatAR.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		565A1BA820268B24007C56F5 /* ManageNodesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageNodesViewController.swift; sourceTree = "<group>"; };
 		5690CC242022ECA400F298EE /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
@@ -148,6 +152,7 @@
 				1C73731620267CFC00725F6D /* Location.swift */,
 				1C2BE07520364E960066C89E /* Pathfinding.swift */,
 				56F25B902022E79800B246D3 /* Main.storyboard */,
+				1C47D878203F09B7006CE670 /* EventInformationViewController.swift */,
 				26BD9C4B2033DEC5007B9F5F /* NodesConnectionViewController.swift */,
 				26BD9C492033DEC5007B9F5F /* Searching.swift */,
 				26BD9C4A2033DEC5007B9F5F /* UIViewExtensions.swift */,
@@ -171,6 +176,7 @@
 				1CEDABB62037D4EB004B58F7 /* RegisterViewController.swift */,
 				26BD9C51203AA0BF007B9F5F /* UserInfoViewController.swift */,
 				26BD9C53203B56DF007B9F5F /* BuildingTableViewCell.swift */,
+				26BD9C57203D1F79007B9F5F /* ManageConnectionsViewController.swift */,
 			);
 			path = navigatAR;
 			sourceTree = "<group>";
@@ -273,7 +279,6 @@
 				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
 				"${BUILT_PRODUCTS_DIR}/HCKalmanFilter/HCKalmanFilter.framework",
 				"${PODS_ROOT}/IndoorAtlas/indooratlas-ios-sdk/IndoorAtlas.framework",
-				"${BUILT_PRODUCTS_DIR}/SVProgressHUD/SVProgressHUD.framework",
 				"${BUILT_PRODUCTS_DIR}/Surge/Surge.framework",
 				"${BUILT_PRODUCTS_DIR}/leveldb-library/leveldb.framework",
 				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
@@ -287,7 +292,6 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/HCKalmanFilter.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/IndoorAtlas.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SVProgressHUD.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Surge.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/leveldb.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
@@ -303,9 +307,14 @@
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-navigatAR/Pods-navigatAR-resources.sh",
+				"${PODS_ROOT}/GoogleMaps/Maps/Frameworks/GoogleMaps.framework/Resources/GoogleMaps.bundle",
+				"${PODS_ROOT}/GooglePlaces/Frameworks/GooglePlaces.framework/Resources/GooglePlaces.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleMaps.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GooglePlaces.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -341,7 +350,9 @@
 				565A1BA920268B24007C56F5 /* ManageNodesViewController.swift in Sources */,
 				B43EACAE20389978000E11B5 /* NewEventViewController.swift in Sources */,
 				56FEE4CC202683EE0075CA75 /* NodePositionViewController.swift in Sources */,
+				26BD9C58203D1F79007B9F5F /* ManageConnectionsViewController.swift in Sources */,
 				26BD9C4C2033DEC6007B9F5F /* Searching.swift in Sources */,
+				1C47D879203F09B7006CE670 /* EventInformationViewController.swift in Sources */,
 				26AE44CF2025753800F8C75D /* AdminViewController.swift in Sources */,
 				1C5365AD20353392003198EB /* FirebaseArray.swift in Sources */,
 				1CB71F49202FE864000666BC /* ManageTagsViewController.swift in Sources */,
@@ -505,7 +516,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = CKCJPG6PEM;
+				DEVELOPMENT_TEAM = CYWSRBS9VH;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = navigatAR/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -522,7 +533,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = CKCJPG6PEM;
+				DEVELOPMENT_TEAM = CYWSRBS9VH;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = navigatAR/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

@@ -29,4 +29,5 @@ struct Node: Codable {
 	// there's no way to provide a default value for this when decoding without a custom implementation, so has to be optional
 	let tags: [String: Tag]?
 	var connectedTo: FirebaseArray<FirebasePushKey>?
+	let highPriority: Bool?
 }

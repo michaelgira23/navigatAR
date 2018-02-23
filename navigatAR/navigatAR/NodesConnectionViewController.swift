@@ -9,7 +9,6 @@
 import UIKit
 import MapKit
 import IndoorAtlas
-import SVProgressHUD
 import Firebase
 import CodableFirebase
 
@@ -42,9 +41,11 @@ class BlueDotAnnotation: MKPointAnnotation {
 class NodeAnnotation: MKPointAnnotation {
 	var glyphText: String
 	var reuseIdentifier: String = "NodeAnnotation"
+	var highPriority: Bool = false
 	
-	init(glyphText: String) {
+	init(glyphText: String, highPriority: Bool) {
 		self.glyphText = glyphText
+		self.highPriority = highPriority
 		super.init()
 	}
 }
@@ -142,8 +143,6 @@ class NodesConnectionViewController: UIViewControllerWithBuilding, IALocationMan
 		ref = Database.database().reference()
 
 		NodeCircle.getNodeCircles(from: ref, map: map!, buildingId: forBuilding.0, callback: { self.nodeCircles = $0 })
-
-		SVProgressHUD.show(withStatus: NSLocalizedString("Waiting for location data", comment: ""))
 	}
 	
 //	// functions to handle drags and touches
@@ -312,7 +311,7 @@ class NodesConnectionViewController: UIViewControllerWithBuilding, IALocationMan
 		let a = degreesToRadians(self.floorPlan.bearing)
 		rotated = cgRect.applying(CGAffineTransform(rotationAngle: CGFloat(a)));
 		let overlay = MapOverlay(floorPlan: floorPlan, andRotatedRect: rotated)
-		map?.add(overlay)
+		map?.add(overlay, level: .aboveRoads)
 	}
 	
 	// Function for rendering overlay objects
@@ -353,8 +352,6 @@ class NodesConnectionViewController: UIViewControllerWithBuilding, IALocationMan
 		
 		// Check that the location is not nil
 		if let newLocation = l.location?.coordinate {
-			
-			SVProgressHUD.dismiss()
 			
 			// The accuracy of coordinate position depends on the placement of floor plan image.
 			let point = floorPlan.coordinate(toPoint: (l.location?.coordinate)!)
@@ -477,8 +474,9 @@ class NodesConnectionViewController: UIViewControllerWithBuilding, IALocationMan
 //			let newCam = self.map!.camera.copy() as! MKMapCamera
 //			newCam.heading = direction
 //			self.map!.setCamera(newCam, animated: true)
-			let viewRegion = MKCoordinateRegionMakeWithDistance(floorPlan!.center, Double(floorPlan!.widthMeters), Double(floorPlan!.heightMeters))
+			let viewRegion = MKCoordinateRegionMakeWithDistance(floorPlan!.center, Double(floorPlan!.widthMeters)/5, Double(floorPlan!.heightMeters)/5)
 			self.map!.setRegion(viewRegion, animated: true)
+			
 		})
 	}
 	
@@ -505,8 +503,6 @@ class NodesConnectionViewController: UIViewControllerWithBuilding, IALocationMan
 		self.map!.removeFromSuperview()
 		self.map = nil
 		label.removeFromSuperview()
-		
-		SVProgressHUD.dismiss()
 		
 		ref.removeAllObservers()
 	}
@@ -542,7 +538,13 @@ class NodesConnectionViewController: UIViewControllerWithBuilding, IALocationMan
 			} else {
 				let annotationView = MKMarkerAnnotationView.init(annotation: annotation, reuseIdentifier: annotation.reuseIdentifier)
 				annotationView.glyphText = annotation.glyphText
-				annotationView.displayPriority = .required
+				annotationView.titleVisibility = .visible
+				print(annotation.highPriority)
+				if annotation.highPriority {
+					annotationView.displayPriority = .defaultHigh
+				} else {
+					annotationView.displayPriority = .defaultLow
+				}
 				return annotationView
 			}
 		}
@@ -562,8 +564,11 @@ class NodeCircle {
 	init(db: DatabaseReference, mapView map: MKMapView, nodeInfo node: (FirebasePushKey, Node)) {
 		self.map = map
 		nodeInfo = node
-		print(node.1.type)
-		MKAnnotation = NodeAnnotation(glyphText: nodeTypeToEmoji[node.1.type]!)
+		if let _ = nodeInfo.1.highPriority {
+			MKAnnotation = NodeAnnotation(glyphText: nodeTypeToEmoji[node.1.type]!, highPriority: nodeInfo.1.highPriority!)
+		} else {
+			MKAnnotation = NodeAnnotation(glyphText: nodeTypeToEmoji[node.1.type]!, highPriority: false)
+		}
 		MKAnnotation.coordinate = CLLocationCoordinate2D(latitude: node.1.position.latitude, longitude: node.1.position.longitude)
 		MKAnnotation.title = nodeInfo.1.name
 		map.addAnnotation(MKAnnotation)

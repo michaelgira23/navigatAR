@@ -23,21 +23,25 @@ class NewEventViewController: FormViewControllerWithBuilding {
 			<<< TextRow("eventname") { row in
 				row.title = "Name"
 //				row.placeholder = "Name"
+				row.value = "navigatAR Presentation"
 			}
 			
 			<<< TextRow("eventdescription") { row in
 				row.title = "Description"
 //				row.placeholder = "Description"
+				row.value = "Where we show off our super cool app"
 			}
 			
 			+++ Section("Event Time")
 			<<< DateTimeRow("eventstarttime") { row in
 				row.title = "Start Time"
 				row.dateFormatter?.dateStyle = DateFormatter.Style.full
+				row.value = Date(timeIntervalSince1970: 1519501500)
 			}
 			<<< DateTimeRow("eventendtime") { row in
 				row.title = "End Time"
 				row.dateFormatter?.dateStyle = DateFormatter.Style.full
+				row.value = Date(timeIntervalSince1970: 1519504200)
 			}
 			
 			+++ ButtonRow("selectLocation") { row in

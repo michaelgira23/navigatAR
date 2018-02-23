@@ -201,6 +201,7 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 		let ref = Database.database().reference()
 		ref.observe(.value, with: { snapshot in
 			do {
+				print("Get new db data")
 				let nodeSnapshot = snapshot.childSnapshot(forPath: "nodes")
 				guard nodeSnapshot.exists(), let nodeValue = nodeSnapshot.value else { return }
 				let firebaseNodes = Array(try FirebaseDecoder().decode([FirebasePushKey: Node].self, from: nodeValue))
@@ -297,33 +298,6 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 	
 	// MARK: - IndoorAtlas delegates
 	
-	func indoorLocationManager(_ manager: IALocationManager, didUpdateLocations locations: [Any]) {
-//		print("pos update")
-//		currentLocation = Location(fromIALocation: locations.last as! IALocation)
-//		let currentCLLocation = CLLocation(
-//			coordinate: CLLocationCoordinate2DMake(currentLocation!.latitude, currentLocation!.altitude),
-//			altitude: currentLocation!.altitude,
-//			horizontalAccuracy: currentLocation!.horizontalAccuracy,
-//			verticalAccuracy: currentLocation!.verticalAccuracy,
-//			timestamp: Date()
-//		)
-//		if hcKalmanFilter == nil {
-//			self.hcKalmanFilter = HCKalmanAlgorithm(initialLocation: currentCLLocation)
-//		} else {
-//			if let hcKalmanFilter = self.hcKalmanFilter {
-//				if resetKalmanFilter == true {
-//					hcKalmanFilter.resetKalman(newStartLocation: currentCLLocation)
-//					resetKalmanFilter = false
-//				} else {
-//					kalmanLocation = hcKalmanFilter.processState(currentLocation: currentCLLocation)
-////					print(kalmanLocation.coordinate)
-////					kalmanLocation = Location(fromIALocation: IALocation(clLocation: hcKalmanFilter.processState(currentLocation: currentCLLocation)))
-//				}
-//			}
-//		}
-//		redraw()
-	}
-	
 	func indoorLocationManager(_ manager: IALocationManager, statusChanged status: IAStatus) {
 		let statusNum = String(status.type.rawValue)
 		print("Status: " + statusNum)
@@ -371,7 +345,10 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 		let path = nodesGraph!.findPath(from: fromGraphNode, to: toGraphNode)
 		
 		if (path.count == 0) {
-			// Do something if there's no pathway to available point
+			// Add arrow directly to destination if there's no available connections
+			if (navStartPosition != nil) {
+				_ = addLine(from: navStartPosition!, to: arNodes[to]!.position)
+			}
 		}
 		
 		var firstNode: FirebasePushKey? = nil
@@ -452,11 +429,13 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 	// This is called upon initial startup and location update
 	func redraw() {
 		// We can't draw anything if we don't know location
-		if (currentLocation == nil) { return }
+		if (kalmanLocation == nil) { return }
+		print("Redraw")
 		ensureNavigationVariables()
 		clearNodes()
 		for node in nodes {
 			let (lat, long, alt) = currentLocation!.distanceDeltas(with: node.value.wrappedNode.position)
+			print("delta", lat, long, alt)
 			arNodes[node.key] = addNode(position: SCNVector3(x: Float(long), y: Float(alt), z: Float(-lat)), node: node.value.wrappedNode)
 		}
 		if (navigating && navigateFrom != nil && navigateTo != nil) {

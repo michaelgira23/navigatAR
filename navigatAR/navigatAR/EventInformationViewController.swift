@@ -36,20 +36,19 @@ class EventInformationViewController: UIViewController, UITableViewDataSource, U
 		startTime.text = "Start Time: " + formatter.string(from: Date(timeIntervalSinceReferenceDate: Double(splitData[3])!))
 		endTime.text = "End Time: " + formatter.string(from: Date(timeIntervalSinceReferenceDate: Double(splitData[4])!))
 		
+		// Table setup
+		nodesTable.dataSource = self
+		nodesTable.delegate = self
+		
 		// Database setup
 		Database.database().reference().child("nodes").observe(.value, with: { snapshot in
 			guard snapshot.exists(), let nodesValue = snapshot.value else { return }
 			
 			let allNodes = try! FirebaseDecoder().decode([FirebasePushKey: Node].self, from: nodesValue)
-			self.eventNodes = Array(splitData.dropFirst(5)).dropLast().map { ($0, allNodes[$0]!) }
+			self.eventNodes = Array(splitData.dropFirst(5)).map { ($0, allNodes[$0]!) }
+			
+			self.nodesTable.reloadData()
 		})
-		
-		// Table setup
-		
-		nodesTable.dataSource = self
-		nodesTable.delegate = self
-		
-		nodesTable.reloadData()
 	}
 	
 	override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

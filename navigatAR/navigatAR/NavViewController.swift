@@ -17,7 +17,7 @@ import GameplayKit
 import HCKalmanFilter
 import CoreLocation
 
-class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSource, UISearchBarDelegate, UITableViewDelegate, IALocationManagerDelegate, CLLocationManagerDelegate {
+class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSource, UISearchBarDelegate, UITableViewDelegate, IALocationManagerDelegate, CLLocationManagerDelegate, LocationDelegate {
 	
 	@IBOutlet weak var searchBlur: UIVisualEffectView!
 	@IBOutlet weak var searchBar: UISearchBar!
@@ -30,6 +30,8 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 		navigating = false
 		redraw()
 	}
+
+	let appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
 	
 	let locationManager = IALocationManager.sharedInstance()
 	let directionManager: CLLocationManager = {
@@ -40,8 +42,6 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 	
 	var currentLocation: Location? = nil
 	var kalmanLocation: CLLocation? = nil
-	var resetKalmanFilter: Bool = false
-	var hcKalmanFilter: HCKalmanAlgorithm? = nil
 	var cameraPosition = SCNVector3(0, 0, 0)
 	
 	var dbSnapshot: DataSnapshot? = nil
@@ -65,13 +65,14 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 		
 		/* Indoor Atlas Setup */
 		
-		locationManager.delegate = self
-		
+//		locationManager.delegate = self
+		appDelegate.locationDelegate = self
+
 		/* AR Setup */
 		
 		// Set the view's delegate
 		sceneView.delegate = self
-		
+
 		// Show statistics such as fps and timing information
 		sceneView.showsStatistics = false
 		
@@ -112,15 +113,15 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 	
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
-		
-		// Start getting location
-		locationManager.startUpdatingLocation()
+
+		// Update location
+		locationUpdate(currentLocation: appDelegate.currentLocation, kalmanLocation: appDelegate.kalmanLocation)
 		
 		// Create a session configuration
 		let configuration = ARWorldTrackingConfiguration()
 		configuration.worldAlignment = .gravityAndHeading
-		//		configuration.planeDetection = [.horizontal]
-		
+//		configuration.planeDetection = [.horizontal]
+
 		// Detect
 		print("ARKit supported?", ARWorldTrackingConfiguration.isSupported)
 		
@@ -133,9 +134,6 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 		
 		// Pause the view's session
 		sceneView.session.pause()
-		
-		// Stop getting position
-		locationManager.stopUpdatingLocation()
 	}
 	
 	override func didReceiveMemoryWarning() {
@@ -300,37 +298,44 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 	// MARK: - IndoorAtlas delegates
 	
 	func indoorLocationManager(_ manager: IALocationManager, didUpdateLocations locations: [Any]) {
-		print("pos update")
-		currentLocation = Location(fromIALocation: locations.last as! IALocation)
-		let currentCLLocation = CLLocation(
-			coordinate: CLLocationCoordinate2DMake(currentLocation!.latitude, currentLocation!.altitude),
-			altitude: currentLocation!.altitude,
-			horizontalAccuracy: currentLocation!.horizontalAccuracy,
-			verticalAccuracy: currentLocation!.verticalAccuracy,
-			timestamp: Date()
-		)
-		if hcKalmanFilter == nil {
-			self.hcKalmanFilter = HCKalmanAlgorithm(initialLocation: currentCLLocation)
-		}
-		else {
-			if let hcKalmanFilter = self.hcKalmanFilter {
-				if resetKalmanFilter == true {
-					hcKalmanFilter.resetKalman(newStartLocation: currentCLLocation)
-					resetKalmanFilter = false
-				}
-				else {
-					kalmanLocation = hcKalmanFilter.processState(currentLocation: currentCLLocation)
-//					print(kalmanLocation.coordinate)
-
-				}
-			}
-		}
-		redraw()
+//		print("pos update")
+//		currentLocation = Location(fromIALocation: locations.last as! IALocation)
+//		let currentCLLocation = CLLocation(
+//			coordinate: CLLocationCoordinate2DMake(currentLocation!.latitude, currentLocation!.altitude),
+//			altitude: currentLocation!.altitude,
+//			horizontalAccuracy: currentLocation!.horizontalAccuracy,
+//			verticalAccuracy: currentLocation!.verticalAccuracy,
+//			timestamp: Date()
+//		)
+//		if hcKalmanFilter == nil {
+//			self.hcKalmanFilter = HCKalmanAlgorithm(initialLocation: currentCLLocation)
+//		} else {
+//			if let hcKalmanFilter = self.hcKalmanFilter {
+//				if resetKalmanFilter == true {
+//					hcKalmanFilter.resetKalman(newStartLocation: currentCLLocation)
+//					resetKalmanFilter = false
+//				} else {
+//					kalmanLocation = hcKalmanFilter.processState(currentLocation: currentCLLocation)
+////					print(kalmanLocation.coordinate)
+////					kalmanLocation = Location(fromIALocation: IALocation(clLocation: hcKalmanFilter.processState(currentLocation: currentCLLocation)))
+//				}
+//			}
+//		}
+//		redraw()
 	}
 	
 	func indoorLocationManager(_ manager: IALocationManager, statusChanged status: IAStatus) {
 		let statusNum = String(status.type.rawValue)
 		print("Status: " + statusNum)
+	}
+
+	// MARK: - Custom LocationDelegates
+
+	func locationUpdate(currentLocation: Location?, kalmanLocation: CLLocation?) {
+		print("pos update nav")
+		self.currentLocation = currentLocation
+		self.kalmanLocation = kalmanLocation
+		redraw()
 	}
 	
 	// MARK: - ARSCNViewDelegate

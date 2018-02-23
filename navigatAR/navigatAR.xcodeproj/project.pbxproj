@@ -30,6 +30,7 @@
 		26BD9C52203AA0BF007B9F5F /* UserInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26BD9C51203AA0BF007B9F5F /* UserInfoViewController.swift */; };
 		26BD9C54203B56DF007B9F5F /* BuildingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26BD9C53203B56DF007B9F5F /* BuildingTableViewCell.swift */; };
 		26BD9C58203D1F79007B9F5F /* ManageConnectionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26BD9C57203D1F79007B9F5F /* ManageConnectionsViewController.swift */; };
+		56383A3B203FE3AD00F4A916 /* LocationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56383A3A203FE3AD00F4A916 /* LocationDelegate.swift */; };
 		565A1BA920268B24007C56F5 /* ManageNodesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565A1BA820268B24007C56F5 /* ManageNodesViewController.swift */; };
 		5690CC252022ECA400F298EE /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 5690CC242022ECA400F298EE /* art.scnassets */; };
 		56AB1B632038E99E00517971 /* SCNVector3Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56AB1B622038E99E00517971 /* SCNVector3Extensions.swift */; };
@@ -74,6 +75,7 @@
 		26BD9C53203B56DF007B9F5F /* BuildingTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuildingTableViewCell.swift; sourceTree = "<group>"; };
 		26BD9C57203D1F79007B9F5F /* ManageConnectionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageConnectionsViewController.swift; sourceTree = "<group>"; };
 		3670E310BCDA21FEDDE0F541 /* Pods_navigatAR.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_navigatAR.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		56383A3A203FE3AD00F4A916 /* LocationDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationDelegate.swift; sourceTree = "<group>"; };
 		565A1BA820268B24007C56F5 /* ManageNodesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageNodesViewController.swift; sourceTree = "<group>"; };
 		5690CC242022ECA400F298EE /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
 		56AB1B622038E99E00517971 /* SCNVector3Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCNVector3Extensions.swift; sourceTree = "<group>"; };
@@ -142,6 +144,7 @@
 				1C7373122026330100725F6D /* TagInfo.swift */,
 				56EC2A0020237BAE00924B5D /* GoogleService-Info.plist */,
 				56F25B8A2022E79800B246D3 /* AppDelegate.swift */,
+				56383A3A203FE3AD00F4A916 /* LocationDelegate.swift */,
 				56F25B8C2022E79800B246D3 /* NavViewController.swift */,
 				26AE44CE2025753800F8C75D /* AdminViewController.swift */,
 				565A1BA820268B24007C56F5 /* ManageNodesViewController.swift */,
@@ -377,6 +380,7 @@
 				B43EACB020389C25000E11B5 /* Event.swift in Sources */,
 				B40E810D2036895E006C2278 /* NewBuildingViewController.swift in Sources */,
 				26BD9C4E2033DEC6007B9F5F /* NodesConnectionViewController.swift in Sources */,
+				56383A3B203FE3AD00F4A916 /* LocationDelegate.swift in Sources */,
 				56AB1B632038E99E00517971 /* SCNVector3Extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -516,7 +520,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = CYWSRBS9VH;
+				DEVELOPMENT_TEAM = CKCJPG6PEM;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = navigatAR/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -533,7 +537,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = CYWSRBS9VH;
+				DEVELOPMENT_TEAM = CKCJPG6PEM;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = navigatAR/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

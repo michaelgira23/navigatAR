@@ -10,6 +10,7 @@ import CodableFirebase
 import UIKit
 import Firebase
 import IndoorAtlas
+import HCKalmanFilter
 
 func getConfigItem(name: String) -> String? {
 	let filePath = Bundle.main.path(forResource: "config", ofType: "plist")
@@ -27,11 +28,18 @@ extension FloatingPoint {
 }
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, IALocationManagerDelegate {
 
 	var window: UIWindow?
 
+	weak var locationDelegate: LocationDelegate?
+
 	var locationManager: IALocationManager?
+
+	var currentLocation: Location? = nil
+	var kalmanLocation: CLLocation? = nil
+	var resetKalmanFilter: Bool = false
+	var hcKalmanFilter: HCKalmanAlgorithm? = nil
 	
 	func authenticateAndRequestLocation() {
 		
@@ -42,6 +50,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		let IAAPIKeyId = getConfigItem(name: "IAAPIKeyId")!
 		let IAAPIKeySecret = getConfigItem(name: "IAAPIKeySecret")!
 		locationManager!.setApiKey(IAAPIKeyId, andSecret: IAAPIKeySecret)
+
+		// Start listening for location
+		locationManager!.delegate = self
+		locationManager!.startUpdatingLocation()
 	}
 
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
@@ -103,6 +115,35 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			return true
 		default:
 			return false
+		}
+	}
+
+	func indoorLocationManager(_ manager: IALocationManager, didUpdateLocations locations: [Any]) {
+		print("pos update app delegate")
+		currentLocation = Location(fromIALocation: locations.last as! IALocation)
+		let currentCLLocation = CLLocation(
+			coordinate: CLLocationCoordinate2DMake(currentLocation!.latitude, currentLocation!.altitude),
+			altitude: currentLocation!.altitude,
+			horizontalAccuracy: currentLocation!.horizontalAccuracy,
+			verticalAccuracy: currentLocation!.verticalAccuracy,
+			timestamp: Date()
+		)
+		if hcKalmanFilter == nil {
+			self.hcKalmanFilter = HCKalmanAlgorithm(initialLocation: currentCLLocation)
+		}
+		else {
+			if let hcKalmanFilter = self.hcKalmanFilter {
+				if resetKalmanFilter == true {
+					hcKalmanFilter.resetKalman(newStartLocation: currentCLLocation)
+					resetKalmanFilter = false
+				}
+				else {
+//					kalmanLocation = Location(hcKalmanFilter.processState(currentLocation: currentCLLocation))
+//					print(kalmanLocation.coordinate)
+					kalmanLocation = hcKalmanFilter.processState(currentLocation: currentCLLocation)
+					locationDelegate?.locationUpdate(currentLocation: currentLocation, kalmanLocation: kalmanLocation)
+				}
+			}
 		}
 	}
 

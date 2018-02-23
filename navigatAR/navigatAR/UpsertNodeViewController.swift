@@ -46,7 +46,7 @@ class UpsertNodeViewController: FormViewController {
 	
 	var tagInfos: [TagInfo] = []
 	
-	var locationData: IALocation?
+	var locationData: Location?
 //	var currentBuilding: Building?
 
 	override func viewDidLoad() {
@@ -212,7 +212,7 @@ class UpsertNodeViewController: FormViewController {
 				building: currentBuilding.id,
 				name: formValues["name"] as! String,
 				type: selectedNodeType!,
-				position: Location(fromIALocation: self.locationData!),
+				position: self.locationData!,
 				tags: tags,
 				connectedTo: [],
 				highPriority: false

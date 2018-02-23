@@ -70,6 +70,8 @@ class NewEventViewController: FormViewControllerWithBuilding {
 						let ref = Database.database().reference()
 						ref.child("events").childByAutoId().setValue(try! FirebaseEncoder().encode(newEvent))
 					}
+					
+					self.performSegue(withIdentifier: "unwindFromNewEventController", sender: self)
 				}
 		}
 	}

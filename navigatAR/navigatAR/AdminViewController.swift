@@ -40,5 +40,6 @@ class AdminViewController: UIViewControllerWithBuilding {
 		super.didReceiveMemoryWarning()
 		// Dispose of any resources that can be recreated.
 	}
-
+	
+	@IBAction func unwindFromNewEvent(segue: UIStoryboardSegue) { }
 }

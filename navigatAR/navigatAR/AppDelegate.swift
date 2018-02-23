@@ -6,6 +6,7 @@
 //  Copyright © 2018 MICDS Programming. All rights reserved.
 //
 
+import CodableFirebase
 import UIKit
 import Firebase
 import IndoorAtlas
@@ -73,6 +74,36 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 	func applicationWillTerminate(_ application: UIApplication) {
 		// Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+	}
+	
+	// Custom URL handler
+	func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
+		let storyboard = UIStoryboard(name: "Main", bundle: nil)
+		let arController = storyboard.instantiateViewController(withIdentifier: "arController") as! NavViewController
+		
+		// Navigate to NavViewController, perform respective segue upon completion
+		switch url.host {
+		case .some("node"):
+			window?.rootViewController!.present(arController, animated: true) {
+				Database.database().reference(withPath: "nodes/\(url.lastPathComponent)").observeSingleEvent(of: .value, with: { snapshot in
+					guard snapshot.exists(), let value = snapshot.value else { return }
+					let node = try! FirebaseDecoder().decode(Node.self, from: value)
+					arController.performSegue(withIdentifier: "showDestinationDetail", sender: "\(url.lastPathComponent),\(node.name),\(node.type),\(node.building)")
+				})
+			}
+			return true
+		case .some("event"):
+			window?.rootViewController!.present(arController, animated: true) {
+				Database.database().reference(withPath: "events/\(url.lastPathComponent)").observeSingleEvent(of: .value, with: { snapshot in
+					guard snapshot.exists(), let value = snapshot.value else { return }
+					let event = try! FirebaseDecoder().decode(Event.self, from: value)
+					arController.performSegue(withIdentifier: "showEventInfo", sender: "_event,\(event.name),\(event.description),\(event.start.timeIntervalSinceReferenceDate),\(event.end.timeIntervalSinceReferenceDate),\(event.locations.joined(separator: ","))")
+				})
+			}
+			return true
+		default:
+			return false
+		}
 	}
 
 }

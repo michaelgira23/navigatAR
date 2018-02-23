@@ -527,6 +527,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 5E69BC90EE3E34F49CA3FF4C /* Pods-navigatAR.release.xcconfig */;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = CYWSRBS9VH;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = navigatAR/Info.plist;

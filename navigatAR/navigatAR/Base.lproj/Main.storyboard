@@ -95,7 +95,7 @@
         <!--Navigate-->
         <scene sceneID="hNz-n2-bh7">
             <objects>
-                <viewController title="Nav" id="9pv-A4-QxB" userLabel="Navigate" customClass="NavViewController" customModule="navigatAR" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="arController" title="Nav" id="9pv-A4-QxB" userLabel="Navigate" customClass="NavViewController" customModule="navigatAR" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="tsR-hK-woN">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -205,7 +205,7 @@
         <!--Select Destination-->
         <scene sceneID="XWS-N7-Oa0">
             <objects>
-                <viewController id="BL3-1u-ans" userLabel="Select Destination" customClass="DestinationSelectionController" customModule="navigatAR" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="destController" id="BL3-1u-ans" userLabel="Select Destination" customClass="DestinationSelectionController" customModule="navigatAR" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="DfH-uY-FWF">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -272,7 +272,7 @@
         <!--User-->
         <scene sceneID="kcW-cQ-AdI">
             <objects>
-                <navigationController id="6yd-Rs-rGj" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="navigationController" id="6yd-Rs-rGj" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="User" image="second" id="RtV-R2-rQ6"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="JsM-Ir-bvn">
                         <rect key="frame" x="0.0" y="44" width="375" height="44"/>

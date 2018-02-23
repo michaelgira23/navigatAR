@@ -20,28 +20,28 @@ class NewEventViewController: FormViewControllerWithBuilding {
 		self.updateDBData()
 		
 		form +++ Section("Event Information")
-			<<< TextRow("eventname") { row in
-				row.title = "Name"
+			<<< TextRow("eventname") {
+				$0.title = "Name"
 //				row.placeholder = "Name"
-				row.value = "navigatAR Presentation"
+				$0.value = "navigatAR Presentation"
 			}
 			
-			<<< TextRow("eventdescription") { row in
-				row.title = "Description"
+			<<< TextRow("eventdescription") {
+				$0.title = "Description"
 //				row.placeholder = "Description"
-				row.value = "Where we show off our super cool app"
+				$0.value = "Where we show off our super cool app"
 			}
 			
 			+++ Section("Event Time")
-			<<< DateTimeRow("eventstarttime") { row in
-				row.title = "Start Time"
-				row.dateFormatter?.dateStyle = DateFormatter.Style.full
-				row.value = Date(timeIntervalSince1970: 1519501500)
+			<<< DateTimeRow("eventstarttime") {
+				$0.title = "Start Time"
+				$0.dateFormatter?.dateStyle = DateFormatter.Style.full
+				$0.value = Date(timeIntervalSince1970: 1519501500)
 			}
-			<<< DateTimeRow("eventendtime") { row in
-				row.title = "End Time"
-				row.dateFormatter?.dateStyle = DateFormatter.Style.full
-				row.value = Date(timeIntervalSince1970: 1519504200)
+			<<< DateTimeRow("eventendtime") {
+				$0.title = "End Time"
+				$0.dateFormatter?.dateStyle = DateFormatter.Style.full
+				$0.value = Date(timeIntervalSince1970: 1519504200)
 			}
 			
 			+++ ButtonRow("selectLocation") { row in
@@ -52,9 +52,9 @@ class NewEventViewController: FormViewControllerWithBuilding {
 				}
 			}
 		
-			+++ ButtonRow() { row in
-				row.title = "Create Event"
-				row.onCellSelection { row, cell in
+			+++ ButtonRow() {
+				$0.title = "Create Event"
+				$0.onCellSelection { row, cell in
 					let formValues = self.form.values()
 					
 					if formValues["eventname"] == nil || formValues["eventdescription"] == nil || self.selectedNodes.count == 0 {

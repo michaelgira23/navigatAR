@@ -53,10 +53,10 @@ class UpsertNodeViewController: FormViewController {
 		super.viewDidLoad()
 
 		form +++ Section("Name")
-			<<< TextRow("name") { row in
-				row.title = "Name"
-				row.placeholder = "Ex. STEM 252"
-				row.value = "Presentation Stage"
+			<<< TextRow("name") {
+				$0.value = "Presentation Stage"
+				$0.title = "Name"
+				$0.placeholder = "Ex. STEM 252"
 			}
 	
 		+++ SelectableSection<ListCheckRow<String>>("Node Type", selectionType: .singleSelection(enableDeselection: true))

@@ -9,11 +9,13 @@
 import UIKit
 import IndoorAtlas
 
-class NodePositionViewController: UIViewController {
+class NodePositionViewController: UIViewController, IALocationManagerDelegate, LocationDelegate {
+
+	let appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
 
 	let locationManager = IALocationManager.sharedInstance()
 
-	var currentLocation: IALocation?
+	var currentLocation: Location?
 
 	@IBOutlet weak var calibrationText: UILabel!
 	@IBOutlet weak var accuracyText: UILabel!
@@ -25,23 +27,30 @@ class NodePositionViewController: UIViewController {
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		// Delegate methods to our custom location handler
-		locationManager.delegate = self
-		locationManager.startUpdatingLocation()
-		setQualityText(calibrationQuality: locationManager.calibration)
-		if let l = locationManager.location {
-			setLocation(location: l)
-		}
 	}
 
-	override func viewWillDisappear(_ animated: Bool) {
-		// Stop getting location
-		locationManager.stopUpdatingLocation()
+	override func viewWillAppear(_ animated: Bool) {
+		setQualityText(calibrationQuality: locationManager.calibration)
+		if (appDelegate.currentLocation != nil) {
+			setLocation(location: appDelegate.currentLocation!)
+		}
 	}
 
 	override func didReceiveMemoryWarning() {
 		super.didReceiveMemoryWarning()
 		// Dispose of any resources that can be recreated.
+	}
+
+	// MARK - Custom location delegate
+
+	func locationUpdate(currentLocation: Location?, kalmanLocation: CLLocation?) {
+		if (currentLocation != nil) {
+			setLocation(location: currentLocation!);
+		}
+	}
+
+	func indoorLocationManager(_ manager: IALocationManager, calibrationQualityChanged quality: ia_calibration) {
+		setQualityText(calibrationQuality: quality)
 	}
 
 	func gotPosition() {
@@ -55,31 +64,11 @@ class NodePositionViewController: UIViewController {
 			UpsertNodeViewController.locationData = currentLocation
 		}
 	}
-}
 
-// MARK: - IndoorAtlas delegates
-extension NodePositionViewController: IALocationManagerDelegate {
-	// recieve locaiton info
-	func indoorLocationManager(_ manager: IALocationManager, didUpdateLocations locations: [Any]) {
-		let l = locations.last as! IALocation
-
-		setLocation(location: l);
-	}
-
-//	func indoorLocationManager(_ manager: IALocationManager, statusChanged status: IAStatus) {
-//		if status.type != ia_status_type.iaStatusServiceAvailable {
-//			performSegue(withIdentifier: "unwindToManageNodesSegueId", sender: self)
-//		}
-//	}
-	
-	func indoorLocationManager(_ manager: IALocationManager, calibrationQualityChanged quality: ia_calibration) {
-		setQualityText(calibrationQuality: quality)
-	}
-	
-	func setLocation(location l: IALocation) {
+	func setLocation(location l: Location) {
 		currentLocation = l
-		let ha = String(round(currentLocation!.location!.horizontalAccuracy))
-		let va = String(round(currentLocation!.location!.verticalAccuracy))
+		let ha = String(round(currentLocation!.horizontalAccuracy))
+		let va = String(round(currentLocation!.verticalAccuracy))
 		accuracyText.text = "Accuracy: (" + ha + ", " + va + ")"
 	}
 

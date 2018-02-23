@@ -14,8 +14,10 @@ import CodableFirebase
 import IndoorAtlas
 import FuzzyMatchingSwift
 import GameplayKit
+import HCKalmanFilter
+import CoreLocation
 
-class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSource, UISearchBarDelegate, UITableViewDelegate, IALocationManagerDelegate, CLLocationManagerDelegate {
+class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSource, UISearchBarDelegate, UITableViewDelegate, IALocationManagerDelegate, CLLocationManagerDelegate, LocationDelegate {
 	
 	@IBOutlet weak var searchBlur: UIVisualEffectView!
 	@IBOutlet weak var searchBar: UISearchBar!
@@ -28,6 +30,8 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 		navigating = false
 		redraw()
 	}
+
+	let appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
 	
 	let locationManager = IALocationManager.sharedInstance()
 	let directionManager: CLLocationManager = {
@@ -37,6 +41,7 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 	}(CLLocationManager())
 	
 	var currentLocation: Location? = nil
+	var kalmanLocation: CLLocation? = nil
 	var cameraPosition = SCNVector3(0, 0, 0)
 	
 	var dbSnapshot: DataSnapshot? = nil
@@ -60,13 +65,14 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 		
 		/* Indoor Atlas Setup */
 		
-		locationManager.delegate = self
-		
+//		locationManager.delegate = self
+		appDelegate.locationDelegate = self
+
 		/* AR Setup */
 		
 		// Set the view's delegate
 		sceneView.delegate = self
-		
+
 		// Show statistics such as fps and timing information
 		sceneView.showsStatistics = false
 		
@@ -107,15 +113,15 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 	
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
-		
-		// Start getting location
-		locationManager.startUpdatingLocation()
+
+		// Update location
+		locationUpdate(currentLocation: appDelegate.currentLocation, kalmanLocation: appDelegate.kalmanLocation)
 		
 		// Create a session configuration
 		let configuration = ARWorldTrackingConfiguration()
 		configuration.worldAlignment = .gravityAndHeading
-		//		configuration.planeDetection = [.horizontal]
-		
+//		configuration.planeDetection = [.horizontal]
+
 		// Detect
 		print("ARKit supported?", ARWorldTrackingConfiguration.isSupported)
 		
@@ -128,9 +134,6 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 		
 		// Pause the view's session
 		sceneView.session.pause()
-		
-		// Stop getting position
-		locationManager.stopUpdatingLocation()
 	}
 	
 	override func didReceiveMemoryWarning() {
@@ -198,6 +201,7 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 		let ref = Database.database().reference()
 		ref.observe(.value, with: { snapshot in
 			do {
+				print("Get new db data")
 				let nodeSnapshot = snapshot.childSnapshot(forPath: "nodes")
 				guard nodeSnapshot.exists(), let nodeValue = nodeSnapshot.value else { return }
 				let firebaseNodes = Array(try FirebaseDecoder().decode([FirebasePushKey: Node].self, from: nodeValue))
@@ -294,15 +298,18 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 	
 	// MARK: - IndoorAtlas delegates
 	
-	func indoorLocationManager(_ manager: IALocationManager, didUpdateLocations locations: [Any]) {
-		print("pos update")
-		currentLocation = Location(fromIALocation: locations.last as! IALocation)
-		redraw()
-	}
-	
 	func indoorLocationManager(_ manager: IALocationManager, statusChanged status: IAStatus) {
 		let statusNum = String(status.type.rawValue)
 		print("Status: " + statusNum)
+	}
+
+	// MARK: - Custom LocationDelegates
+
+	func locationUpdate(currentLocation: Location?, kalmanLocation: CLLocation?) {
+		print("pos update nav")
+		self.currentLocation = currentLocation
+		self.kalmanLocation = kalmanLocation
+		redraw()
 	}
 	
 	// MARK: - ARSCNViewDelegate
@@ -338,7 +345,10 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 		let path = nodesGraph!.findPath(from: fromGraphNode, to: toGraphNode)
 		
 		if (path.count == 0) {
-			// Do something if there's no pathway to available point
+			// Add arrow directly to destination if there's no available connections
+			if (navStartPosition != nil) {
+				_ = addLine(from: navStartPosition!, to: arNodes[to]!.position)
+			}
 		}
 		
 		var firstNode: FirebasePushKey? = nil
@@ -419,11 +429,13 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 	// This is called upon initial startup and location update
 	func redraw() {
 		// We can't draw anything if we don't know location
-		if (currentLocation == nil) { return }
+		if (kalmanLocation == nil) { return }
+		print("Redraw")
 		ensureNavigationVariables()
 		clearNodes()
 		for node in nodes {
 			let (lat, long, alt) = currentLocation!.distanceDeltas(with: node.value.wrappedNode.position)
+			print("delta", lat, long, alt)
 			arNodes[node.key] = addNode(position: SCNVector3(x: Float(long), y: Float(alt), z: Float(-lat)), node: node.value.wrappedNode)
 		}
 		if (navigating && navigateFrom != nil && navigateTo != nil) {

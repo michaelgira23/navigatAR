@@ -427,12 +427,8 @@ class NodesConnectionViewController: UIViewControllerWithBuilding, IALocationMan
 	
 	// Authenticate to IndoorAtlas services and request location updates
 	func requestLocation() {
-		
 		locationManager.delegate = self
-		
 		resourceManager = IAResourceManager(locationManager: locationManager)!
-		
-		locationManager.startUpdatingLocation()
 	}
 	
 	// Called when view will appear and sets up the map view and its bounds and delegate. Also requests location
@@ -483,8 +479,7 @@ class NodesConnectionViewController: UIViewControllerWithBuilding, IALocationMan
 	// Called when view will disappear and will remove the map from the view and sets its delegate to nil
 	override func viewWillDisappear(_ animated: Bool) {
 		super.viewWillDisappear(true)
-		
-		locationManager.stopUpdatingLocation()
+
 		locationManager.delegate = nil
 		
 		// clean ram

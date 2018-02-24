@@ -55,7 +55,8 @@ class NodePositionViewController: UIViewController, IALocationManagerDelegate, L
 
 	func gotPosition() {
 		print("Got gotted");
-		performSegue(withIdentifier: "unwindToUpsertNodesWithUnwindSegue", sender: self)
+//		performSegue(withIdentifier: "unwindToUpsertNodesWithUnwindSegue", sender: self)
+		_ = navigationController?.popViewController(animated: true)
 	}
 
 	//	Pass position data back to the creation page

@@ -30,9 +30,9 @@ class UpsertTagViewController: FormViewController {
 		super.viewDidLoad()
 
 		form +++ Section()
-			<<< TextRow("name") { row in
-				row.title = "Name"
-				row.placeholder = "Ex. Room Number"
+			<<< TextRow("name") {
+				$0.title = "Name"
+				$0.placeholder = "Ex. Room Number"
 //				row.add(rule: RuleRequired())
 //				row.validationOptions = .validatesOnChange
 			}

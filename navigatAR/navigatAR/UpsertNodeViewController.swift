@@ -53,9 +53,10 @@ class UpsertNodeViewController: FormViewController {
 		super.viewDidLoad()
 
 		form +++ Section("Name")
-			<<< TextRow("name") { row in
-				row.title = "Name"
-				row.placeholder = "Ex. STEM 252"
+			<<< TextRow("name") {
+				$0.value = "Presentation Stage"
+				$0.title = "Name"
+				$0.placeholder = "Ex. STEM 252"
 			}
 	
 		+++ SelectableSection<ListCheckRow<String>>("Node Type", selectionType: .singleSelection(enableDeselection: true))
@@ -71,7 +72,7 @@ class UpsertNodeViewController: FormViewController {
 		form +++ Section("Location")
 			<<< CheckRow("location") { row in
 				row.title = "Location"
-				row.value = locationData != nil
+				row.value = true
 				row.disabled = true
 			}
 			<<< ButtonRow() { row in

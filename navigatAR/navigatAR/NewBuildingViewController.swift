@@ -22,6 +22,7 @@ class NewBuildingViewController: FormViewController {
 			<<< TextRow("buildingname") { row in
 				row.title = "Name"
 				row.placeholder = "Building Name"
+				row.value = "WWT"
 			}
 			
 			+++ MultivaluedSection(multivaluedOptions: .Insert, header: "Add Floors") { sec in

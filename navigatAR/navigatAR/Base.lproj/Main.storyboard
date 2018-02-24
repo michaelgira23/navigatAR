@@ -176,27 +176,27 @@
                                 <color key="textColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" alpha="0.10000000000000001" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LIf-ul-qir">
-                                <rect key="frame" x="329" y="689" width="30" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" image="first"/>
+                            <switch opaque="NO" alpha="0.10000000000000001" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6Mp-Ud-nhD" userLabel="Update Position">
+                                <rect key="frame" x="310" y="688" width="51" height="31"/>
                                 <connections>
-                                    <action selector="lockPosition:" destination="9pv-A4-QxB" eventType="touchUpInside" id="gNw-4N-6v1"/>
+                                    <action selector="toggleUpdatePosition:" destination="9pv-A4-QxB" eventType="valueChanged" id="uow-t3-qUo"/>
                                 </connections>
-                            </button>
-                            <button opaque="NO" alpha="0.10000000000000001" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="d3f-dn-Gdn">
-                                <rect key="frame" x="282" y="689" width="30" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" image="second"/>
+                            </switch>
+                            <switch opaque="NO" alpha="0.10000000000000001" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="og1-qE-xuk" userLabel="Calibrate Nodes">
+                                <rect key="frame" x="310" y="649" width="51" height="31"/>
                                 <connections>
-                                    <action selector="shiftNodes:" destination="9pv-A4-QxB" eventType="touchUpInside" id="1K6-V1-tKl"/>
+                                    <action selector="toggleCalibration:" destination="9pv-A4-QxB" eventType="valueChanged" id="uv6-1l-xLe"/>
                                 </connections>
-                            </button>
+                            </switch>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="UZU-Me-GKZ" firstAttribute="leading" secondItem="PQr-Ze-W5v" secondAttribute="leading" id="Hqc-hH-qRJ"/>
+                            <constraint firstItem="PQr-Ze-W5v" firstAttribute="trailing" secondItem="6Mp-Ud-nhD" secondAttribute="trailing" constant="16" id="KIO-kn-fg9"/>
                             <constraint firstItem="UZU-Me-GKZ" firstAttribute="trailing" secondItem="PQr-Ze-W5v" secondAttribute="trailing" id="MWk-n8-43i"/>
+                            <constraint firstItem="6Mp-Ud-nhD" firstAttribute="top" secondItem="og1-qE-xuk" secondAttribute="bottom" constant="8" id="XU5-kf-d1S"/>
+                            <constraint firstItem="PQr-Ze-W5v" firstAttribute="trailing" secondItem="og1-qE-xuk" secondAttribute="trailing" constant="16" id="bNY-R4-bAq"/>
+                            <constraint firstItem="PQr-Ze-W5v" firstAttribute="bottom" secondItem="6Mp-Ud-nhD" secondAttribute="bottom" constant="10" id="lrh-h0-rqY"/>
                             <constraint firstItem="PQr-Ze-W5v" firstAttribute="bottom" secondItem="UZU-Me-GKZ" secondAttribute="bottom" constant="10" id="wbA-7y-DTA"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="PQr-Ze-W5v"/>

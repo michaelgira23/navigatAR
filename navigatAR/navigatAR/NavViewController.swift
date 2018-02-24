@@ -31,17 +31,18 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 		redraw()
 	}
 
-	@IBAction func lockPosition(_ sender: Any) {
-		positionLocked = !positionLocked
+	@IBAction func toggleUpdatePosition(_ sender: UISwitch) {
+		positionLocked = !sender.isOn
 	}
 
-	@IBAction func shiftNodes(_ sender: Any) {
-		if (sceneView.pointOfView != nil) {
-			let shiftBy = Float(10)
-			let shiftVector = sceneView.pointOfView!.eulerAngles.normalized() * shiftBy
-			for node in arNodes {
-				node.value.position -= shiftVector
-			}
+	@IBAction func toggleCalibration(_ sender: UISwitch) {
+		calibrateNodes = sender.isOn
+		if (calibrateNodes) {
+			calibrateOriginalCameraPos = cameraPosition
+			calibrateOriginalRootPos = sceneView.scene.rootNode.position
+		} else {
+			calibrateOriginalCameraPos = nil
+			calibrateOriginalRootPos = nil
 		}
 	}
 
@@ -55,6 +56,9 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 	}(CLLocationManager())
 
 	var positionLocked = false
+	var calibrateNodes = false
+	var calibrateOriginalCameraPos: SCNVector3? = nil
+	var calibrateOriginalRootPos: SCNVector3? = nil
 
 	var currentLocation: Location? = nil
 	var kalmanLocation: CLLocation? = nil
@@ -335,6 +339,9 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 		guard let pointOfView = sceneView.pointOfView else { return }
 		let transform = pointOfView.transform
 		cameraPosition = SCNVector3(transform.m41, transform.m42, transform.m43)
+		if (calibrateNodes) {
+			sceneView.scene.rootNode.position = cameraPosition - calibrateOriginalCameraPos! + calibrateOriginalRootPos!
+		}
 	}
 	
 	func session(_ session: ARSession, didFailWithError error: Error) {

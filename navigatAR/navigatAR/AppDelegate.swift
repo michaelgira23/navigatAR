@@ -63,6 +63,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate, IALocationManagerDelegate
 		
 //		let GMSAPIKey = getConfigItem(name: "GMSAPIKey")
 //		GMSServices.provideAPIKey(GMSAPIKey!)
+		
+//			fontFamily = "Nunito"
+//			style.regularFaceAttribute = "Book"
+//			style.boldFaceAttribute = "Heavy"
+//
+//			style.backgroundColor = UIColor.white
+//			style.primaryColor = UIColor(hue: 106, saturation: 60, brightness: 71, alpha: 1)
+//			style.secondaryColor = UIColor(hue: 118, saturation: 76, brightness: 27, alpha: 1)
+//			style.separatorColor = UIColor.grayColor()
+//			style.failureColor = UIColor(hue: 35, saturation: 100, brightness: 95, alpha: 1)
+//			style.collectionBackgroundColor = UIColor.darkGrayColor()
+//		UIButton.appearance().tintColor = UIColor(displayP3Red: 98, green: 181, blue: 73, alpha: 1)
+//		UITableView.appearance().tintColor = UIColor(hue: 106, saturation: 60, brightness: 71, alpha: 1)
+		window?.tintColor = UIColor(displayP3Red: 98 / 255, green: 181 / 255, blue: 73 / 255, alpha: 1)
+//		UITableView.appearance().backgroundColor =
+
 		return true
 	}
 

@@ -41,7 +41,7 @@ class UserInfoViewController: UIViewControllerWithBuilding, UITableViewDataSourc
 		ref = Database.database().reference()
 		authListenerHandle = Auth.auth().addStateDidChangeListener { (auth, user) in
 			if let _ = user {
-				self.emailLabel.text = "Email: " + user!.email!
+				self.emailLabel.text = user!.email!
 				self.userHandle = self.ref.child("users/\(user!.uid)").observe(.value, with: { snapshot in
 					guard !(snapshot.value! is NSNull) else { return }
 

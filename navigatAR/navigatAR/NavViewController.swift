@@ -459,7 +459,7 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 		clearNodes()
 		for node in nodes {
 			let (lat, long, alt) = currentLocation!.distanceDeltas(with: node.value.wrappedNode.position)
-			print("delta", lat, long, alt)
+//			print("delta", lat, long, alt)
 			arNodes[node.key] = addNode(position: SCNVector3(x: Float(long), y: Float(alt), z: Float(-lat)), node: node.value.wrappedNode)
 		}
 		if (navigating && navigateFrom != nil && navigateTo != nil) {
@@ -515,6 +515,7 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 		let constraint = SCNLookAtConstraint(target: sceneView.pointOfView)
 		constraint.isGimbalLockEnabled = true
 		destinationNode.position = position
+		destinationNode.scale = SCNVector3(0.5, 0.5, 0.5)
 		destinationNode.constraints = [constraint]
 		
 		sceneView.scene.rootNode.addChildNode(destinationNode)

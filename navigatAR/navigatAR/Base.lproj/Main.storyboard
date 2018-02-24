@@ -176,11 +176,27 @@
                                 <color key="textColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <switch opaque="NO" alpha="0.10000000000000001" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6Mp-Ud-nhD" userLabel="Update Position">
+                                <rect key="frame" x="310" y="688" width="51" height="31"/>
+                                <connections>
+                                    <action selector="toggleUpdatePosition:" destination="9pv-A4-QxB" eventType="valueChanged" id="uow-t3-qUo"/>
+                                </connections>
+                            </switch>
+                            <switch opaque="NO" alpha="0.10000000000000001" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="og1-qE-xuk" userLabel="Calibrate Nodes">
+                                <rect key="frame" x="310" y="649" width="51" height="31"/>
+                                <connections>
+                                    <action selector="toggleCalibration:" destination="9pv-A4-QxB" eventType="valueChanged" id="uv6-1l-xLe"/>
+                                </connections>
+                            </switch>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="UZU-Me-GKZ" firstAttribute="leading" secondItem="PQr-Ze-W5v" secondAttribute="leading" id="Hqc-hH-qRJ"/>
+                            <constraint firstItem="PQr-Ze-W5v" firstAttribute="trailing" secondItem="6Mp-Ud-nhD" secondAttribute="trailing" constant="16" id="KIO-kn-fg9"/>
                             <constraint firstItem="UZU-Me-GKZ" firstAttribute="trailing" secondItem="PQr-Ze-W5v" secondAttribute="trailing" id="MWk-n8-43i"/>
+                            <constraint firstItem="6Mp-Ud-nhD" firstAttribute="top" secondItem="og1-qE-xuk" secondAttribute="bottom" constant="8" id="XU5-kf-d1S"/>
+                            <constraint firstItem="PQr-Ze-W5v" firstAttribute="trailing" secondItem="og1-qE-xuk" secondAttribute="trailing" constant="16" id="bNY-R4-bAq"/>
+                            <constraint firstItem="PQr-Ze-W5v" firstAttribute="bottom" secondItem="6Mp-Ud-nhD" secondAttribute="bottom" constant="10" id="lrh-h0-rqY"/>
                             <constraint firstItem="PQr-Ze-W5v" firstAttribute="bottom" secondItem="UZU-Me-GKZ" secondAttribute="bottom" constant="10" id="wbA-7y-DTA"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="PQr-Ze-W5v"/>
@@ -188,12 +204,14 @@
                     <tabBarItem key="tabBarItem" title="Navigate" image="first" selectedImage="first" id="WIH-oR-4oo"/>
                     <navigationItem key="navigationItem" id="fsA-LB-6k7"/>
                     <connections>
+                        <outlet property="calibrationSwitch" destination="og1-qE-xuk" id="2df-En-1wh"/>
                         <outlet property="direction" destination="rfJ-78-8mP" id="FhO-fY-fVY"/>
                         <outlet property="sceneView" destination="oa8-xz-7VX" id="DCP-Nm-WJc"/>
                         <outlet property="searchBar" destination="ONB-vc-NFq" id="3X7-bd-RyR"/>
                         <outlet property="searchBlur" destination="aNc-gS-R5b" id="bn3-zA-LcG"/>
                         <outlet property="stopNavBtn" destination="UZU-Me-GKZ" id="nq5-4d-erP"/>
                         <outlet property="tableView" destination="FQP-Iy-yKU" id="axT-VE-ilQ"/>
+                        <outlet property="updatePositionSwitch" destination="6Mp-Ud-nhD" id="ssl-o9-ay8"/>
                         <segue destination="BL3-1u-ans" kind="show" identifier="showDestinationDetail" id="tfo-8K-Z5Z"/>
                         <segue destination="hqV-Bb-lBA" kind="show" identifier="showEventInfo" id="iqf-Kz-vI9"/>
                     </connections>
@@ -841,6 +859,6 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="sQL-se-JQG"/>
-        <segue reference="CiO-NH-fcZ"/>
+        <segue reference="tfo-8K-Z5Z"/>
     </inferredMetricsTieBreakers>
 </document>

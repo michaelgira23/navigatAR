@@ -31,6 +31,23 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 		redraw()
 	}
 
+	@IBOutlet weak var updatePositionSwitch: UISwitch!
+	@IBAction func toggleUpdatePosition(_ sender: UISwitch) {
+		positionLocked = !sender.isOn
+	}
+
+	@IBOutlet weak var calibrationSwitch: UISwitch!
+	@IBAction func toggleCalibration(_ sender: UISwitch) {
+		calibrateNodes = sender.isOn
+		if (calibrateNodes) {
+			calibrateOriginalCameraPos = cameraPosition
+			calibrateOriginalRootPos = sceneView.scene.rootNode.position
+		} else {
+			calibrateOriginalCameraPos = nil
+			calibrateOriginalRootPos = nil
+		}
+	}
+
 	let appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
 	
 	let locationManager = IALocationManager.sharedInstance()
@@ -39,7 +56,12 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 		$0.startUpdatingHeading()
 		return $0
 	}(CLLocationManager())
-	
+
+	var positionLocked = false
+	var calibrateNodes = false
+	var calibrateOriginalCameraPos: SCNVector3? = nil
+	var calibrateOriginalRootPos: SCNVector3? = nil
+
 	var currentLocation: Location? = nil
 	var kalmanLocation: CLLocation? = nil
 	var cameraPosition = SCNVector3(0, 0, 0)
@@ -69,6 +91,17 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 		appDelegate.locationDelegate = self
 
 		/* AR Setup */
+
+		// Create a session configuration
+		let configuration = ARWorldTrackingConfiguration()
+		configuration.worldAlignment = .gravityAndHeading
+//		configuration.planeDetection = [.horizontal]
+
+		// Detect
+		print("ARKit supported?", ARWorldTrackingConfiguration.isSupported)
+
+		// Run the view's session
+		sceneView.session.run(configuration)
 		
 		// Set the view's delegate
 		sceneView.delegate = self
@@ -114,26 +147,19 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
 
+//		print("Position locked", positionLocked)
+		updatePositionSwitch.isOn = !positionLocked
+		calibrationSwitch.isOn = calibrateNodes
+
 		// Update location
 		locationUpdate(currentLocation: appDelegate.currentLocation, kalmanLocation: appDelegate.kalmanLocation)
-		
-		// Create a session configuration
-		let configuration = ARWorldTrackingConfiguration()
-		configuration.worldAlignment = .gravityAndHeading
-//		configuration.planeDetection = [.horizontal]
-
-		// Detect
-		print("ARKit supported?", ARWorldTrackingConfiguration.isSupported)
-		
-		// Run the view's session
-		sceneView.session.run(configuration)
 	}
 	
 	override func viewWillDisappear(_ animated: Bool) {
 		super.viewWillDisappear(animated)
 		
 		// Pause the view's session
-		sceneView.session.pause()
+//		sceneView.session.pause()
 	}
 	
 	override func didReceiveMemoryWarning() {
@@ -306,6 +332,7 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 	// MARK: - Custom LocationDelegates
 
 	func locationUpdate(currentLocation: Location?, kalmanLocation: CLLocation?) {
+		if (positionLocked) { return }
 		print("pos update nav")
 		self.currentLocation = currentLocation
 		self.kalmanLocation = kalmanLocation
@@ -318,6 +345,9 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 		guard let pointOfView = sceneView.pointOfView else { return }
 		let transform = pointOfView.transform
 		cameraPosition = SCNVector3(transform.m41, transform.m42, transform.m43)
+		if (calibrateNodes) {
+			sceneView.scene.rootNode.position = cameraPosition - calibrateOriginalCameraPos! + calibrateOriginalRootPos!
+		}
 	}
 	
 	func session(_ session: ARSession, didFailWithError error: Error) {
@@ -435,7 +465,7 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 		clearNodes()
 		for node in nodes {
 			let (lat, long, alt) = currentLocation!.distanceDeltas(with: node.value.wrappedNode.position)
-			print("delta", lat, long, alt)
+//			print("delta", lat, long, alt)
 			arNodes[node.key] = addNode(position: SCNVector3(x: Float(long), y: Float(alt), z: Float(-lat)), node: node.value.wrappedNode)
 		}
 		if (navigating && navigateFrom != nil && navigateTo != nil) {
@@ -491,6 +521,7 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 		let constraint = SCNLookAtConstraint(target: sceneView.pointOfView)
 		constraint.isGimbalLockEnabled = true
 		destinationNode.position = position
+		destinationNode.scale = SCNVector3(0.5, 0.5, 0.5)
 		destinationNode.constraints = [constraint]
 		
 		sceneView.scene.rootNode.addChildNode(destinationNode)

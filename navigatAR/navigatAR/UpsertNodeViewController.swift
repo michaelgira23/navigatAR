@@ -72,7 +72,7 @@ class UpsertNodeViewController: FormViewController {
 		form +++ Section("Location")
 			<<< CheckRow("location") { row in
 				row.title = "Location"
-				row.value = true
+//				row.value = true
 				row.disabled = true
 			}
 			<<< ButtonRow() { row in
@@ -221,8 +221,8 @@ class UpsertNodeViewController: FormViewController {
 			
 			self.ref.child("nodes").childByAutoId().setValue(data)
 
-	//		_ = navigationController?.popViewController(animated: true)
-			self.performSegue(withIdentifier: "unwindToManageNodesWithUnwindSegue", sender: self)
+			_ = self.navigationController?.popViewController(animated: true)
+//			self.performSegue(withIdentifier: "unwindToUpsertNodesWithUnwindSegue", sender: self)
 		})
 	}
 	

@@ -25,12 +25,6 @@ class AdminViewController: UIViewControllerWithBuilding {
 			} else {
 				print("whoopsie")
 			}
-			guard let (nodes, graph) = populateGraph(rootSnapshot: snapshot) else { print("unable to get graph"); return }
-
-			let myHouse = nodes["-L5VHbFv1Fwx3bHFvX_I"]!
-			let stem252 = nodes["-L50XlMkv4OWKSN6y75D"]!
-			
-			print(graph.findPath(from: myHouse, to: stem252))
 		})
 		
 		navigationItem.prompt = forBuilding.1.name

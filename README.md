@@ -38,4 +38,4 @@ Special thanks for the guidance of our faculty sponsors Mrs. Purdy and Mr. Borja
 
 Last but certainly not least, many thanks to our WWT mentors Satya Gudivada and Lisa Rains!
 
-![MICDS Team at WWT Hackathon 2018](https://lh5.googleusercontent.com/ht4Cqb4LH9PNup4RH5Gitb5KR3T6Cs90xbGgpkqmB_rnxDrecWR8OZB2tU3lUOdzk7Jh93EOGhe-6wxoc5G9)
+![MICDS Team at WWT Hackathon 2018](https://drive.google.com/uc?export=view&id=1yogw1DR_dLDsXnrOesT2jTUWSJU8Gw2s)

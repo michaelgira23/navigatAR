@@ -176,6 +176,22 @@
                                 <color key="textColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" alpha="0.10000000000000001" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LIf-ul-qir">
+                                <rect key="frame" x="329" y="689" width="30" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" image="first"/>
+                                <connections>
+                                    <action selector="lockPosition:" destination="9pv-A4-QxB" eventType="touchUpInside" id="gNw-4N-6v1"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" alpha="0.10000000000000001" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="d3f-dn-Gdn">
+                                <rect key="frame" x="282" y="689" width="30" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" image="second"/>
+                                <connections>
+                                    <action selector="shiftNodes:" destination="9pv-A4-QxB" eventType="touchUpInside" id="1K6-V1-tKl"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
@@ -797,6 +813,6 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="sQL-se-JQG"/>
-        <segue reference="CiO-NH-fcZ"/>
+        <segue reference="tfo-8K-Z5Z"/>
     </inferredMetricsTieBreakers>
 </document>

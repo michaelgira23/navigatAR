@@ -31,6 +31,20 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 		redraw()
 	}
 
+	@IBAction func lockPosition(_ sender: Any) {
+		positionLocked = !positionLocked
+	}
+
+	@IBAction func shiftNodes(_ sender: Any) {
+		if (sceneView.pointOfView != nil) {
+			let shiftBy = Float(10)
+			let shiftVector = sceneView.pointOfView!.eulerAngles.normalized() * shiftBy
+			for node in arNodes {
+				node.value.position -= shiftVector
+			}
+		}
+	}
+
 	let appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
 	
 	let locationManager = IALocationManager.sharedInstance()
@@ -39,7 +53,9 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 		$0.startUpdatingHeading()
 		return $0
 	}(CLLocationManager())
-	
+
+	var positionLocked = false
+
 	var currentLocation: Location? = nil
 	var kalmanLocation: CLLocation? = nil
 	var cameraPosition = SCNVector3(0, 0, 0)
@@ -69,6 +85,17 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 		appDelegate.locationDelegate = self
 
 		/* AR Setup */
+
+		// Create a session configuration
+		let configuration = ARWorldTrackingConfiguration()
+		configuration.worldAlignment = .gravityAndHeading
+//		configuration.planeDetection = [.horizontal]
+
+		// Detect
+		print("ARKit supported?", ARWorldTrackingConfiguration.isSupported)
+
+		// Run the view's session
+		sceneView.session.run(configuration)
 		
 		// Set the view's delegate
 		sceneView.delegate = self
@@ -116,24 +143,13 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 
 		// Update location
 		locationUpdate(currentLocation: appDelegate.currentLocation, kalmanLocation: appDelegate.kalmanLocation)
-		
-		// Create a session configuration
-		let configuration = ARWorldTrackingConfiguration()
-		configuration.worldAlignment = .gravityAndHeading
-//		configuration.planeDetection = [.horizontal]
-
-		// Detect
-		print("ARKit supported?", ARWorldTrackingConfiguration.isSupported)
-		
-		// Run the view's session
-		sceneView.session.run(configuration)
 	}
 	
 	override func viewWillDisappear(_ animated: Bool) {
 		super.viewWillDisappear(animated)
 		
 		// Pause the view's session
-		sceneView.session.pause()
+//		sceneView.session.pause()
 	}
 	
 	override func didReceiveMemoryWarning() {
@@ -306,6 +322,7 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 	// MARK: - Custom LocationDelegates
 
 	func locationUpdate(currentLocation: Location?, kalmanLocation: CLLocation?) {
+		if (positionLocked) { return }
 		print("pos update nav")
 		self.currentLocation = currentLocation
 		self.kalmanLocation = kalmanLocation

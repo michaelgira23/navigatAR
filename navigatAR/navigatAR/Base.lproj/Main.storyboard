@@ -204,12 +204,14 @@
                     <tabBarItem key="tabBarItem" title="Navigate" image="first" selectedImage="first" id="WIH-oR-4oo"/>
                     <navigationItem key="navigationItem" id="fsA-LB-6k7"/>
                     <connections>
+                        <outlet property="calibrationSwitch" destination="og1-qE-xuk" id="2df-En-1wh"/>
                         <outlet property="direction" destination="rfJ-78-8mP" id="FhO-fY-fVY"/>
                         <outlet property="sceneView" destination="oa8-xz-7VX" id="DCP-Nm-WJc"/>
                         <outlet property="searchBar" destination="ONB-vc-NFq" id="3X7-bd-RyR"/>
                         <outlet property="searchBlur" destination="aNc-gS-R5b" id="bn3-zA-LcG"/>
                         <outlet property="stopNavBtn" destination="UZU-Me-GKZ" id="nq5-4d-erP"/>
                         <outlet property="tableView" destination="FQP-Iy-yKU" id="axT-VE-ilQ"/>
+                        <outlet property="updatePositionSwitch" destination="6Mp-Ud-nhD" id="ssl-o9-ay8"/>
                         <segue destination="BL3-1u-ans" kind="show" identifier="showDestinationDetail" id="tfo-8K-Z5Z"/>
                         <segue destination="hqV-Bb-lBA" kind="show" identifier="showEventInfo" id="iqf-Kz-vI9"/>
                     </connections>
@@ -813,6 +815,6 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="sQL-se-JQG"/>
-        <segue reference="CiO-NH-fcZ"/>
+        <segue reference="tfo-8K-Z5Z"/>
     </inferredMetricsTieBreakers>
 </document>

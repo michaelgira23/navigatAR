@@ -31,10 +31,12 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 		redraw()
 	}
 
+	@IBOutlet weak var updatePositionSwitch: UISwitch!
 	@IBAction func toggleUpdatePosition(_ sender: UISwitch) {
 		positionLocked = !sender.isOn
 	}
 
+	@IBOutlet weak var calibrationSwitch: UISwitch!
 	@IBAction func toggleCalibration(_ sender: UISwitch) {
 		calibrateNodes = sender.isOn
 		if (calibrateNodes) {
@@ -144,6 +146,10 @@ class NavViewController: UIViewController, ARSCNViewDelegate, UITableViewDataSou
 	
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
+
+//		print("Position locked", positionLocked)
+		updatePositionSwitch.isOn = !positionLocked
+		calibrationSwitch.isOn = calibrateNodes
 
 		// Update location
 		locationUpdate(currentLocation: appDelegate.currentLocation, kalmanLocation: appDelegate.kalmanLocation)

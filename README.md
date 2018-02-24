@@ -2,7 +2,7 @@
 
 Finding your way through buildings and campuses through the power of augmented reality
 
-> NavigatAR is an iOS app that shows you where to go in an accessible, user-friendly way.  No more aking for direcstion or searching for a map, you can use a simple app instead.  NavigatAR leverages the power of augmented reality to proivde indoor directions to areas, rooms, and even events, displayed by arros that show you where ot go in realtime.
+> navigatAR is an iOS app that shows you where to go in an accessible, user-friendly way. No more asking for directions or searching for a map, you can use a simple app instead. navigatAR leverages the power of augmented reality to provide indoor directions to areas, rooms, and even events, displayed by arrows that show you where to go in real-time.
 
 ## Technologies
 

@@ -65,9 +65,9 @@ The next option for each building is managing "tags." A tag is a customizable pr
 
 When there is a temporary event taking place at the venue, admins can create an event via the "New Event" button. This is a temporary connection to nodes for a predefined duration. An event will be searchable just like any other node, but will show a list of nodes the user can navigate to.
 
-## Main Interface Demo
+## Demo
 
-![Demo of Search and Pathfinding](https://i.imgur.com/khWxOed.gif)
+[Demo of Search and Pathfinding](https://i.imgur.com/khWxOed.gifv)
 
 # Hackathon
 
